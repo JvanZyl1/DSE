@@ -10,4 +10,11 @@ def T_x(a, mat):
     mat_rot_x = mat*T_x
     return mat_rot_x
 
+
+
+def T_z(c, mat):
+    Tz = np.matrix([[cos(c), sin(c), 0], [-sin(c), cos(c), 0], [0, 0, 1]])
+    mat_rot_z = mat*T_z
+    return mat_rot_z
+
 print(Tx)
