@@ -41,3 +41,35 @@ def BodyMass(S_body):
     S_body_ft2 = S_body/(0.3048**2) #[ft^2]
     M_body = (-269.023 + 2.356 * S_body_ft2)*0.4536 # [kg] Estimation relation
     return M_body
+
+
+### Mass estimation methods for wing-equipped aircraft
+# Taken from Torenbeek chapter 8.
+
+def StructureMassFun(n_ult, D, l, W_MTOW):
+    W_s = W_MTOW * 0.447 * np.sqrt(n_ult) * (l * D**2 / W_MTOW)**0.24
+    return W_s
+
+def WingMassFun(W_MTOW, b, Lambda, S_w, t_chord, n_ult):
+    k_w = 4.9 * 10**(-3)
+    b_ref = 1.905
+    b_s = b / np.cos(Lambda) #structural span
+    W_frac = k_w * b_s**0.75 * (1 + np.sqrt(b_ref / b_s)) * n_ult**0.55 * ((b_s / t_chord)/(W_MTOW/S_w))**0.3
+    # t_chord - thickness of the chord at the root; n_ult - ultimate load factor.
+    return W_frac
+
+def FuselageMassFun(l_t, V_cr, S_body):     # l_t - distance between 1/4 chord points of wings and horizontal tailplane root
+    k_wf = 0.23
+    V_D = 2*V_cr / 3.6
+    W_f = k_wf * np.sqrt(V_D * (l_t/(D + D))) * S_body**1.2
+    return W_f
+
+def TailPlaneMassFun(S_t, n_ult):           # weight estimation for the tailplanes
+    k_wt = 0.64
+    W_tail = k_wt * (n_ult * S_t**2)**0.75
+    return W_tail
+
+def PropGroupMassFun(N_prop, P_to, W_e):
+    k_pg = 1.35         # W_e - engine weight in [kg]
+    W_pg = k_pg * N_prop * (W_e + 0.00014617141 * P_to)
+    return W_pg

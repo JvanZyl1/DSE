@@ -7,3 +7,4 @@ def DragPolar(C_L):
     elif VehicleConfig == 'VectorThrust':
         C_D = 0.0163 + 0.058 * (C_L**2)
     return C_D
+

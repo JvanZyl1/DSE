@@ -3,14 +3,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from inputs import *
-from PowerEstimation import PowerEstimationFun
-from MassEstimation import BatteryMassFun, PowerPlantWeightEstFun, DriveTrainWeightEstFun
+from PowerEstimation import *
+from MassEstimation import *
 
 P_cruise = PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, W_MTOW)
 
 W_PW_Sys = PowerPlantWeightEstFun(P_cruise) + DriveTrainWeightEstFun(W_MTOW)
 
 print(P_cruise, W_PW_Sys)
+M_fus = FuselageMassFun(l_t, V_cr, S_body)
+
+M_struc = StructureMassFun(n_ult, D, l, W_MTOW)
+print(M_struc)
+
 
 # Get the estimate for the power required in cruise.
 # Ran = np.linspace(0.7, 1.5, 25)
