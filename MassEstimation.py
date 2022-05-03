@@ -1,3 +1,4 @@
+
 '''This scipt includes functions for weight estimation routines'''
 
 import matplotlib.pyplot as plt
@@ -19,25 +20,24 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_cruise):
     print('The mass of the battery in [kg]: ', M_bat)
 
     return M_bat
-
+#For rotorcrafts
 def PowerPlantWeightEstFun(P_cruise):
     W_pwp = 59.077 + P_cruise * 0.0004948372 # Weight of the powerplant in [kg]
     return W_pwp
     # using from  W = 130.243 + .369 HP_e
-
+#For rotorcrafts
 def DriveTrainWeightEstFun(W_MTOW):
     W_dt = -16.125 + W_MTOW * 0.045812829 # Weight of the drive train in [kg]
     return W_dt
-
-
-A = 75 # [-] Rotor aspect ratio
-S_disk = 80 #[m^2] Rotor disk area
-b = 2* np.sqrt(S_disk/np.pi) # [m] Span width
-c = b / A # [m] chord length
-n_blades = 2 # [-] Number of blades
-S_rot = n_blades* b/2 * c #[m^2] rotor planform length (assumed to be two blades)
-
-
+#For rotorcrafts
 def Est_rotor_mass(S_rot):
+    '''Input rotor planform area'''
     S_rot_ft2 = S_rot/(0.3048**2) #[ft^2]
-    return (-194.685 + 12.164*S_rot_ft2)*0.4536
+    M_rot_sys = (-194.685 + 12.164*S_rot_ft2)*0.4536 # [kg] Helicopter rotor mass estimation
+    return M_rot_sys
+#For rotorcrafts
+def BodyMass(S_body):
+    '''Input body surface area'''
+    S_body_ft2 = S_body/(0.3048**2) #[ft^2]
+    M_body = (-269.023 + 2.356 * S_body_ft2)*0.4536 # [kg] Estimation relation
+    return M_body
