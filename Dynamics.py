@@ -15,7 +15,7 @@ def T_y(b, mat):
     return mat_rot_y
 
 def T_z(c, mat):
-    Tz = np.matrix([[cos(c), sin(c), 0], [-sin(c), cos(c), 0], [0, 0, 1]])
+    Tz = np.matrix([[np.cos(c), np.sin(c), 0], [-1*np.sin(c), np.cos(c), 0], [0, 0, 1]])
     mat_rot_z = mat*T_z
     return mat_rot_z
 
