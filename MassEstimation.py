@@ -69,7 +69,9 @@ def TailPlaneMassFun(S_t, n_ult):           # weight estimation for the tailplan
     W_tail = k_wt * (n_ult * S_t**2)**0.75
     return W_tail
 
+def EngineMassFun(P_cruise):               # based off the perofrmance of the EMRAX electric motors
+    return W_e = (P_cruise / PowWtRat) / N_prop
+
 def PropGroupMassFun(N_prop, P_to, W_e):
-    k_pg = 1.35         # W_e - engine weight in [kg]
-    W_pg = k_pg * N_prop * (W_e + 0.00014617141 * P_to)
+    W_pg =  N_prop * (1.5 * W_e)      # extra 50% accounting for cabling. NACELLES NOT INCLUDED !
     return W_pg
