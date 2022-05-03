@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
 
-def PowerEstimatinonFun(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
+def PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
     # Assumed values for power estimation
 
     K = 4.5             #
@@ -45,11 +45,8 @@ def PowerEstimatinonFun(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
     Pi = CalculatePi(kappa, mu, C_T, P_fact)
     Pp = CalculatePp(f, A_rotor, mu, P_fact)
 
-    print(omega_prop * R_prop * (2 * np.pi / 60))
-    print(C_T)
-    print(mu,P_fact)
-    print(P0,Pi,Pp)
-    print(A_rotor)
+    print('The tip speed in m/s is: ', np.round(omega_prop * R_prop * (2 * np.pi / 60),2))
     P_cruise = P0 + Pi + Pp
-
+    print('The power required in cruise is [kW]:', np.round((P_cruise/1000),2))
     return P_cruise
+
