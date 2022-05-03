@@ -18,21 +18,22 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_cruise):
     print('The mass of the battery in [kg]: ', M_bat)
 
     return M_bat
-
+#For rotorcrafts
 def PowerPlantWeightEstFun(P_cruise):
     W_pwp = 59.077 + P_cruise * 0.0004948372 # Weight of the powerplant in [kg]
     return W_pwp
     # using from  W = 130.243 + .369 HP_e
-
+#For rotorcrafts
 def DriveTrainWeightEstFun(W_MTOW):
     W_dt = -16.125 + W_MTOW * 0.045812829 # Weight of the drive train in [kg]
     return W_dt
-
+#For rotorcrafts
 def Est_rotor_mass(S_rot):
     '''Input rotor planform area'''
     S_rot_ft2 = S_rot/(0.3048**2) #[ft^2]
     M_rot_sys = (-194.685 + 12.164*S_rot_ft2)*0.4536 # [kg] Helicopter rotor mass estimation
     return M_rot_sys
+#For rotorcrafts
 def BodyMass(S_body):
     '''Input body surface area'''
     S_body_ft2 = S_body/(0.3048**2) #[ft^2]
