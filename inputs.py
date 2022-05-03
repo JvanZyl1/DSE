@@ -9,6 +9,9 @@ M_PL = 250          # mass of the payload in kilograms [kg]
 eta_E = 200         # energy density of the battery in [Wh/kg]\
 W_MTOW = 800        # maximum take-off weight in [kg]
 g = 9.81            # gravitional acceleration [m/s2]
+VehicleConfig = 'LiftCruise'
+# KittyHawk - LiftCruise; Ehang 184 - Multirotor; Lilium - VectorThrust
+
 
 # Mission profile characteristics
 R = 20              # mission range in kilometers [km]

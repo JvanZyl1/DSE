@@ -1,5 +1,4 @@
 '''Power Estimation Routine for a Helicopter-Config Vehicle'''
-
 import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
