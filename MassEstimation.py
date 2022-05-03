@@ -10,4 +10,4 @@ S_rot = n_blades* b/2 * c #[m^2] rotor planform length (assumed to be two blades
 
 def Est_rotor_mass(S_rot):
     S_rot_ft2 = S_rot/(0.3048**2) #[ft^2]
-    return -194.685 + 12.164*S_rot_ft2
+    return (-194.685 + 12.164*S_rot_ft2)*0.4536
