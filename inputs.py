@@ -1,7 +1,9 @@
+import numpy as np
 '''Inputs script '''
 # Vehicle characteristics
 l = 6               # length of the vehicle in meters [m]
 D = 2               # diameter of the fuselage in meters [m]
+S_body = np.pi**2*l*D/4 # Surface area of ellipse rotated around its longitudinal axis
 N_prop = 4     #4     # number of propellers in meters squared [m2]
 R_prop = 5   #3.7       # radius of each propeller in meters [m]
 C_prop = 0.5        # Rotor blade chord length [m]
