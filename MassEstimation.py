@@ -118,7 +118,7 @@ def LandingGearMassFun(W_MTOW):
     '''
     k_uc = 1.0 # based off Table 8-6 from Torenbeek.
     A_m = 9.1; B_m = 0.082; C_m = 0.019
-    A_n = 11.3; C_n = 0.0024;   #Main and nose LG weight coefficients
+    A_n = 11.3; C_n = 0.0024   #Main and nose LG weight coefficients
     W_uc_m = k_uc * (A_m + B_m*W_MTOW**0.75 + C_m * W_MTOW)
     W_uc_n = k_uc * (A_n +  + C_n * W_MTOW)
     W_uc = W_uc_n + W_uc_m
@@ -158,17 +158,19 @@ def HydraulicsMassFun(W_e):
     '''
     This function estimates the weight of the hydraulics based off the engine weight
     '''
-    W_hd = 0.00914 * (W_e ** 1.2) * N_prop  #based off the engine weight
-    return W_hd
+    W_h = 0.00914 * (W_e ** 1.2) * N_prop  #based off the engine weight
+    return W_h
 
 def FurnishingMassFun(W_PL):
     '''
     This function estimate the weight of the furnishing based off the payload and number
     of passengers.
     '''
-    W_fur = 5.9 * (W_Pl / 125) + 2.3
+    W_fur = 5.9 * (W_PL / 125) + 2.3
     return W_fur
 
+
+#### Component group estimation ####
 
 def PropGroupMassFun(N_prop, W_e, W_blades, W_cab):
     '''
