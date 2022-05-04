@@ -1,6 +1,6 @@
-from cProfile import run
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 def read_txt(file):
     '''
@@ -48,7 +48,7 @@ def T_x(a, mat):
 
     return mat_rot_x - rotated matrix or vector
     '''
-    Tx = np.matrix([[1,0,0],[0,np.cos(a),np.sin(a)],[0,-1*np.sin(a),np.cos(a)]])
+    Tx = np.matrix([[1,0,0],[0,math.cos(a),math.sin(a)],[0,-1*math.sin(a),math.cos(a)]])
     mat_rot_x = Tx*mat
     return mat_rot_x
 
@@ -62,7 +62,7 @@ def T_y(b, mat):
 
     return mat_rot_y - rotated matrix or vector
     '''
-    Ty = np.matrix([[np.cos(b),0,-1*np.sin(b)],[0,1,0],[np.sin(b),0,np.cos(b)]])
+    Ty = np.matrix([[math.cos(b),0,-1*math.sin(b)],[0,1,0],[math.sin(b),0,math.cos(b)]])
     mat_rot_y = Ty*mat
     return mat_rot_y
 
@@ -76,7 +76,10 @@ def T_z(c, mat):
 
     return mat_rot_z - rotated matrix or vector
     '''
-    Tz = np.matrix([[np.cos(c), np.sin(c), 0], [-np.sin(c), np.cos(c), 0], [0, 0, 1]])
+    Tz = np.matrix([[math.cos(c), math.sin(c), 0],
+    [-math.sin(c), math.cos(c), 0],
+    [0, 0, 1]])
+    #Tz = np.matrix([[np.cos(c), np.sin(c), 0], [-np.sin(c), np.cos(c), 0], [0, 0, 1]])
     mat_rot_z = Tz*mat
     return mat_rot_z
 
@@ -95,8 +98,6 @@ def T_zyx(a,b,c,mat):
     Tzy = T_y(b, Tz)
     Tzyx = T_x(a, Tzy)
     return Tzyx
-
-print(T_zyx(0.2,0.1,0.05, [[1], [2], [3]]))
 
 def Euler_rot(initial_conds_dict, constant_dict, config_dict, M_aero, F_control):
     '''
@@ -187,7 +188,25 @@ def angular_simulation(config_dict, M_aero, F_control, constant_dict, delta_t, v
 
     return calculation_dict
 
-def angles(w_0, delta_t, F_dict):
+def rot_inertia(w_0, delta_t, constant_dict):
+    I = constant_dict["I_mat"]
+    dtheta = np.dot(w_0, delta_t) #Change in angle
+    T_z = np.matrix([[math.cos(dtheta[2]), math.sin(dtheta[2]), 0],
+    [-math.sin(dtheta[2]), math.cos(dtheta[2]), 0],
+    [0, 0, 1]])
+    Ty = np.matrix([[math.cos(dtheta[1]),0,-1*math.sin(dtheta[1])],[0,1,0],[math.sin(dtheta[1]),0,math.cos(dtheta[1])]])
+    Tx = np.matrix([[1,0,0],[0,math.cos(dtheta[0]),math.sin(dtheta[0])],[0,-1*math.sin(dtheta[0]),math.cos(dtheta[0])]])
+    
+    I_rotz = np.matmul(T_z, I)
+    I_rotzy = np.matmul(Ty, I_rotz)
+    I_rotzyx = np.matmul(Tx, I_rotzy)
+
+    I_inv = np.linalg.inv(I_rotzyx)
+    constant_dict["I"] = I_rotzyx
+    constant_dict["I_inv"] = I_inv
+    return constant_dict
+
+def angles(w_0, delta_t, F_dict, constant_dict):
     '''
     This function rotates the forces
 
@@ -209,12 +228,18 @@ def angles(w_0, delta_t, F_dict):
     F_y_rest = F_y_total - F_control_y
     F_z_rest = F_z_total - F_control_z
     F_rest_vec = np.matrix([[float(F_x_rest)], [float(F_y_rest)], [float(F_z_rest)]])
-    print(F_rest_vec)
     dtheta = np.dot(w_0, delta_t) #Change in angle
     F_rest_rot = T_zyx(dtheta[0],dtheta[1],dtheta[2],F_rest_vec)
     F_control_rot = T_zyx(dtheta[0],dtheta[1],dtheta[2],F_control_vec)
     # Update dictionary for forces TBD !!!!!!git 
-    return F_rest_rot, F_control_rot
+    F_dict["control"]["x"] = float(F_control_rot[0])
+    F_dict["control"]["y"] = float(F_control_rot[1])
+    F_dict["control"]["z"] = float(F_control_rot[2])
+    F_dict["aero"]["x"] = float(F_rest_rot[0])
+    F_dict["aero"]["y"] = float(F_rest_rot[1])
+    F_dict["aero"]["z"] = float(F_rest_rot[2])
+    constant_dict = rot_inertia(w_0, delta_t, constant_dict)
+    return F_rest_rot, F_control_rot, F_dict
 
 
 
@@ -288,7 +313,7 @@ def simulation(delta_t, constant_dict, time_span, initial_conds_dict, F_dict, M_
         alpha_y.append(float(calculation_dict["alpha_y_0"]))
         alpha_z.append(float(calculation_dict["alpha_z_0"]))
 
-        F_aero, F_control = angles(calculation_dict["w_0"], delta_t, F_dict)
+        F_aero, F_control, F_dict = angles(calculation_dict["w_0"], delta_t, F_dict, constant_dict)
 
     output_dict = {'r_x':r_x, 'r_y':r_y, 'r_z':r_z, 'v_x': v_x, 'v_y': v_y, 'v_z': v_z, 'a_x':a_x, 'a_y':a_y, 'a_z':a_z, 
     'theta_x': theta_x, 'theta_y': theta_y, 'theta_z': theta_z, 'w_x': w_x, 'w_y': w_y, 'w_z': w_z, 'alpha_x': alpha_x,
@@ -297,6 +322,9 @@ def simulation(delta_t, constant_dict, time_span, initial_conds_dict, F_dict, M_
 
 
 def run_code():
+    '''
+    This function runs the code.
+    '''
     constant_dict = read_txt("Constants.txt")
     initialconds_dict = read_txt("Initial_Conditions.txt")
     config_dict = read_configuration("Propulsive_arms.txt")
@@ -307,13 +335,11 @@ def run_code():
     constant_dict["I_mat"] = I
     constant_dict["I_inv"] = Iinv
 
-    F_aero = np.matrix([[5], [5], [4]])
-    M_aero = np.matrix([[0],[0],[0]])
-    F_control = np.matrix([[20],[20],[12]])
-    F_dict = {"control":{"x": 20, "y": 20, "z":12},
-    "aero":{"x":5, "y": 4, "z": 4}}
+    F_dict = {"control":{"x": 10, "y": 0, "z":0},
+    "aero":{"x":0, "y": 0, "z": 0}}
+    M_aero = [[float(F_dict["aero"]["x"]*config_dict["quadcopter"]["x_cg_cp"])], [float(F_dict["aero"]["y"]*config_dict["quadcopter"]["y_cg_cp"])], [float(F_dict["aero"]["z"]*config_dict["quadcopter"]["z_cg_cp"])]]
     delta_t = 0.01
-    time_span = 5
+    time_span = 0.04
     output_dict = simulation(delta_t, constant_dict, time_span, initialconds_dict, F_dict, M_aero, config_dict)
     return output_dict
 
@@ -350,6 +376,8 @@ plt.title("time-velocity")
 plt.show()
 
 
-### Need to add a F_control including the rotation angles
-### TBD Aerodynamic moments with rotation
-### TBD rotate the inertia from body frame?
+### Check why the velocity is constant when a force is acting
+### Look into aerodynamic inputs
+### Look into adding drag
+### Look into control force response
+### Look to add sensors
