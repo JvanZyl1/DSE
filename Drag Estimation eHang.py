@@ -40,4 +40,8 @@ print(isa(h))
 mu = 1.7893e-5
 Re = rho*V*l/mu
 print(log10(Re))
-Cd_fus = 0.2 # at reynolds number of e7
+#For a quadrotor. Found at https://ntrs.nasa.gov/api/citations/20180003381/downloads/20180003381.pdf
+CD_fus = 0.0045 #use the wetted area as reference area
+CD_rothub = 0.0045 #use the rotor disk area as reference area
+CD_rotpylon = 0.025 #use wetted area
+D_q_landinggear = 0.2
