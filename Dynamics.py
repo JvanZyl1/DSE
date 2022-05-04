@@ -1,4 +1,3 @@
-from distutils.command.config import config
 import numpy as np
 
 def read_txt(file):
@@ -118,9 +117,9 @@ def Euler_rot(initial_conds_dict, constant_dict, config_dict, M_aero, F_control)
     #w_dot = np.matrix([[initial_conds_dict["w_dotx_0"]], [initial_conds_dict["w_doty_0"]], [initial_conds_dict["w_dotz_0"]]])
     part_1 = M_control + M_aero - w_cross_H
     w_dot = np.matmul(constant_dict["I_inv"], part_1) #Angular accleration vector
-    return w_cross_H
+    return w_dot
 
-def linear_dynamics(initial_conds_dict, constant_dict, F_control, F_aero):
+def linear_dynamics(constant_dict, F_control, F_aero):
     '''
     Finds the accleration.
 
@@ -132,12 +131,93 @@ def linear_dynamics(initial_conds_dict, constant_dict, F_control, F_aero):
     acceleration = np.add(F_control, F_aero)*1/constant_dict["m"]
     return acceleration
 
-def simulation(delta_t, initial_conds_dict):
+def angular_simulation(v_0, r_0, w_0, theta_0, v_dot, euler_rot, calculation_dict):
+    v_jplus1 = v_0 + v_dot*delta_t
+    calculation_dict["v_x_0"] = v_jplus1[0]
+    calculation_dict["v_y_0"] = v_jplus1[1]
+    calculation_dict["v_z_0"] = v_jplus1[2]
+    calculation_dict["v_0"] = np.matrix([[v_jplus1[0]], [v_jplus1[1]], [v_jplus1[2]]])
+
+    r_jplus1 = r_0 + v_jplus1*delta_t
+    calculation_dict["r_x_0"] = r_jplus1[0]
+    calculation_dict["r_y_0"] = r_jplus1[1]
+    calculation_dict["r_z_0"] = r_jplus1[2]
+    calculation_dict["r_0"] = np.matrix([[r_jplus1[0]], [r_jplus1[1]], [r_jplus1[2]]])
+
+    w_dot = Euler_rot(euler_rot, constant_dict, config_dict, M_aero, F_control)
+    calculation_dict["alpha_x_0"] = w_dot[0]
+    calculation_dict["alpha_y_0"] = w_dot[1]
+    calculation_dict["alpha_z_0"] = w_dot[2]
+
+    w_jplus1 = w_0 + w_dot*delta_t
+    calculation_dict["w_x_0"] = w_jplus1[0]
+    calculation_dict["w_y_0"] = w_jplus1[1]
+    calculation_dict["w_z_0"] = w_jplus1[2]
+    calculation_dict["w_0"] = np.matrix([[w_jplus1[0]], [w_jplus1[1]], [w_jplus1[2]]])
+
+    theta_jplus1 = theta_0 + w_jplus1*delta_t
+    calculation_dict["theta_x_0"] = theta_jplus1[0]
+    calculation_dict["theta_y_0"] = theta_jplus1[1]
+    calculation_dict["theta_z_0"] = theta_jplus1[2]
+
+    return calculation_dict
+
+def simulation(delta_t, time_span, initial_conds_dict, F_control, F_aero, M_aero):
+    theta_0 = np.matrix([[initial_conds_dict["theta_x_0"]], [initial_conds_dict["theta_y_0"]], [initial_conds_dict["theta_z_0"]]]) #Initial angle
     w_0 = np.matrix([[initial_conds_dict["w_x_0"]], [initial_conds_dict["w_y_0"]], [initial_conds_dict["w_z_0"]]]) #Initial angular velocity vector
     r_0 = np.matrix([[initial_conds_dict["r_x_0"]], [initial_conds_dict["r_y_0"]], [initial_conds_dict["r_z_0"]]]) #Initial position vector
     v_0 = np.matrix([[initial_conds_dict["v_x_0"]], [initial_conds_dict["v_y_0"]], [initial_conds_dict["v_z_0"]]]) #Initial linear velocity vector
     delta_t = delta_t #Time-step
+    time_span = time_span #Time-span
+    time = range(0, time_span, delta_t)
     
+    v_x, v_y, v_z = [],[],[]
+    r_x, r_y, r_z = [],[],[]
+    w_x, w_y, w_z = [],[],[]
+    theta_x, theta_y, theta_z = [],[],[]
+    alpha_x, alpha_y, alpha_z = [],[],[]
+    a_x, a_y, a_z = [],[],[]
+
+    calculation_dict = {}
+    
+    for i in range(len(time)):
+        v_dot = linear_dynamics(constant_dict, F_control, F_aero)
+        calculation_dict["v_dot"] = v_dot
+        calculation_dict["a_x_0"] = v_dot[0]
+        calculation_dict["a_y_0"] = v_dot[1]
+        calculation_dict["a_z_0"] = v_dot[2]
+
+        if time[i] == 0:
+            calculation_dict = angular_simulation(v_0, r_0, w_0, theta_0, v_dot, initial_conds_dict, calculation_dict)
+        else:
+            calculation_dict = angular_simulation(calculation_dict["v_0"], calculation_dict["r_0"], calculation_dict["w_0"], calculation_dict["theta_0"], calculation_dict["v_dot"], calculation_dict, calculation_dict)
+        
+        v_x.append(calculation_dict["v_x_0"])
+        v_y.append(calculation_dict["v_y_0"])
+        v_z.append(calculation_dict["v_z_0"])
+
+        r_x.append(calculation_dict["r_x_0"])
+        r_y.append(calculation_dict["r_y_0"])
+        r_z.append(calculation_dict["r_z_0"])
+
+        a_x.append(calculation_dict["a_x_0"])
+        a_y.append(calculation_dict["a_x_0"])
+        a_z.append(calculation_dict["a_z_0"])
+
+        w_x.append(calculation_dict["w_x_0"])
+        w_y.append(calculation_dict["w_y_0"])
+        w_z.append(calculation_dict["w_z_0"])
+
+        theta_x.append(calculation_dict["theta_x_0"])
+        theta_y.append(calculation_dict["theta_y_0"])
+        theta_z.append(calculation_dict["theta_z_0"])
+
+        alpha_x.append(calculation_dict["alpha_x_0"])
+        alpha_y.append(calculation_dict["alpha_y_0"])
+        alpha_z.append(calculation_dict["alpha_z_0"])
+
+    output_dict = {'v_x':v_x}
+    return output_dict
 
 
 constant_dict = read_txt("Constants.txt")
@@ -154,4 +234,12 @@ F_aero = np.matrix([[0], [4], [0]])
 M_aero = np.matrix([[0],[0],[0]])
 F_control = np.matrix([[0],[0],[0]])
 H = Euler_rot(initialconds_dict, constant_dict, config_dict, M_aero, F_control)
-a = linear_dynamics(initialconds_dict, constant_dict, F_control, F_aero)
+
+
+
+a = linear_dynamics(constant_dict, F_control, F_aero)
+
+delta_t = 0.01
+time_span = 5
+output_dict = simulation(delta_t, time_span, initialconds_dict, F_control, F_aero, M_aero)
+print(output_dict)
