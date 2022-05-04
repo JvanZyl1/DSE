@@ -54,3 +54,6 @@ S_e = 4
 C_D_Ptot = 1.04 * (CD_fus + CD_rothub + CD_rotpylon)
 
 D_parasite = q * S_e * C_D_Ptot
+
+print('parasite', D_parasite)
+print('C_D_Ptot', C_D_Ptot)
