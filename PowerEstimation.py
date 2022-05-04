@@ -18,7 +18,7 @@ def PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
                         # advance ratio [~]
 
     # Calculate the dimensionalizing factor
-    P_fact = rho * A_rotor * R_prop**3 * (omega_prop \
+    P_fact = rho * A_rotor * R_prop**3 * (omega_prop
     * (2 * np.pi / 60))**3
 
     # Caculate the thrust coefficient
@@ -43,9 +43,29 @@ def PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
     P0 = CalculateP0(sigma, C_d0, K, mu, P_fact)
     Pi = CalculatePi(kappa, mu, C_T, P_fact)
     Pp = CalculatePp(f, A_rotor, mu, P_fact)
+    print("Power components: ", P0, Pi, Pp)
 
     print('The tip speed in m/s is: ', np.round(omega_prop * R_prop * (2 * np.pi / 60),2))
     P_cruise = P0 + Pi + Pp
     print('The power required in cruise is [kW]:', np.round((P_cruise/1000),2))
     return P_cruise
+
+def MaxPowerEstimation(MTOW, N_prop, R_prop, duct=False):
+    """
+    This function calculates the maximum power required (at take-off and landing)
+    input: MTOW
+    :return:
+    """
+    T = MTOW   # N
+
+    if duct:
+        Ti = 1.2  # Multiplication factor for ducted propeller thrust (from literature)
+    else:
+        Ti = 1
+
+    disk_area = R_prop * np.pi ** 2 * N_prop  # m^2, Actuator disk area (total)
+
+    P_max = np.sqrt((T / Ti) ** 3 / (2 * rho * disk_area))  # W
+
+    return P_max
 
