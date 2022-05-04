@@ -1,25 +1,28 @@
 
 '''
 This scipt includes functions for weight estimation routines
-Estimates the following components:
+Estimates the following component weights:
 
-Propulsion Group:
+Battery Weight:         * Inputs: R, R_div, V_cr, V_TO, h_TO, eta_E, P_cruise
+
+Propulsion Group:       * Inputs: P_cruise, N_prop, B_prop, R_prop,
 * Blade weight
 * Motor weight
 * Cable weight
 
-Wing group:
+Wing group:             * Inputs: W_MTOW, W_Pl, b, Lambda, S, t_chord, n_ult
 * Hydraulics
 * Wing structure weight
 * Surface control
 
-Fuselage group
+Fuselage group           * Inputs: W_MTOW, W_PL, l_t, V_cr, D, l, S_nac, N_nac
 * Fuselage structural mass
 * Furnishing
 * Nacelle
 * Landing gear
+* Avionics
 
-Tailplane group
+Tailplane group          * Inputs: S_h, S_v, n_ult
 * Horizontal tailplane
 * Vertical tailplane
 '''
@@ -42,9 +45,9 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_cruise):
     E_CR = t_CR * P_cruise
     E_TO = t_TO * P_cruise * n_TO
     E_total = (E_TO + E_CR) / 3600               # total energy needed in [Wh]
-    M_bat = E_total / eta_E
-
-    return M_bat
+    W_bat = E_total / eta_E
+    Wts = np.array([["Battery Weight", W_bat]], dtype=object)
+    return W_bat, Wts
 
 ### Mass estimation methods for wing-equipped aircraft
 # Taken from Torenbeek chapter 8.
@@ -99,7 +102,7 @@ def EngineMassFun(P_cruise):               # based off the perofrmance of the EM
     W_e = (P_cruise / PowWtRat) / N_prop
     return W_e
 
-def PropMassFun(N_prop, R_prop, B_prop, P_cruise):
+def BladeMassFun(N_prop, R_prop, B_prop, P_cruise):
     '''
     This function estimates the mass of propeller blades
     based off the cruise / take-off overall power and propeller configuration.
@@ -135,6 +138,7 @@ def NacelleMassFun(S_nac, V_cr):
     '''
     This function is used to estimate the weight of nacelles, struts, etc.
     It takes design dive speed and wetted surface area as inputs.
+    Designed for one nacelle
     '''
     V_D = 2*V_cr / 3.6      # S_nac - total area of nacelle wetted by the airflow externally and internally.
                             # Also works for pylons, struts etc.
@@ -154,48 +158,75 @@ def CableMassFun(N_prop, W_e):
     W_cable = ( W_e / W_e_ref * (l_cab * 2) ) * N_prop
     return W_cable
 
-def HydraulicsMassFun(W_e):
+def HydraulicsMassFun(W_MTOW, W_PL):
     '''
-    This function estimates the weight of the hydraulics based off the engine weight
+    This function estimates the weight of the hydraulics, pneumatics and
+    sine electrical component based off the empty weight
     '''
-    W_hd = 0.00914 * (W_e ** 1.2) * N_prop  #based off the engine weight
+    W_e = W_MTOW - W_PL
+    W_hd = 0.00914 * (W_e ** 1.2)
     return W_hd
 
 def FurnishingMassFun(W_PL):
     '''
-    This function estimate the weight of the furnishing based off the payload and number
+    This function estimates the weight of the furnishing based off the payload and number
     of passengers.
     '''
-    W_fur = 5.9 * (W_Pl / 125) + 2.3
+    W_fur = 5.9 * (W_PL/125) + 2.3
     return W_fur
 
+def AvionicsMassFun(W_MTOW):
+    '''
+    This function calculates the weight of hte instrumentation and avionics.
+    '''
+    W_av = 18.1 + 0.008 * W_MTOW
+    return W_av
 
-def PropGroupMassFun(N_prop, W_e, W_blades, W_cab):
+def PropGroupMassFun(N_prop, R_prop, B_prop, P_cruise):
     '''
     This function gives the weight of the whole propulsion group
     based off the motor and blade weight.
     '''
-    W_prop =  N_prop * W_e     # extra 50% accounting for cabling. NACELLES NOT INCLUDED !
-    W_pg = W_prop + W_blades + W_cab          # propulsion group is only cables, blades and motors :) NO NACELLE !
-    return W_pg
+    W_e = EngineMassFun(P_cruise)
+    W_engs = W_e * N_prop
+    W_bl = BladeMassFun(N_prop, R_prop, B_prop, P_cruise)
+    W_cab = CableMassFun(N_prop, W_e)
+    W_pg = W_engs + W_bl + W_cab          # propulsion group is only cables, blades and motors :) NO NACELLE !a = np.array([["String",1,2]], dtype=object)
+    Wts = np.array([["Blade Weight", W_bl], ["Engines Weight", W_engs], ["Cable Weight", W_cab]], dtype=object)
+    return W_pg, Wts
 
-def WingGroupMassFun(W_w, W_h, W_sc):
+def WingGroupMassFun(W_MTOW, W_PL, b, Lambda, S, t_chord, n_ult):
     '''
     This functions gives the weight of the wing group
     '''
-    W_wg = W_w + W_h + W_sc
-    return W_wg
+    W_w = WingMassFun(W_MTOW, b, Lambda, S, t_chord, n_ult)
+    W_hd = HydraulicsMassFun(W_MTOW, W_PL)
+    W_sc = SurfaceControlsMassFun(W_MTOW)
+    W_wg = W_w + W_hd + W_sc
+    Wts = np.array([["Wing Structural Weight", W_w], ["Surface controls Weight", W_sc], ["Hydraulics Weight", W_hd]], dtype=object)
+    return W_wg, Wts
 
-def FuselageGroupMassFun(W_fus, W_fur, W_lg, W_nac):
+def FuselageGroupMassFun(W_MTOW, W_PL, l_t, V_cr, D, l, S_nac, N_nac):
     '''
     This functions returns the weight of the fuselage group
     '''
-    W_fg = W_fus + W_fur + W_lg + W_nac
-    return W_fg
+    W_fs = FuselageMassFun(l_t, V_cr, D, l)
+    W_fur = FurnishingMassFun(W_PL)
+    W_lg = LandingGearMassFun(W_MTOW)
+    W_nac = N_nac * NacelleMassFun(S_nac, V_cr)
+    W_av = AvionicsMassFun(W_MTOW)
+    W_fg = W_fs + W_fur + W_lg + W_nac + W_av
+    Wts = np.array([["Fuselage Structural Weight", W_fs], ["Furnishing Weight", W_fur], \
+            ["Landing Gear Weight", W_lg], ["Nacelles Weight", W_nac], ["Avionics Weight", W_av]], dtype=object)
+    return W_fg, Wts
 
-def TailplaneGroupFun(W_ht, W_vt):
+def TailplaneGroupFun(S_h, S_v, n_ult):
     '''
     This functions returns the weight of the tailplane group
     '''
+    W_ht = TailPlaneMassFun(S_h, n_ult)
+    W_vt = TailPlaneMassFun(S_v, n_ult)
     W_tg = W_ht + W_vt
-    return W_tg
+    Wts = np.array([["Vertical Tail Weight", W_vt], ["Horizontal Tail Weight", W_ht]], dtype = object)
+    return W_tg, Wts
+
