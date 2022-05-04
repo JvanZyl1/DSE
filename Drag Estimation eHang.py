@@ -45,3 +45,4 @@ CD_fus = 0.0045 #use the wetted area as reference area
 CD_rothub = 0.0045 #use the rotor disk area as reference area
 CD_rotpylon = 0.025 #use wetted area
 D_q_landinggear = 0.2
+D_q_tot = 3.43*0.3048**2 #[m^2] Total CDA of a quadcopter
