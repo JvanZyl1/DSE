@@ -70,8 +70,39 @@ def TailPlaneMassFun(S_t, n_ult):           # weight estimation for the tailplan
     return W_tail
 
 def EngineMassFun(P_cruise):               # based off the perofrmance of the EMRAX electric motors
-    return W_e = (P_cruise / PowWtRat) / N_prop
+    W_e = (P_cruise / PowWtRat) / N_prop
+    return W_e
 
 def PropGroupMassFun(N_prop, P_to, W_e):
     W_pg =  N_prop * (1.5 * W_e)      # extra 50% accounting for cabling. NACELLES NOT INCLUDED !
     return W_pg
+
+def LandingGearMassFun(W_MTOW):
+    k_uc = 1.0 # based off Table 8-6 from Torenbeek.
+    A_m = 9.1; B_m = 0.082; C_m = 0.019
+    A_n = 11.3; C_n = 0.0024;   #Main and nose LG weight coefficients
+    W_uc_m = k_uc * (A_m + B_m*W_MTOW**0.75 + C_m * W_MTOW)
+    W_uc_n = k_uc * (A_n +  + C_n * W_MTOW)
+    W_uc = W_uc_n + W_uc_m
+    return W_uc
+
+def SurfaceControlsMassFun(W_MTOW):
+    W_sc = 8 * W_MTOW ** 0.2
+
+def NacelleMassFun(S_nac, V_cr):
+    V_D = 2*V_cr / 3.6      # S_nac - total area of nacelle wetted by the airflow externally and internally.
+                            # Also works for pylons, struts etc.
+    W_nac = 0.405 * np.sqrt(V_D) * (S_nac ** 1.3)
+    return W_nac
+
+def AirframeEquipmentMassFun(W_MTOW):
+    W_eq = 0.08 * W_MTOW
+    return W_eq
+
+def HydraulicsMassFun(W_e):
+    W_hd = 0.00914 * (W_e ** 1.2) * N_prop  #based off the engine weight
+    return W_hd
+
+def FurnishingMassFun(W_PL):
+    W_fur = 5.9 * (W_Pl / 125) + 2.3
+    return W_fur
