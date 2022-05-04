@@ -95,25 +95,31 @@ def T_zyx(a,b,c,mat):
     Tzyx = T_x(a, Tzy)
     return Tzyx
 
-def Euler_rot(initial_conds_dict, constant_dict, config_dict, M_aero, F):
+def Euler_rot(initial_conds_dict, constant_dict, config_dict, M_aero, F_control):
     w_vec = np.matrix([[initial_conds_dict["w_x_0"]], [initial_conds_dict["w_y_0"]], [initial_conds_dict["w_z_0"]]])
     #r_cp_cg = np.matrix([[config_dict["x_cg_cp"]], [config_dict["y_cg_cp"]], [config_dict["z_cg_cp"]]])
     I = constant_dict["I_mat"]
     H = np.matmul(I, w_vec)
     w_cross_H = (np.cross(w_vec.T, H.T)).T
     d_arm = np.matrix([[config_dict["quadcopter"]["x_1"], config_dict["quadcopter"]["y_1"], config_dict["quadcopter"]["z_1"]], [config_dict["quadcopter"]["x_2"], config_dict["quadcopter"]["y_2"], config_dict["quadcopter"]["z_2"]], [config_dict["quadcopter"]["x_3"], config_dict["quadcopter"]["y_3"], config_dict["quadcopter"]["z_3"]]])
-
+    M_control = np.dot(d_arm, F_control)
+    #w_dot = np.matrix([[initial_conds_dict["w_dotx_0"]], [initial_conds_dict["w_doty_0"]], [initial_conds_dict["w_dotz_0"]]])
+    part_1 = M_control + M_aero - w_cross_H
+    w_dot = np.matmul(constant_dict["I_inv"], part_1)
+    print(w_dot)
     return w_cross_H
+
+def linear_dynamics(initial_conds_dict, constant_dict)
 
 constant_dict = read_txt("Constants.txt")
 initialconds_dict = read_txt("Initial_Conditions.txt")
 config_dict = read_configuration("Propulsive_arms.txt")
-print(config_dict)
 I = np.matrix([[constant_dict['I_xx'], constant_dict['I_xy'], constant_dict['I_xz']],
     [constant_dict['I_yx'], constant_dict['I_yy'], constant_dict['I_yz']],
     [constant_dict['I_zx'], constant_dict['I_zy'], constant_dict['I_zz']]])
+Iinv = np.linalg.inv(I)
 constant_dict["I_mat"] = I
+constant_dict["I_inv"] = Iinv
 M_aero = [[0],[0],[0]]
 F = [[0],[0],[0]]
 H = Euler_rot(initialconds_dict, constant_dict, config_dict, M_aero, F)
-print(H)
