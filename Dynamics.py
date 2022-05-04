@@ -1,19 +1,42 @@
+from distutils.command.config import config
 import numpy as np
 
-def read_constants():
+def read_txt(file):
     '''
-    This function reads the file Constants.txt to create the constants dictionary
+    This function reads the file  to create a dictonary
 
-    return: constant_dict - a dictionary of all the constants
+    return: dict - a dictionary of all the constants
     '''
-    constant_dict = {}
-    file = "Constants.txt"
+    new_dict = {}
     file_reading = open(str(file), "r") #open the file
     freq = file_reading.readlines()  #read the lines
     for line in freq:
         row = line.split()
-        constant_dict[str(row[0])] = float(row[1])
-    return constant_dict
+        new_dict[str(row[0])] = float(row[1])
+    return new_dict
+
+def read_configuration(file):
+    '''
+    This function reads the file  to create a nested dictionary
+
+    param: file - input txt file to read
+
+    return: w_dict - a nested dictionary
+    '''
+    w_dict = {}
+    file_reading = open(str(file), "r") #open the file
+    freq = file_reading.readlines()  #read the lines
+    names = []
+    for line in freq:
+        row = line.split()
+        if row[0] not in names:
+            names.append(row[0])
+    for i in range(len(names)):
+        w_dict[names[i]] = {}
+    for line in freq:
+        row = line.split()
+        w_dict[row[0]][row[1]] = float(row[2])
+    return w_dict
 
 def T_x(a, mat):
     '''
@@ -72,9 +95,25 @@ def T_zyx(a,b,c,mat):
     Tzyx = T_x(a, Tzy)
     return Tzyx
 
+def Euler_rot(initial_conds_dict, constant_dict, config_dict, M_aero, F):
+    w_vec = np.matrix([[initial_conds_dict["w_x_0"]], [initial_conds_dict["w_y_0"]], [initial_conds_dict["w_z_0"]]])
+    #r_cp_cg = np.matrix([[config_dict["x_cg_cp"]], [config_dict["y_cg_cp"]], [config_dict["z_cg_cp"]]])
+    I = constant_dict["I_mat"]
+    H = np.matmul(I, w_vec)
+    w_cross_H = (np.cross(w_vec.T, H.T)).T
+    d_arm = np.matrix([[config_dict["quadcopter"]["x_1"], config_dict["quadcopter"]["y_1"], config_dict["quadcopter"]["z_1"]], [config_dict["quadcopter"]["x_2"], config_dict["quadcopter"]["y_2"], config_dict["quadcopter"]["z_2"]], [config_dict["quadcopter"]["x_3"], config_dict["quadcopter"]["y_3"], config_dict["quadcopter"]["z_3"]]])
 
-constant_dict = read_constants()
+    return w_cross_H
+
+constant_dict = read_txt("Constants.txt")
+initialconds_dict = read_txt("Initial_Conditions.txt")
+config_dict = read_configuration("Propulsive_arms.txt")
+print(config_dict)
 I = np.matrix([[constant_dict['I_xx'], constant_dict['I_xy'], constant_dict['I_xz']],
     [constant_dict['I_yx'], constant_dict['I_yy'], constant_dict['I_yz']],
     [constant_dict['I_zx'], constant_dict['I_zy'], constant_dict['I_zz']]])
-
+constant_dict["I_mat"] = I
+M_aero = [[0],[0],[0]]
+F = [[0],[0],[0]]
+H = Euler_rot(initialconds_dict, constant_dict, config_dict, M_aero, F)
+print(H)

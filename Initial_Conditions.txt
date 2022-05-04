@@ -1,0 +1,12 @@
+w_x_0   0
+w_y_0   0
+w_z_0   0
+w_xdot_0    0
+w_ydot_0    0
+w_zdot_0    0
+v_x_0   0
+v_y_0   0
+v_z_0   0
+r_cx_0  0
+r_cy_0  0
+r_cz_0  0
