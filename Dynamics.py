@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def read_txt(file):
     '''
@@ -107,7 +108,8 @@ def Euler_rot(initial_conds_dict, constant_dict, config_dict, M_aero, F_control)
     return: w_dot - the angular accleration vector
     
     '''
-    w_vec = np.matrix([[initial_conds_dict["w_x_0"]], [initial_conds_dict["w_y_0"]], [initial_conds_dict["w_z_0"]]]) #Angular velocity vector
+    w_vec = np.matrix([[float(initial_conds_dict["w_x_0"])], [float(initial_conds_dict["w_y_0"])], [float(initial_conds_dict["w_z_0"])]]) #Angular velocity vector
+    
     #r_cp_cg = np.matrix([[config_dict["x_cg_cp"]], [config_dict["y_cg_cp"]], [config_dict["z_cg_cp"]]])
     I = constant_dict["I_mat"]  #Inertia matrix
     H = np.matmul(I, w_vec) #Angular momentum
@@ -132,45 +134,89 @@ def linear_dynamics(constant_dict, F_control, F_aero):
     return acceleration
 
 def angular_simulation(v_0, r_0, w_0, theta_0, v_dot, euler_rot, calculation_dict):
-    v_jplus1 = v_0 + v_dot*delta_t
+    '''
+    This is the kinematics block
+
+    param: v_0 - initial velocity vector
+    param: r_0 - initial position vector
+    param: w_0 - initial angular velocity vector
+    param: theta_0 - initial angle vector
+    param: v_dot - initial acceleration vector
+    param: euler_rot - dictionary for starting Euler_rot function
+    param: calculation_dict - for storing values
+
+    return: calculation_dict
+    '''
+    v_jplus1 = v_0 + np.multiply(v_dot,delta_t)
     calculation_dict["v_x_0"] = v_jplus1[0]
     calculation_dict["v_y_0"] = v_jplus1[1]
     calculation_dict["v_z_0"] = v_jplus1[2]
-    calculation_dict["v_0"] = np.matrix([[v_jplus1[0]], [v_jplus1[1]], [v_jplus1[2]]])
+    calculation_dict["v_0"] = v_jplus1
 
     r_jplus1 = r_0 + v_jplus1*delta_t
     calculation_dict["r_x_0"] = r_jplus1[0]
     calculation_dict["r_y_0"] = r_jplus1[1]
     calculation_dict["r_z_0"] = r_jplus1[2]
-    calculation_dict["r_0"] = np.matrix([[r_jplus1[0]], [r_jplus1[1]], [r_jplus1[2]]])
+    calculation_dict["r_0"] = r_jplus1
 
     w_dot = Euler_rot(euler_rot, constant_dict, config_dict, M_aero, F_control)
     calculation_dict["alpha_x_0"] = w_dot[0]
     calculation_dict["alpha_y_0"] = w_dot[1]
     calculation_dict["alpha_z_0"] = w_dot[2]
+    calculation_dict["alpha_0"] = w_dot
 
     w_jplus1 = w_0 + w_dot*delta_t
     calculation_dict["w_x_0"] = w_jplus1[0]
     calculation_dict["w_y_0"] = w_jplus1[1]
     calculation_dict["w_z_0"] = w_jplus1[2]
-    calculation_dict["w_0"] = np.matrix([[w_jplus1[0]], [w_jplus1[1]], [w_jplus1[2]]])
+    calculation_dict["w_0"] = w_jplus1
 
     theta_jplus1 = theta_0 + w_jplus1*delta_t
     calculation_dict["theta_x_0"] = theta_jplus1[0]
     calculation_dict["theta_y_0"] = theta_jplus1[1]
     calculation_dict["theta_z_0"] = theta_jplus1[2]
+    calculation_dict["theta_0"] = theta_jplus1
 
     return calculation_dict
+
+def angles(w_0, delta_t, F_dict):
+    '''
+    This function rotates the forces
+
+    param: w_0 - the angular acclereation at the start of time step
+    param: delta_t - time step
+    param: F_dict - dictionary containing the forces
+    
+    return: F_rest_rot - rotated forces excluding control forces
+    return: F_control_rot - rotated control forces
+    '''
+    F_x_total = sum(d['x'] for d in F_dict.values() if d)
+    F_y_total = sum(d['y'] for d in F_dict.values() if d)
+    F_z_total = sum(d['z'] for d in F_dict.values() if d)
+    F_control_x = F_dict["control"]["x"]
+    F_control_y = F_dict["control"]["y"]
+    F_control_z = F_dict["control"]["z"]
+    F_control_vec = [[float(F_control_x)], [float(F_control_y)], [float(F_control_z)]]
+    F_x_rest = F_x_total - F_control_x
+    F_y_rest = F_y_total - F_control_y
+    F_z_rest = F_z_total - F_control_z
+    F_rest_vec = [[float(F_x_rest)], [float(F_y_rest)], [float(F_z_rest)]]
+    dtheta = np.dot(w_0, delta_t) #Change in angle
+    F_rest_rot = T_zyx(dtheta[0],dtheta[1],dtheta[2],F_rest_vec)
+    F_control_rot = T_zyx(dtheta[0],dtheta[1],dtheta[2],F_control_vec)
+    # Update dictionary for forces TBD !!!!!!
+    return F_rest_rot, F_control_rot
+
+
 
 def simulation(delta_t, time_span, initial_conds_dict, F_control, F_aero, M_aero):
     theta_0 = np.matrix([[initial_conds_dict["theta_x_0"]], [initial_conds_dict["theta_y_0"]], [initial_conds_dict["theta_z_0"]]]) #Initial angle
     w_0 = np.matrix([[initial_conds_dict["w_x_0"]], [initial_conds_dict["w_y_0"]], [initial_conds_dict["w_z_0"]]]) #Initial angular velocity vector
     r_0 = np.matrix([[initial_conds_dict["r_x_0"]], [initial_conds_dict["r_y_0"]], [initial_conds_dict["r_z_0"]]]) #Initial position vector
     v_0 = np.matrix([[initial_conds_dict["v_x_0"]], [initial_conds_dict["v_y_0"]], [initial_conds_dict["v_z_0"]]]) #Initial linear velocity vector
-    delta_t = delta_t #Time-step
-    time_span = time_span #Time-span
-    time = range(0, time_span, delta_t)
     
+    time = np.arange(0, time_span, delta_t)
+
     v_x, v_y, v_z = [],[],[]
     r_x, r_y, r_z = [],[],[]
     w_x, w_y, w_z = [],[],[]
@@ -179,7 +225,7 @@ def simulation(delta_t, time_span, initial_conds_dict, F_control, F_aero, M_aero
     a_x, a_y, a_z = [],[],[]
 
     calculation_dict = {}
-    
+
     for i in range(len(time)):
         v_dot = linear_dynamics(constant_dict, F_control, F_aero)
         calculation_dict["v_dot"] = v_dot
@@ -192,32 +238,35 @@ def simulation(delta_t, time_span, initial_conds_dict, F_control, F_aero, M_aero
         else:
             calculation_dict = angular_simulation(calculation_dict["v_0"], calculation_dict["r_0"], calculation_dict["w_0"], calculation_dict["theta_0"], calculation_dict["v_dot"], calculation_dict, calculation_dict)
         
-        v_x.append(calculation_dict["v_x_0"])
-        v_y.append(calculation_dict["v_y_0"])
-        v_z.append(calculation_dict["v_z_0"])
+        v_x.append(float(calculation_dict["v_x_0"]))
+        v_y.append(float(calculation_dict["v_y_0"]))
+        v_z.append(float(calculation_dict["v_z_0"]))
 
-        r_x.append(calculation_dict["r_x_0"])
-        r_y.append(calculation_dict["r_y_0"])
-        r_z.append(calculation_dict["r_z_0"])
+        r_x.append(float(calculation_dict["r_x_0"]))
+        r_y.append(float(calculation_dict["r_y_0"]))
+        r_z.append(float(calculation_dict["r_z_0"]))
 
-        a_x.append(calculation_dict["a_x_0"])
-        a_y.append(calculation_dict["a_x_0"])
-        a_z.append(calculation_dict["a_z_0"])
+        a_x.append(float(calculation_dict["a_x_0"]))
+        a_y.append(float(calculation_dict["a_x_0"]))
+        a_z.append(float(calculation_dict["a_z_0"]))
 
-        w_x.append(calculation_dict["w_x_0"])
-        w_y.append(calculation_dict["w_y_0"])
-        w_z.append(calculation_dict["w_z_0"])
+        w_x.append(float(calculation_dict["w_x_0"]))
+        w_y.append(float(calculation_dict["w_y_0"]))
+        w_z.append(float(calculation_dict["w_z_0"]))
 
-        theta_x.append(calculation_dict["theta_x_0"])
-        theta_y.append(calculation_dict["theta_y_0"])
-        theta_z.append(calculation_dict["theta_z_0"])
+        theta_x.append(float(calculation_dict["theta_x_0"]))
+        theta_y.append(float(calculation_dict["theta_y_0"]))
+        theta_z.append(float(calculation_dict["theta_z_0"]))
 
-        alpha_x.append(calculation_dict["alpha_x_0"])
-        alpha_y.append(calculation_dict["alpha_y_0"])
-        alpha_z.append(calculation_dict["alpha_z_0"])
+        alpha_x.append(float(calculation_dict["alpha_x_0"]))
+        alpha_y.append(float(calculation_dict["alpha_y_0"]))
+        alpha_z.append(float(calculation_dict["alpha_z_0"]))
 
-    output_dict = {'v_x':v_x}
+    output_dict = {'r_x':r_x, 'r_y':r_y, 'r_z':r_z, 'v_x': v_x, 'v_y': v_y, 'v_z': v_z, 'a_x':a_x, 'a_y':a_y, 'a_z':a_z, 
+    'theta_x': theta_x, 'theta_y': theta_y, 'theta_z': theta_z, 'w_x': w_x, 'w_y': w_y, 'w_z': w_z, 'alpha_x': alpha_x,
+    'alpha_y': alpha_x, 'alpha_y': alpha_y, 'alpha_z': alpha_z, 't': time}
     return output_dict
+
 
 
 constant_dict = read_txt("Constants.txt")
@@ -235,11 +284,18 @@ M_aero = np.matrix([[0],[0],[0]])
 F_control = np.matrix([[0],[0],[0]])
 H = Euler_rot(initialconds_dict, constant_dict, config_dict, M_aero, F_control)
 
-
-
 a = linear_dynamics(constant_dict, F_control, F_aero)
 
 delta_t = 0.01
 time_span = 5
 output_dict = simulation(delta_t, time_span, initialconds_dict, F_control, F_aero, M_aero)
-print(output_dict)
+
+plt.plot(output_dict["t"], output_dict["v_y"])
+plt.xlabel("Time [s]")
+plt.ylabel("y velocity [m/s]")
+plt.title("time-vy")
+plt.show()
+
+
+### Need to add a F_control including the rotation angles
+### TBD Aerodynamic moments with rotation

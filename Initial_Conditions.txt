@@ -7,9 +7,9 @@ w_dotz_0    0
 v_x_0   0
 v_y_0   0
 v_z_0   0
-r_cx_0  0
-r_cy_0  0
-r_cz_0  0
+r_x_0  0
+r_y_0  0
+r_z_0  0
 theta_x_0   0
 theta_y_0   0
 theta_z_0   0
