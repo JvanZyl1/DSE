@@ -1,9 +1,15 @@
 import numpy as np
+from sympy import interactive_traversal
 
-#angles
-a = 0
-b = 0
-c = 0
+def read_constants():
+    constant_dict = {}
+    file = "Constants.txt"
+    file_reading = open(str(file), "r") #open the file
+    freq = file_reading.readlines()  #read the lines
+    for line in freq:
+        row = line.split()
+        constant_dict(str[row[0]]) = float(row[1])
+    return None   
 
 def T_x(a, mat):
     '''
