@@ -132,6 +132,12 @@ def linear_dynamics(initial_conds_dict, constant_dict, F_control, F_aero):
     acceleration = np.add(F_control, F_aero)*1/constant_dict["m"]
     return acceleration
 
+def simulation(delta_t, initial_conds_dict):
+    w_0 = np.matrix([[initial_conds_dict["w_x_0"]], [initial_conds_dict["w_y_0"]], [initial_conds_dict["w_z_0"]]]) #Initial angular velocity vector
+    r_0 = np.matrix([[initial_conds_dict["r_x_0"]], [initial_conds_dict["r_y_0"]], [initial_conds_dict["r_z_0"]]]) #Initial position vector
+    v_0 = np.matrix([[initial_conds_dict["v_x_0"]], [initial_conds_dict["v_y_0"]], [initial_conds_dict["v_z_0"]]]) #Initial linear velocity vector
+    delta_t = delta_t #Time-step
+    
 
 
 constant_dict = read_txt("Constants.txt")
