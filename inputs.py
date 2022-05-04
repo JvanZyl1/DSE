@@ -1,9 +1,9 @@
 '''Inputs script '''
 # Vehicle characteristics
-l = 6               # length of the vehicle in meters [m]
-D = 2               # diameter of the fuselage in meters [m]
+l = 3               # length of the vehicle in meters [m]
+D = 1.5               # diameter of the fuselage in meters [m]
 N_prop = 4          # number of propellers in meters squared [m2]
-R_prop = 3.7          # radius of each propeller in meters [m]
+R_prop = 0.5          # radius of each propeller in meters [m]
 omega_prop = 300    # rotational speed of each propeller in rpm [min-1]
 M_PL = 250          # mass of the payload in kilograms [kg]
 eta_E = 200         # energy density of the battery in [Wh/kg]\
