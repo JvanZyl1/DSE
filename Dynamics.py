@@ -1,15 +1,19 @@
 import numpy as np
-from sympy import interactive_traversal
 
 def read_constants():
+    '''
+    This function reads the file Constants.txt to create the constants dictionary
+
+    return: constant_dict - a dictionary of all the constants
+    '''
     constant_dict = {}
     file = "Constants.txt"
     file_reading = open(str(file), "r") #open the file
     freq = file_reading.readlines()  #read the lines
     for line in freq:
         row = line.split()
-        constant_dict(str[row[0]]) = float(row[1])
-    return None   
+        constant_dict[str(row[0])] = float(row[1])
+    return constant_dict
 
 def T_x(a, mat):
     '''
@@ -48,7 +52,7 @@ def T_z(c, mat):
 
     return mat_rot_z - rotated matrix or vector
     '''
-    Tz = np.matrix([[cos(c), sin(c), 0], [-sin(c), cos(c), 0], [0, 0, 1]])
+    Tz = np.matrix([[np.cos(c), np.sin(c), 0], [-np.sin(c), np.cos(c), 0], [0, 0, 1]])
     mat_rot_z = mat*T_z
     return mat_rot_z
 
@@ -67,3 +71,10 @@ def T_zyx(a,b,c,mat):
     Tzy = T_y(b, Tz)
     Tzyx = T_x(a, Tzy)
     return Tzyx
+
+
+constant_dict = read_constants()
+I = np.matrix([[constant_dict['I_xx'], constant_dict['I_xy'], constant_dict['I_xz']],
+    [constant_dict['I_yx'], constant_dict['I_yy'], constant_dict['I_yz']],
+    [constant_dict['I_zx'], constant_dict['I_zy'], constant_dict['I_zz']]])
+
