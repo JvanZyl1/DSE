@@ -46,3 +46,11 @@ CD_rothub = 0.0045 #use the rotor disk area as reference area
 CD_rotpylon = 0.025 #use wetted area
 D_q_landinggear = 0.2
 D_q_tot = 3.43*0.3048**2 #[m^2] Total CDA of a quadcopter
+
+#drag build up method
+q = 0.5 * rho * V ** 2
+S_e = 4
+
+C_D_Ptot = 1.04 * (CD_fus + CD_rothub + CD_rotpylon)
+
+D_parasite = q * S_e * C_D_Ptot
