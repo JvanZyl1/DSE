@@ -8,6 +8,10 @@ from MassEstimation import *
 
 P_cruise = PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, W_MTOW)
 
+P_hover = PowerEstimationHover(R_prop, N_prop, rho, g, W_MTOW)
+
+
+
 W_PW_Sys = PowerPlantWeightEstFun(P_cruise) + DriveTrainWeightEstFun(W_MTOW)
 
 print(P_cruise, W_PW_Sys)

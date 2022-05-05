@@ -49,3 +49,17 @@ def PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
     print('The power required in cruise is [kW]:', np.round((P_cruise/1000),2))
     return P_cruise
 
+def PowerEstimationHover(R_prop, N_prop, rho, g, M_MTOW):
+
+    thrust = M_MTOW / N_prop
+
+    K = 22.35   # Typical value for sealevel conditions
+
+    P_prop = K * thrust ** 1.5 / R_prop
+
+    P_hover = P_prop * N_prop
+
+    print('The power required in hover is [kW]:', np.round((P_hover/1000),2))
+
+    return P_hover
+
