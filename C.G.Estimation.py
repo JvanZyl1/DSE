@@ -9,6 +9,7 @@ M_Wing=
 M_Tail=
 M_Payload=250 #[kg}
 
+#For now based on estimations from Ehang
 h_Landinggear= 0.4 #[m]
 h_Fuselage= 1.2 #[m]
 h_Prop= 0.5 #[m]
