@@ -50,7 +50,7 @@ def PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
     print('The power required in cruise is [kW]:', np.round((P_cruise/1000),2))
     return P_cruise
 
-def PowerEstimationHover(R_prop, N_prop, rho, g, M_MTOW):
+def PowerEstimationHover(R_prop, N_prop, M_MTOW):
 
     thrust = M_MTOW / N_prop
 

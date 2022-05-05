@@ -6,7 +6,8 @@ from inputs import *
 from PowerEstimation import *
 from MassEstimation import *
 
-#P_cruise = PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, W_MTOW)
+P_cruise = PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, W_MTOW)
+P_hover = PowerEstimationHover(R_prop, N_prop, W_MTOW)
 
 # Weight Estimation routine for KittyHawk
 BatWt, BatWts = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_cruise)
