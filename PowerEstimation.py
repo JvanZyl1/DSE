@@ -93,14 +93,12 @@ def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
 
 def PowerReq(MTOW,N_prop,R_prop,V_cr):
     T = (MTOW*g)*1.1       #10 percent safety factor
-    tilt_cruise =        #angle of tilt during cruise in degree
+    tilt_cruise = 10       #angle of tilt during cruise in degree
     disk_area = R_prop * np.pi ** 2 * N_prop
     kappa = 1.2       #correction factor for extra power losses
     V_perp = (V_cr*np.sin(tilt_cruise*(np.pi/180)))/3.6
     P = T*V_perp + kappa*T*(-V_perp/2 + np.sqrt(V_perp**2/4+T/(2*rho*disk_area)))
-    return P, V_perp, V_cr
+    return P
 
 
-print('Power required = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' kW')
-print('Perpendicular velocity = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1], 'm/s')
-print('cruise speed = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[2]/3.6, 'm/s')
+print('Power required = ',PowerReq(MTOW,N_prop,R_prop,V_cr)/1000,' kW')
