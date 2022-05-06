@@ -4,6 +4,8 @@ import numpy as np
 from inputs import *
 from Drag Estimation eHang import *
 
+def Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
+    '''Inputs: R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW. Output: Preq_cruise.'''
     # Assumed values for power estimation
 
     K = 4.65                                       # 4.5 in hover to 5 at mu = .5
@@ -31,10 +33,12 @@ from Drag Estimation eHang import *
 
     def CalculatePi(kappa, mu, C_T, P_fact):
         # it is assumed that mu >> lambda here
+        C_Pi = kappa * C_T**2 / (2 * mu) #Induced power coefficient [-]
         Pi = C_Pi * P_fact
         return Pi
 
     def CalculatePp(f, A_rotor, mu, P_fact):
+        C_Pp = 0.5 * mu**3 * (f/A_rotor) #Parisative power coefficient [-]
         Pp = C_Pp * P_fact
         return Pp
 
@@ -44,6 +48,17 @@ from Drag Estimation eHang import *
     print("Power components: ", P0, Pi, Pp)
 
     print('The tip speed in m/s is: ', np.round(omega_prop * R_prop * (2 * np.pi / 60),2))
+    
+    Preq_cruise = P0 + Pi + Pp #Total power from components [W]
+
+    print('The power required in cruise is [kW]:', np.round((Preq_cruise/1000),2))
+    return Preq_cruise
+def Rotorcraft_CruiseDrag(V_cr,M_MTOW,Preq_cruise,S_body):
+    '''Outputs order: Cruise drag, L/D and C_D'''
+    D_cruise = Preq_cruise / V_cr # Total drag during cruise [N]
+    L_D_cruise = (M_MTOW*V_cr)/Preq_cruise # L/D for cruise [-]
+    C_D_cruise = D_cruise / (0.5 *rho *V_cr**2 * S_body)
+    return D_cruise, L_D_cruise, C_D_cruise
 def PowerEstimationHover(R_prop, N_prop, M_MTOW):
 
     thrust = M_MTOW / N_prop
