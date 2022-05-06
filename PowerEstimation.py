@@ -6,7 +6,7 @@ from Parasitedrag_Estimation_Multirotor import *
 from DragEstimation import DragPolar
 from MassEstimation import BatteryMassFun
 
-def Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW):
+def Cruise_Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW):
     '''Inputs: R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW. Output: Preq_cruise.'''
     # Assumed values for power estimation
 

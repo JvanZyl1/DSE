@@ -77,13 +77,13 @@ elif VehicleConfig == 'VectoredThrust':
 
 elif VehicleConfig == 'multirotor':
     Wing = False
-    V_cr = 100 / 3.6          # Cruise velocity [m/s]
-    N_prop = 8                # Number of propellers [-]
-    R_prop = 0.8              # Propeller radius [m]
-    B_prop = 2                # Number of blades per propeller [-]
-    omega_prop = 30           # Rotational velocity of propeller [rad/s]
-    MTOW = 800                # Max take of weight [kg]
-
+    V_cr = 100 / 3.6                 # Cruise velocity [m/s]
+    N_prop = 4                       # Number of propellers [-]
+    R_prop = 0.7                     # Propeller radius [m]
+    B_prop = 5                       # Number of blades per propeller [-]
+    omega_prop = 30                  # Rotational velocity of propeller [rad/s]
+    MTOW = 800                       # Max take of weight [kg]
+    S_body = np.pi ** 2 * l * D / 4  # Assume fuselage to be an ellipse of revolution and calculate its wetted area
 
 
 
