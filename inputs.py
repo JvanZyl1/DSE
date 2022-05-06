@@ -31,6 +31,7 @@ VehicleConfig = 'LiftCruise'
 
 
 if VehicleConfig == 'LiftCruise':     #KittyHawk
+    Wing=True
     l_t = 3.344         # length from wing c/4 to root of tail
     C_L = 0.8           # Lift coefficient in cruise
     b = 11              # Wing span [m]
@@ -54,6 +55,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     # ^^^ This will be obtained from the calculations right? Yes
 
 elif VehicleConfig == 'VectoredThrust':
+    Wing = True
     C_L = 0.8  # Lift coefficient in cruise
     S = 10
     b = 12
@@ -74,6 +76,7 @@ elif VehicleConfig == 'VectoredThrust':
 
 
 elif VehicleConfig == 'multirotor':
+    Wing = True
     V_cr = 100 / 3.6          # Cruise velocity [m/s]
     N_prop = 4                # Number of propellers [-]
     R_prop = 0.7              # Propeller radius [m]

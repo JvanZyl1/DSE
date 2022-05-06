@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d79784b7-0bb1-4a2b-be8c-114235dd6b28" name="Changes" comment="hov-cr function for power estimation winged aircraft">
+    <list default="true" id="d79784b7-0bb1-4a2b-be8c-114235dd6b28" name="Changes" comment="first power estimation for all configurations done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MassEstimation.py" beforeDir="false" afterPath="$PROJECT_DIR$/MassEstimation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PowerEstimation.py" beforeDir="false" afterPath="$PROJECT_DIR$/PowerEstimation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PropSizing.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/inputs.py" beforeDir="false" afterPath="$PROJECT_DIR$/inputs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -179,12 +178,12 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.python" />
       <item itemvalue="Python.Lilium_estimationmethods" />
       <item itemvalue="Python.MassEstimation" />
       <item itemvalue="Python.PowerEstimation" />
       <item itemvalue="Python.PropSizing" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.python" />
     </list>
     <recent_temporary>
       <list>
@@ -261,7 +260,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651843417158</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="first power estimation for all configurations done">
+      <created>1651847347634</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1651847347634</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -282,6 +288,7 @@
     <MESSAGE value="first start to prop sizing" />
     <MESSAGE value="still working on power" />
     <MESSAGE value="hov-cr function for power estimation winged aircraft" />
-    <option name="LAST_COMMIT_MESSAGE" value="hov-cr function for power estimation winged aircraft" />
+    <MESSAGE value="first power estimation for all configurations done" />
+    <option name="LAST_COMMIT_MESSAGE" value="first power estimation for all configurations done" />
   </component>
 </project>
