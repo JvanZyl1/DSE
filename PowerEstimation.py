@@ -65,22 +65,19 @@ def PowerEstimationHover(R_prop, N_prop, M_MTOW):
 
     return P_hover
 
-def MaxPowerEstimation(MTOW, N_prop, R_prop, duct=False):
+def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
     """
     This function calculates the maximum power required (at take-off and landing)
     input: MTOW
-    :return:
+    :return: P_max
     """
     T = MTOW   # N
-
     if duct:
         Ti = 1.2  # Multiplication factor for ducted propeller thrust (from literature)
     else:
         Ti = 1
-
     disk_area = R_prop * np.pi ** 2 * N_prop  # m^2, Actuator disk area (total)
-
     P_max = np.sqrt((T / Ti) ** 3 / (2 * rho * disk_area))  # W
-
+    print("Pmax = ", P_max)
     return P_max
 
