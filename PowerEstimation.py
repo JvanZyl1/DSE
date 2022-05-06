@@ -4,8 +4,8 @@ import numpy as np
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
 
-def Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
-    '''Inputs: R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW. Output: Preq_cruise.'''
+def Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW):
+    '''Inputs: R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW. Output: Preq_cruise.'''
     # Assumed values for power estimation
 
     K = 4.65                                       # 4.5 in hover to 5 at mu = .5
@@ -23,7 +23,7 @@ def Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW
     P_fact = rho * A_rotor * (R_prop*omega_prop)**3 
 
     # Caculate the thrust coefficient
-    C_T = (M_MTOW * g / np.cos(np.deg2rad(alpha_TPP)) ) \
+    C_T = (MTOW * g / np.cos(np.deg2rad(alpha_TPP)) ) \
     / (rho * (R_prop * omega_prop)**2 * A_rotor)
 
     def CalculateP0(sigma, C_d0, K, mu, P_fact):
@@ -53,15 +53,15 @@ def Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW
 
     print('The power required in cruise is [kW]:', np.round((Preq_cruise/1000),2))
     return Preq_cruise
-def Rotorcraft_CruiseDrag(V_cr,M_MTOW,Preq_cruise,S_body):
+def Rotorcraft_CruiseDrag(V_cr,MTOW,Preq_cruise,S_body):
     '''Outputs order: Cruise drag, L/D and C_D'''
     D_cruise = Preq_cruise / V_cr # Total drag during cruise [N]
-    L_D_cruise = (M_MTOW*V_cr)/Preq_cruise # L/D for cruise [-]
+    L_D_cruise = (MTOW*V_cr)/Preq_cruise # L/D for cruise [-]
     C_D_cruise = D_cruise / (0.5 *rho *V_cr**2 * S_body)
     return D_cruise, L_D_cruise, C_D_cruise
-def PowerEstimationHover(R_prop, N_prop, M_MTOW):
+def PowerEstimationHover(R_prop, N_prop, MTOW):
 
-    thrust = M_MTOW / N_prop
+    thrust = MTOW / N_prop
 
     K = 22.35   # Typical value for sealevel conditions
 
