@@ -14,7 +14,7 @@ omega_prop = 300    # rotational speed of each propeller in rpm [min-1]
 W_PL = 250          # mass of the payload in kilograms [kg]
 eta_E = 200         # energy density of the battery in [Wh/kg]
 
-W_MTOW = 800        # maximum take-off weight in [kg]
+MTOW = 800        # maximum take-off weight in [kg]
 
 PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
 
@@ -32,7 +32,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     R_prop = 0.65
     B_prop = 2
     V_cr = 180 / 3.6
-    W_MTOW = 1224
+    MTOW = 1224
     eta_E = 157
     l = 4.8
     D = 1.5
@@ -66,7 +66,11 @@ elif VehicleConfig == 'multirotor':
     V_cr = 100
     N_prop = 4
     R_prop = 0.7   # [m]
+    B_prop = 5              # number of blades per propeller
+    omega_prop = 300 
     MTOW = 800
+    
+    
 
 
 
