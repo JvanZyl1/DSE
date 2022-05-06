@@ -10,6 +10,12 @@ R_prop = 2     #3.7       # radius of each propeller in meters [m]
 B_prop = 5              # number of blades per propeller
 omega_prop = 300    # rotational speed of each propeller in rpm [min-1]
 
+# Efficiencies
+eta_prop = 0.8  # efficiencies, values taken from https://arc.aiaa.org/doi/pdf/10.2514/6.2021-3169
+eta_motor = 0.95
+eta_power_transfer = 0.97
+eta_battery = 0.95
+eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer
 
 W_PL = 250          # mass of the payload in kilograms [kg]
 eta_E = 200         # energy density of the battery in [Wh/kg]

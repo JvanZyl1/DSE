@@ -100,11 +100,6 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     V_perp = (V_cr*np.sin(tilt_cruise*(np.pi/180)))/3.6
     v_i = np.sqrt((T/disk_area)*(1/(2*rho)))           #induced velocity during hover
     P = T*V_perp + kappa*T*(-V_perp/2 + np.sqrt(V_perp**2/4+T/(2*rho*disk_area)))
-    eta_prop = 0.8  # efficiencies, values taken from https://arc.aiaa.org/doi/pdf/10.2514/6.2021-3169
-    eta_motor = 0.95
-    eta_power_transfer = 0.97
-    eta_battery = 0.95
-    eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer
     P_cr = P / eta_final
     K_TO = 1.5     #safety factor takeoff
     T_TO = K_TO*T
@@ -129,4 +124,5 @@ def hov_cr_rotor():
 
 print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' kW')
 print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' kW')
+
 
