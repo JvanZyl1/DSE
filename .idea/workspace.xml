@@ -154,11 +154,11 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.python" />
       <item itemvalue="Python.Lilium_estimationmethods" />
       <item itemvalue="Python.MassEstimation" />
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.PropSizing" />
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.python" />
     </list>
     <recent_temporary>
       <list>
