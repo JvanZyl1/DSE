@@ -6,8 +6,8 @@ Cd = .2
 A  = 3.5 # area in m2
 m  = 827 # mass in kg
 # u  = 20  # gust velocity in m/s
-t  = 2000   # time of gust in s
-tau = .1 # random time delay, https://link.springer.com/content/pdf/10.3103/S1068799816020045.pdf
+t  = 5000   # time of gust in s
+tau = 0.01 # random time delay, https://link.springer.com/content/pdf/10.3103/S1068799816020045.pdf
 
 # functions
 def gust_velocity(t):
@@ -47,9 +47,9 @@ a_drags = []
 for i in np.arange(0,t,dt):
     a_back = 0
     if i > tau:
-        a_back = .001*pid(posy)
+        #a_back = 0.001*pid(posy)
         # print(a_back)
-        # a_back = 0
+        a_back = 0
 
     u_gust = gust_velocity(i)
     # relative velocity pushing the vehicle
@@ -73,3 +73,6 @@ plt.show()
 # plt.plot(time,a_drags)
 # plt.show()
 print(u_side, posy)
+
+
+

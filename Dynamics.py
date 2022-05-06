@@ -189,6 +189,15 @@ def angular_simulation(config_dict, M_aero, F_control, constant_dict, delta_t, v
     return calculation_dict
 
 def rot_inertia(w_0, delta_t, constant_dict):
+    '''
+    This rotates the inertia
+
+    param: w_0 - angular acceleration at start of time_step
+    param: delta_t - time step
+    param: constant_dict
+
+    return: constant_dict - with updated inertia
+    '''
     I = constant_dict["I_mat"]
     dtheta = np.dot(w_0, delta_t) #Change in angle
     T_z = np.matrix([[math.cos(dtheta[2]), math.sin(dtheta[2]), 0],
@@ -202,7 +211,7 @@ def rot_inertia(w_0, delta_t, constant_dict):
     I_rotzyx = np.matmul(Tx, I_rotzy)
 
     I_inv = np.linalg.inv(I_rotzyx)
-    constant_dict["I"] = I_rotzyx
+    constant_dict["I_mat"] = I_rotzyx
     constant_dict["I_inv"] = I_inv
     return constant_dict
 
@@ -335,11 +344,11 @@ def run_code():
     constant_dict["I_mat"] = I
     constant_dict["I_inv"] = Iinv
 
-    F_dict = {"control":{"x": 500, "y": 0, "z":0},
+    F_dict = {"control":{"x": 0, "y": 0, "z":0.1},
     "aero":{"x":0, "y": 0, "z": 0}}
     M_aero = [[float(F_dict["aero"]["x"]*config_dict["quadcopter"]["x_cg_cp"])], [float(F_dict["aero"]["y"]*config_dict["quadcopter"]["y_cg_cp"])], [float(F_dict["aero"]["z"]*config_dict["quadcopter"]["z_cg_cp"])]]
-    delta_t = 0.01
-    time_span = 0.04
+    delta_t = (10)**(-1)
+    time_span = 10
     output_dict = simulation(delta_t, constant_dict, time_span, initialconds_dict, F_dict, M_aero, config_dict)
     return output_dict
 
@@ -365,13 +374,14 @@ plt.ylabel("angle [rad]")
 plt.title("time-theta")
 plt.show()
 
+
 plt.figure(3)
 plt.plot(output_dict["t"], output_dict["v_x"], '-g')
 plt.plot(output_dict["t"], output_dict["v_y"], '-b')
 plt.plot(output_dict["t"], output_dict["v_z"], '-r')
 plt.legend(("x", "y","z"))
 plt.xlabel("Time [s]")
-plt.ylabel("Velocity [m/s]")
+plt.ylabel("Velocity [km/hr]")
 plt.title("time-velocity")
 plt.show()
 
@@ -381,3 +391,5 @@ plt.show()
 ### Look into adding drag
 ### Look into control force response
 ### Look to add sensors
+
+
