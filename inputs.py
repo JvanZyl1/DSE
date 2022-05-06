@@ -20,7 +20,7 @@ PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
 
 g = 9.81            # gravitional acceleration [m/s2]
 
-VehicleConfig = 'VectoredThrust'
+VehicleConfig = 'multirotor'
 # KittyHawk - LiftCruise; Ehang 184 - Multirotor; Lilium - VectorThrust
 
 
@@ -61,6 +61,15 @@ elif VehicleConfig == 'VectoredThrust':
     Lambda = np.arctan(15 / 182)
     t_chord = 0.14
     W_MTOW = 1000
+
+elif VehicleConfig == 'multirotor':
+    V_cr = 100
+    N_prop = 4
+    R_prop = 0.7   # [m]
+    MTOW = 800
+
+
+
 
 # Mission profile characteristics
 R = 20000           # mission range in kilometers [m]
