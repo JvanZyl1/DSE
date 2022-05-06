@@ -92,7 +92,7 @@ def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
     return P_max
 
 
-def PowerReq(MTOW,N_prop,R_prop,V_cr):
+def PowerReq(MTOW,N_prop,R_prop,V_cr):  """Function designed for multirotors (EHang's)"""
     T = (MTOW*g)*1.1       #10 percent safety factor
     tilt_cruise = 10       #angle of tilt during cruise in degree
     disk_area = R_prop ** 2 * np.pi * N_prop
@@ -131,7 +131,8 @@ def hov_cr_rotor():
 
 
 
-print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' kW')
-print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' kW')
+print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' [kW]')
+print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' [kW]')
+print('Battery weight = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[2],' [kg]')
 
 
