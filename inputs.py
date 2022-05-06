@@ -6,7 +6,7 @@ D = 2               # diameter of the fuselage in meters [m]
 
 # Propeller data
 N_prop = 4     #4     # number of propellers in meters squared [m2]
-R_prop = 5     #3.7       # radius of each propeller in meters [m]
+R_prop = 2     #3.7       # radius of each propeller in meters [m]
 B_prop = 5              # number of blades per propeller
 omega_prop = 300    # rotational speed of each propeller in rpm [min-1]
 
@@ -20,7 +20,9 @@ PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
 
 g = 9.81            # gravitional acceleration [m/s2]
 
-VehicleConfig = 'LiftCruise'
+
+
+VehicleConfig = 'Multirotor'
 # KittyHawk - LiftCruise; Ehang 184 - Multirotor; Lilium - VectorThrust
 
 
@@ -49,7 +51,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
 # Mission profile characteristics
 R = 20              # mission range in kilometers [km]
 R_div = 5           # additional diversion range in kilometers [km]
-#V_cr = 200          # assumed cruise speed in kilometers per hour [km/h]
+V_cr = 200          # assumed cruise speed in kilometers per hour [km/h]
 V_TO = 3            # assumed take-off and descent velocity [m/s !]
 h_TO = 100          # assumed vertical travel distance in [m]
 rho = 1.225         # air density in [kg/m3]

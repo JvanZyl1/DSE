@@ -10,20 +10,23 @@ def PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
     sigma = 0.1         # solidity for the main rotor
     kappa = 1.15        # induced power factor
     C_d0 = 0.008        # profile drag coefficient of the blade
-    alpha_TPP = 5       # angle of attack in cruise [deg]
+    alpha_TPP = 5      # angle of attack in cruise [deg]
     f = 0.5             # equivalent flat plate area of the fulselage [m2]
 
     A_rotor = N_prop * np.pi * R_prop**2     # rotor area in [m2]
     mu = (V_cr * 1000 / (60*60)) / omega_prop * R_prop * (2 * np.pi / 60)
                         # advance ratio [~]
+    print(mu)
 
     # Calculate the dimensionalizing factor
     P_fact = rho * A_rotor * R_prop**3 * (omega_prop
     * (2 * np.pi / 60))**3
+    print('fact:',P_fact)
 
     # Caculate the thrust coefficient
     C_T = (M_MTOW * g / np.cos(np.deg2rad(alpha_TPP)) ) \
     / ((rho * R_prop**2 * (omega_prop * (2 * np.pi / 60))**2) * rho * A_rotor)
+    print(C_T)
 
     def CalculateP0(sigma, C_d0, K, mu, P_fact):
         C_P0 = sigma * C_d0 * (1 + (K * mu**2)) / 8
