@@ -45,7 +45,7 @@ def TOL_cr_wing(V_cr, rho, S, C_L, P_TOL):
 
 ### These estimation routines are for the multirotor configuration
 
-def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, rho, S, C_L):
+def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise):
     '''
     This function estimates the battery mass in [kg]
     based off the energy denisty and mission profile
@@ -198,7 +198,7 @@ def PropGroupMassFun(N_prop, R_prop, B_prop, P_TOL):
     This function gives the weight of the whole propulsion group
     based off the motor and blade weight.
     '''
-    W_e = EngineMassFun(P_cruise)
+    W_e = EngineMassFun(P_TOL)
     W_engs = W_e * N_prop
     W_bl = BladeMassFun(N_prop, R_prop, B_prop, P_TOL)
     W_cab = CableMassFun(N_prop, W_e)

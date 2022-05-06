@@ -26,7 +26,7 @@ PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
 
 g = 9.81            # gravitional acceleration [m/s2]
 
-VehicleConfig = 'LiftCruise'
+VehicleConfig = 'multirotor'
 # KittyHawk - LiftCruise; Ehang 184 - Multirotor; Lilium - VectorThrust
 
 
@@ -76,13 +76,18 @@ elif VehicleConfig == 'VectoredThrust':
 
 
 elif VehicleConfig == 'multirotor':
-    Wing = True
+    Wing = False
     V_cr = 100 / 3.6          # Cruise velocity [m/s]
     N_prop = 4                # Number of propellers [-]
     R_prop = 0.7              # Propeller radius [m]
     B_prop = 5                # Number of blades per propeller [-]
     omega_prop = 30           # Rotational velocity of propeller [rad/s]
     MTOW = 800                # Max take of weight [kg]
+    l = 2.5
+    w = 1.6
+    l_t = l
+    S_nac = 0
+    N_nac = 0
 
 
 

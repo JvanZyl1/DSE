@@ -15,14 +15,18 @@ for i in range(n_iter):
         P_cruise = PowerCruiseWing(C_L, rho, V_cr, S)
     else:
         P_cruise = PowerReq(MTOW, N_prop, R_prop, V_cr)[0]
-    BatWt, BatWts = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, rho, S, C_L)
+    BatWt, BatWts = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise)
     PropWt, PropWts = PropGroupMassFun(N_prop, R_prop, B_prop, P_hov)
-    WingWt, WingWts = WingGroupMassFun(MTOW, W_PL, b, Lambda, S, t_chord, n_ult)
     FuseWt, FuseWts = FuselageGroupMassFun(MTOW, W_PL, l_t, V_cr, D, l, S_nac, N_nac)
-    TailWt, TailWts = TailplaneGroupFun(S_h, S_v, n_ult)
-    Weights = np.vstack((BatWts,PropWts,WingWts,FuseWts,TailWts))
-    #print(Weights)
-    MTOW = np.sum([PropWt,WingWt,FuseWt,TailWt,BatWt,W_PL])
+    if Wing:
+        WingWt, WingWts = WingGroupMassFun(MTOW, W_PL, b, Lambda, S, t_chord, n_ult)
+        TailWt, TailWts = TailplaneGroupFun(S_h, S_v, n_ult)
+        np.vstack((BatWts,PropWts,FuseWts, WingWts, TailWts))
+        MTOW = np.sum([PropWt, WingWt, FuseWt, TailWt, BatWt, W_PL])
+    else:
+        Weights = np.vstack((BatWts,PropWts,FuseWts))
+        MTOW = np.sum([PropWt, FuseWt, BatWt, W_PL])
+    print(Weights)
     print(MTOW)
 # Get the estimate for the power required in cruise.
 # Ran = np.linspace(0.7, 1.5, 25)
