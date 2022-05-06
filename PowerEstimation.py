@@ -92,7 +92,8 @@ def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
     return P_max
 
 
-def PowerReq(MTOW,N_prop,R_prop,V_cr):  """Function designed for multirotors (EHang's)"""
+def PowerReq(MTOW,N_prop,R_prop,V_cr):
+    """Function designed for multirotors (EHang's)"""
     T = (MTOW*g)*1.1       #10 percent safety factor
     tilt_cruise = 10       #angle of tilt during cruise in degree
     disk_area = R_prop ** 2 * np.pi * N_prop
