@@ -4,7 +4,7 @@ import numpy as np
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
 from DragEstimation import DragPolar
-# from MassEstimation import BatteryMassFun
+from MassEstimation import BatteryMassFun
 
 def Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW):
     '''Inputs: R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW. Output: Preq_cruise.'''
@@ -102,20 +102,20 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     V_perp = (V_cr*np.sin(tilt_cruise*(np.pi/180)))/3.6
     v_i = np.sqrt((T/disk_area)*(1/(2*rho)))           #induced velocity during hover
     P = T*V_perp + kappa*T*(-V_perp/2 + np.sqrt(V_perp**2/4+T/(2*rho*disk_area)))
-    P_cr = P / eta_final
+    P_cruise = P / eta_final
     K_TO = 1.5     #safety factor takeoff
-    T_TO = K_TO*T
-    P_TOL = (((T_TO*V_TO)/2)*(np.sqrt(1+(2*T_TO)/(rho*V_TO**2*disk_area))))/eta_final
+    T_TOL = K_TO*T
+    P_TOL = (((T_TOL*V_TO)/2)*(np.sqrt(1+(2*T_TOL)/(rho*V_TO**2*disk_area))))/eta_final
 
     """From here the battery weight code is replicated with calculated values"""
     t_CR = (R + R_div) / V_cr  # Calculate time in cruise + diversion
     t_TO = (h_TO / V_TO) * 2
     # Energy required for flight phases
-    E_CR = t_CR * P_cr
-    E_TOL = t_TO * P_TOL
-    E_total = (E_TOL + E_CR) / 3600  # total energy needed in [Wh]
+    E_CR = t_CR * P_cruise
+    E_TO = t_TO * P_TOL
+    E_total = (E_TO + E_CR) / 3600  # total energy needed in [Wh]
     W_bat = E_total / eta_E
-    return P_cr,P_TOL,W_bat
+    return P_cruise,P_TOL,W_bat
 
 
 def PowerCruiseWing(C_L, rho, V_cr, S):
