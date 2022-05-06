@@ -4,7 +4,7 @@ import numpy as np
 from inputs import *
 from Drag Estimation eHang import *
 
-def PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
+def PowerEstimationRotorcraftCruise(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
     # Assumed values for power estimation
 
     K = 4.65                                       # 4.5 in hover to 5 at mu = .5
