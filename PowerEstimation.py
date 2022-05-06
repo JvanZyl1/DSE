@@ -99,7 +99,14 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     kappa = 1.2       #correction factor for extra power losses
     V_perp = (V_cr*np.sin(tilt_cruise*(np.pi/180)))/3.6
     P = T*V_perp + kappa*T*(-V_perp/2 + np.sqrt(V_perp**2/4+T/(2*rho*disk_area)))
-    return P
+    eta_prop = 0.8  # efficiencies, values taken from https://arc.aiaa.org/doi/pdf/10.2514/6.2021-3169
+    eta_motor = 0.95
+    eta_power_transfer = 0.97
+    eta_battery = 0.95
+    eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer
+    P_cr = P / eta_final
+    return P_cr
+
 print('propeller blade radius = ', R_prop)
 
 def hov_cr_wing(MTOW, V_cr, rho, S, C_L):
@@ -114,13 +121,7 @@ def hov_cr_rotor():
 
 
     return
-    eta_prop = 0.8      #efficiencies, values taken from https://arc.aiaa.org/doi/pdf/10.2514/6.2021-3169
-    eta_motor = 0.95
-    eta_power_transfer = 0.97
-    eta_battery = 0.95
-    eta_final = eta_battery*eta_prop*eta_motor*eta_power_transfer
-    P_cr = P/eta_final
-    return P_cr
+
 
 
 print('Power required = ',PowerReq(MTOW,N_prop,R_prop,V_cr)/1000,' kW')
