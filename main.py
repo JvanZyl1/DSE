@@ -8,7 +8,7 @@ from MassEstimation import *
 
 # Weight Estimation routine for KittyHawk
 
-n_iter = 5
+n_iter = 20
 for i in range(n_iter):
     P_hov = PowerReq(MTOW, N_prop, R_prop, V_cr)[1]
     if Wing:
@@ -21,7 +21,7 @@ for i in range(n_iter):
     if Wing:
         WingWt, WingWts = WingGroupMassFun(MTOW, W_PL, b, Lambda, S, t_chord, n_ult)
         TailWt, TailWts = TailplaneGroupFun(S_h, S_v, n_ult)
-        np.vstack((BatWts,PropWts,FuseWts, WingWts, TailWts))
+        Weights = np.vstack((BatWts,PropWts,FuseWts, WingWts, TailWts))
         MTOW = np.sum([PropWt, WingWt, FuseWt, TailWt, BatWt, W_PL])
     else:
         Weights = np.vstack((BatWts,PropWts,FuseWts))
