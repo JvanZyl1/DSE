@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
-from Drag Estimation eHang import *
+from Parasitedrag_Estimation_Multirotor import *
 
 def Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
     '''Inputs: R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW. Output: Preq_cruise.'''
@@ -73,22 +73,28 @@ def PowerEstimationHover(R_prop, N_prop, M_MTOW):
 
     return P_hover
 
-def MaxPowerEstimation(MTOW, N_prop, R_prop, duct=False):
+def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
     """
     This function calculates the maximum power required (at take-off and landing)
     input: MTOW
-    :return:
+    :return: P_max
     """
     T = MTOW   # N
-
     if duct:
         Ti = 1.2  # Multiplication factor for ducted propeller thrust (from literature)
     else:
         Ti = 1
-
     disk_area = R_prop * np.pi ** 2 * N_prop  # m^2, Actuator disk area (total)
-
     P_max = np.sqrt((T / Ti) ** 3 / (2 * rho * disk_area))  # W
-
+    print("Pmax = ", P_max)
     return P_max
 
+def PowerReq(MTOW,N_prop,R_prop,V_cr):
+    T = (MTOW*g)*1.1       #10 percent safety factor
+    tilt_cruise = 10       #angle of tilt during cruise in degree
+    disk_area = R_prop * np.pi ** 2 * N_prop
+    kappa = 1.2       #correction factor for extra power losses
+    V_perp = (V_cr*np.sin(tilt_cruise*(np.pi/180)))/3.6
+    P = T*V_perp + kappa*T*(-V_perp/2 + np.sqrt(V_perp**2/4+T/(2*rho*disk_area)))
+    return P
+print('propeller blade radius = ', R_prop)

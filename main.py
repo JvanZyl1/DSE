@@ -6,8 +6,7 @@ from inputs import *
 from PowerEstimation import *
 from MassEstimation import *
 
-P_cruise = PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, W_MTOW)
-P_hover = PowerEstimationHover(R_prop, N_prop, W_MTOW)
+#P_cruise = PowerEstimationFun(R_prop, N_prop, V_cr, omega_prop, rho, g, W_MTOW)
 
 # Weight Estimation routine for KittyHawk
 BatWt, BatWts = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_cruise)
@@ -17,7 +16,7 @@ FuseWt, FuseWts = FuselageGroupMassFun(W_MTOW, W_PL, l_t, V_cr, D, l, S_nac, N_n
 TailWt, TailWts =  TailplaneGroupFun(S_h, S_v, n_ult)
 Weights = np.vstack((BatWts,PropWts,WingWts,FuseWts,TailWts))
 print(Weights)
-print(np.sum([PropWt,WingWt,FuseWt,TailWt,BatWt,W_PL]))
+print("MTOW = ", np.sum([PropWt,WingWt,FuseWt,TailWt,BatWt,W_PL]))
 # Get the estimate for the power required in cruise.
 # Ran = np.linspace(0.7, 1.5, 25)
 # Ns_prop = np.array([1, 2, 4, 8, 12, 16, 18, 24, 32])
