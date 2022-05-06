@@ -335,7 +335,7 @@ def run_code():
     constant_dict["I_mat"] = I
     constant_dict["I_inv"] = Iinv
 
-    F_dict = {"control":{"x": 10, "y": 0, "z":0},
+    F_dict = {"control":{"x": 500, "y": 0, "z":0},
     "aero":{"x":0, "y": 0, "z": 0}}
     M_aero = [[float(F_dict["aero"]["x"]*config_dict["quadcopter"]["x_cg_cp"])], [float(F_dict["aero"]["y"]*config_dict["quadcopter"]["y_cg_cp"])], [float(F_dict["aero"]["z"]*config_dict["quadcopter"]["z_cg_cp"])]]
     delta_t = 0.01
