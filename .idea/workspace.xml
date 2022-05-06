@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d79784b7-0bb1-4a2b-be8c-114235dd6b28" name="Changes" comment="first start to prop sizing">
+    <list default="true" id="d79784b7-0bb1-4a2b-be8c-114235dd6b28" name="Changes" comment="still working on power">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lilium_estimationmethods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lilium_estimationmethods.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MassEstimation.py" beforeDir="false" afterPath="$PROJECT_DIR$/MassEstimation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PowerEstimation.py" beforeDir="false" afterPath="$PROJECT_DIR$/PowerEstimation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inputs.py" beforeDir="false" afterPath="$PROJECT_DIR$/inputs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +50,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.Lilium_estimationmethods">
+  <component name="RunManager" selected="Python.MassEstimation">
     <configuration name="Lilium_estimationmethods" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -157,18 +157,18 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.python" />
       <item itemvalue="Python.Lilium_estimationmethods" />
       <item itemvalue="Python.MassEstimation" />
       <item itemvalue="Python.PropSizing" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.python" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.MassEstimation" />
         <item itemvalue="Python.Lilium_estimationmethods" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.PropSizing" />
-        <item itemvalue="Python.MassEstimation" />
       </list>
     </recent_temporary>
   </component>
@@ -223,7 +223,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651831998424</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="still working on power">
+      <created>1651838877999</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1651838877999</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -242,6 +249,7 @@
     <MESSAGE value="first weight estimation for lilium finished" />
     <MESSAGE value="first weight estimation for lilium finished - doesn't work though" />
     <MESSAGE value="first start to prop sizing" />
-    <option name="LAST_COMMIT_MESSAGE" value="first start to prop sizing" />
+    <MESSAGE value="still working on power" />
+    <option name="LAST_COMMIT_MESSAGE" value="still working on power" />
   </component>
 </project>

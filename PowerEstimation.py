@@ -81,12 +81,12 @@ def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
     input: MTOW
     :return: P_max
     """
-    T = MTOW   # N
+    T = MTOW * g * 1.1  # N
     if duct:
         Ti = 1.2  # Multiplication factor for ducted propeller thrust (from literature)
     else:
         Ti = 1
-    A_disk = R_prop * np.pi ** 2 * N_prop  # m^2, Actuator disk area (total)
+    A_disk = R_prop ** 2 * np.pi * N_prop  # m^2, Actuator disk area (total)
     P_max = np.sqrt((T / Ti) ** 3 / (2 * rho * A_disk))  # W
     print("Pmax = ", P_max)
     return P_max
@@ -95,10 +95,25 @@ def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
 def PowerReq(MTOW,N_prop,R_prop,V_cr):
     T = (MTOW*g)*1.1       #10 percent safety factor
     tilt_cruise = 10       #angle of tilt during cruise in degree
-    disk_area = R_prop**2 * np.pi * N_prop
+    disk_area = R_prop ** 2 * np.pi * N_prop
     kappa = 1.2       #correction factor for extra power losses
     V_perp = (V_cr*np.sin(tilt_cruise*(np.pi/180)))/3.6
     P = T*V_perp + kappa*T*(-V_perp/2 + np.sqrt(V_perp**2/4+T/(2*rho*disk_area)))
+    return P
+print('propeller blade radius = ', R_prop)
+
+def hov_cr_wing(MTOW, V_cr, rho, S, C_L):
+    C_D = DragPolar(C_L)
+    T = 0.5 * C_D * rho * V_cr**2 * S
+    P_cruise = T * V_cr
+    P_hov = PowerReq(MTOW,N_prop,R_prop,V_TO)
+    n_TO = P_hov / P_cruise
+    return n_TO
+
+def hov_cr_rotor():
+
+
+    return
     eta_prop = 0.8      #efficiencies, values taken from https://arc.aiaa.org/doi/pdf/10.2514/6.2021-3169
     eta_motor = 0.95
     eta_power_transfer = 0.97

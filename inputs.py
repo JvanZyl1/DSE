@@ -26,6 +26,26 @@ VehicleConfig = 'multirotor'
 
 if VehicleConfig == 'LiftCruise':     #KittyHawk
     l_t = 3.344         # length from wing c/4 to root of tail
+    b = 11
+    S = 10
+    C_L = 1.4
+    N_prop = 12
+    R_prop = 0.65
+    B_prop = 2
+    V_cr = 180 / 3.6
+    W_MTOW = 1224
+    eta_E = 157
+    l = 4.8
+    D = 1.5
+    S_nac = 3.76
+    N_nac = 6
+    Lambda = 0
+    t_chord = 0.3
+    n_ult = 2
+    S_v = 1.5
+    S_h = 2
+    P_cruise = 200000
+
     b = 11              # Wing span [m]
     S = 10              # Wing surface area [m^2]
     N_prop = 12         # Number of propellers [-]
@@ -46,6 +66,23 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     P_cruise = 200000   # Cruise power [W]
     # ^^^ This will be obtained from the calculations right?
 elif VehicleConfig == 'VectoredThrust':
+    C_L = 1.4
+    S = 10
+    b = 12
+    V_cr = 203 / 3.6
+    N_prop = 24
+    D = 1.6
+    l = 3.5
+    R_prop = 0.20
+    B_prop = 20
+    RPM = 6000
+    S_nac = 0.5
+    N_nac = 24
+    l_t = l
+    energy_density = 170
+    Lambda = np.arctan(15 / 182)
+    t_chord = 0.14
+    W_MTOW = 1000
     CL = 1.4            # Lift coefficient during ? [-]
     V_cr = 203 / 3.6    # Cruise velocity [m/s]
     N_prop = 24         # Number of propellers [-]
@@ -69,8 +106,8 @@ elif VehicleConfig == 'multirotor':
     B_prop = 5                # Number of blades per propeller [-]
     omega_prop = 30           # Rotational velocity of propeller [rad/s]
     MTOW = 800                # Max take of weight [kg]
-    
-    
+
+
 
 
 

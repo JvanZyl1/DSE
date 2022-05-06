@@ -19,6 +19,7 @@ def wing_sizing(MTOW):
     """
     L = MTOW
     S_w = L / (CL * 0.5 * rho * V_cr * V_cr)
+    print(S_w)
     b = np.sqrt(S_w) * np.sqrt(10)
     # c = np.sqrt(S_w) / np.sqrt(10)
 
@@ -26,8 +27,9 @@ def wing_sizing(MTOW):
 
 
 def battery_sizing(MTOW):
-    # Pmax = PM.Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=True)
-    Pmax = 187*10^3  # W
+    Pmax = PM.Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=True)
+    # Pmax = PM.PowerEstimationHover(R_prop, N_prop, MTOW)
+    # Pmax = 187*10^3  # W
     Pcruise = 0.1 * Pmax  # Power for cruise
 
     # Energy needed for flight stages.
@@ -40,15 +42,15 @@ def battery_sizing(MTOW):
     Etot = (Eto + Ecruise + Eland + Eres)  # Wh
 
     # Needed battery weight
-    W_bat = Etot / energy_density * g  # N
+    W_bat = Etot / energy_density  # kg
 
     return W_bat, Pmax, Pcruise, Etot
 
 
 def weight_estimation(MTOW, P_cruise, W_bat, W_wg):
     OEW = W_bat + W_wg + EM.PropGroupMassFun(N_prop, R_prop, B_prop, P_cruise)[0] + \
-          EM.FuselageGroupMassFun(MTOW, Wp, l_t, V_cr, D, l, S_nac, 1)[0]
-    MTOW = Wp + W_bat + OEW
+          EM.FuselageGroupMassFun(MTOW, W_PL, l_t, V_cr, D, l, S_nac, 1)[0]
+    MTOW = W_PL + W_bat + OEW
     return MTOW
 
 new_MTOW = W_MTOW
@@ -58,7 +60,7 @@ for i in range(n_iter):
     S_w, b = wing_sizing(MTOW)
     W_bat, Pmax, P_cruise, Etot = battery_sizing(MTOW)
     W_e = EM.EngineMassFun(P_cruise)
-    W_wg, Wts = EM.WingGroupMassFun(MTOW, Wp, b, Lambda, S_w, t_chord, n_ult)
+    W_wg, Wts = EM.WingGroupMassFun(MTOW, W_PL, b, Lambda, S_w, t_chord, n_ult)
     new_MTOW = weight_estimation(MTOW, P_cruise, W_bat, W_wg)
 MTOW = new_MTOW
 
