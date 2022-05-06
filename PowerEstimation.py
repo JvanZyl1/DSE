@@ -103,7 +103,8 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     P_cr = P / eta_final
     K_TO = 1.5     #safety factor takeoff
     T_TO = K_TO*T
-    P_TO = ((T_TO*V_TO)/2)*(np.sqrt(1+(2*T_TO)/(rho*V_TO**2*disk_area)))
+    P_TO = (((T_TO*V_TO)/2)*(np.sqrt(1+(2*T_TO)/(rho*V_TO**2*disk_area))))/eta_final
+
     return P_cr,P_TO
 
 
