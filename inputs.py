@@ -76,7 +76,7 @@ elif VehicleConfig == 'VectoredThrust':
 
 
 elif VehicleConfig == 'multirotor':
-    Wing = True
+    Wing = False
     V_cr = 100 / 3.6          # Cruise velocity [m/s]
     N_prop = 4                # Number of propellers [-]
     R_prop = 0.7              # Propeller radius [m]
