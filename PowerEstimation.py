@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
-from Drag Estimation eHang import *
+from Drag_Estimation_Multirotor import *
 
 def PowerEstimationRotorcraftCruise(R_prop, N_prop, V_cr, omega_prop, rho, g, M_MTOW):
     # Assumed values for power estimation

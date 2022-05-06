@@ -55,7 +55,7 @@ new_MTOW = W_MTOW
 n_iter = 10
 for i in range(n_iter):
     MTOW = new_MTOW
-    S_w, b = wing_sizing(MTOW, n_ult)
+    S_w, b = wing_sizing(MTOW)
     W_bat, Pmax, P_cruise, Etot = battery_sizing(MTOW)
     W_e = EM.EngineMassFun(P_cruise)
     W_wg, Wts = EM.WingGroupMassFun(MTOW, Wp, b, Lambda, S_w, t_chord, n_ult)

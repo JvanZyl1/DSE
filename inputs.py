@@ -46,7 +46,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     P_cruise = 200000
 
 elif VehicleConfig == 'VectoredThrust':
-    CL = 1.4
+    CL = 1.2
     V_cr = 203 / 3.6
     N_prop = 24
     D = 1.6
