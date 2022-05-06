@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d79784b7-0bb1-4a2b-be8c-114235dd6b28" name="Changes" comment="first start to prop sizing">
-      <change beforePath="$PROJECT_DIR$/PropSizing.py" beforeDir="false" afterPath="$PROJECT_DIR$/PropSizing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MassEstimation.py" beforeDir="false" afterPath="$PROJECT_DIR$/MassEstimation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PowerEstimation.py" beforeDir="false" afterPath="$PROJECT_DIR$/PowerEstimation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inputs.py" beforeDir="false" afterPath="$PROJECT_DIR$/inputs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,11 +157,11 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.python" />
       <item itemvalue="Python.Lilium_estimationmethods" />
       <item itemvalue="Python.MassEstimation" />
       <item itemvalue="Python.PropSizing" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.python" />
     </list>
     <recent_temporary>
       <list>

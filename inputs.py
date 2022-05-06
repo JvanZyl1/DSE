@@ -20,7 +20,7 @@ PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
 
 g = 9.81            # gravitional acceleration [m/s2]
 
-VehicleConfig = 'VectoredThrust'
+VehicleConfig = 'LiftCruise'
 # KittyHawk - LiftCruise; Ehang 184 - Multirotor; Lilium - VectorThrust
 
 
@@ -65,7 +65,7 @@ elif VehicleConfig == 'VectoredThrust':
 # Mission profile characteristics
 R = 20000           # mission range in kilometers [m]
 R_div = 5000        # additional diversion range in kilometers [m]
-#V_cr = 200 / 3.6   # assumed cruise speed in kilometers per hour [km/h]
+#V_cr = 200 / 3.6   # assumed cruise speed in kilometers per hour [m/s]
 V_TO = 3            # assumed take-off and descent velocity [m/s !]
 h_TO = 100          # assumed vertical travel distance in [m]
 rho = 1.225         # air density in [kg/m3]
