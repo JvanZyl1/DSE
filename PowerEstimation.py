@@ -81,3 +81,4 @@ def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
     print("Pmax = ", P_max)
     return P_max
 
+def PowerReq(MTOW,N_prop,R_prop,V_cr)
