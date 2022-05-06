@@ -106,9 +106,11 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     eta_battery = 0.95
     eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer
     P_cr = P / eta_final
-    return P_cr
+    K_TO = 1.5     #safety factor takeoff
+    T_TO = K_TO*T
+    P_TO = ((T_TO*V_TO)/2)*(np.sqrt(1+(2*T_TO)/(rho*V_TO**2*disk_area)))
+    return P_cr,P_TO
 
-print('propeller blade radius = ', R_prop)
 
 def hov_cr_wing(MTOW, V_cr, rho, S, C_L):
     C_D = DragPolar(C_L)
@@ -125,5 +127,6 @@ def hov_cr_rotor():
 
 
 
-print('Power required = ',PowerReq(MTOW,N_prop,R_prop,V_cr)/1000,' kW')
-print('battery mass = ',BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, PowerReq(MTOW,N_prop,R_prop,V_cr))[0],' [kg]')
+print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' kW')
+print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' kW')
+
