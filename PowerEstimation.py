@@ -81,4 +81,12 @@ def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
     print("Pmax = ", P_max)
     return P_max
 
-def PowerReq(MTOW,N_prop,R_prop,V_cr)
+def PowerReq(MTOW,N_prop,R_prop,V_cr):
+    T = (MTOW*g)*1.1       #10 percent safety factor
+    tilt_cruise = 10       #angle of tilt during cruise in degree
+    disk_area = R_prop * np.pi ** 2 * N_prop
+    kappa = 1.2       #correction factor for extra power losses
+    V_perp = (V_cr*np.sin(tilt_cruise*(np.pi/180)))/3.6
+    P = T*V_perp + kappa*T*(-V_perp/2 + np.sqrt(V_perp**2/4+T/(2*rho*disk_area)))
+    return P
+print('propeller blade radius = ', R_prop)
