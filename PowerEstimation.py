@@ -93,7 +93,7 @@ def Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=False):
 
 def PowerReq(MTOW,N_prop,R_prop,V_cr):
     T = (MTOW*g)*1.1       #10 percent safety factor
-    tilt_cruise =        #angle of tilt during cruise in degree
+    tilt_cruise = 10       #angle of tilt during cruise in degree
     disk_area = R_prop * np.pi ** 2 * N_prop
     kappa = 1.2       #correction factor for extra power losses
     V_perp = (V_cr*np.sin(tilt_cruise*(np.pi/180)))/3.6
