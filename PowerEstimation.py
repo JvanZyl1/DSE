@@ -98,6 +98,7 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     disk_area = R_prop ** 2 * np.pi * N_prop
     kappa = 1.2       #correction factor for extra power losses
     V_perp = (V_cr*np.sin(tilt_cruise*(np.pi/180)))/3.6
+    v_i = np.sqrt((T/disk_area)*(1/(2*rho)))           #induced velocity during hover
     P = T*V_perp + kappa*T*(-V_perp/2 + np.sqrt(V_perp**2/4+T/(2*rho*disk_area)))
     eta_prop = 0.8  # efficiencies, values taken from https://arc.aiaa.org/doi/pdf/10.2514/6.2021-3169
     eta_motor = 0.95
