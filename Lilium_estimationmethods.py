@@ -8,7 +8,7 @@ Weight estimation and sizing of a 2-person UAM vehicle based on the Lilium Jet.
 """
 
 
-def wing_sizing(MTOW, n_ult):
+def wing_sizing(MTOW):
     """
     This function sizes the wing and estimates its weight for a Lilium-type aircraft
 
@@ -26,8 +26,8 @@ def wing_sizing(MTOW, n_ult):
 
 
 def battery_sizing(MTOW):
-    Pmax = PM.Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=True)
-    # Pmax = 170*10^3  # W
+    # Pmax = PM.Power_DiskActuatorTheory(MTOW, N_prop, R_prop, duct=True)
+    Pmax = 187*10^3  # W
     Pcruise = 0.1 * Pmax  # Power for cruise
 
     # Energy needed for flight stages.

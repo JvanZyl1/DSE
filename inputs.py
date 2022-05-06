@@ -20,7 +20,7 @@ PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
 
 g = 9.81            # gravitional acceleration [m/s2]
 
-VehicleConfig = 'LiftCruise'
+VehicleConfig = 'VectoredThrust'
 # KittyHawk - LiftCruise; Ehang 184 - Multirotor; Lilium - VectorThrust
 
 
@@ -46,7 +46,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     P_cruise = 200000
 
 elif VehicleConfig == 'VectoredThrust':
-    CL = 0.52
+    CL = 1.4
     V_cr = 203 / 3.6
     N_prop = 24
     D = 1.6
