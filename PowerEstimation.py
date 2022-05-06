@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
-from MassEstimation import BatteryMassFun
+# from MassEstimation import BatteryMassFun
 
 def Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW):
     '''Inputs: R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW. Output: Preq_cruise.'''
