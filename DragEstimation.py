@@ -2,9 +2,9 @@
 
 from inputs import *
 def DragPolar(C_L):
+    '''Lift drag estimations for lift&cruise and VectorThrust.'''
     if VehicleConfig == 'LiftCruise':
         C_D = 0.0438 + 0.0294 * (C_L**2)
     elif VehicleConfig == 'VectorThrust':
         C_D = 0.0163 + 0.058 * (C_L**2)
     return C_D
-
