@@ -99,7 +99,7 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     tilt_cruise = 10       #angle of tilt during cruise in degree
     disk_area = R_prop**2 * np.pi * N_prop
     kappa = 1.2       #correction factor for extra power losses, value taken from literature
-    V_perp = (V_cr * np.sin(tilt_cruise * (np.pi/180))) / 3.6      #perpendicular to rotor plane free stream velocity in [m/s]
+    V_perp = (V_cr * np.sin(tilt_cruise * (np.pi/180)))      #perpendicular to rotor plane free stream velocity in [m/s]
     v_i = np.sqrt((T/disk_area) * (1/(2 * rho)))           #induced velocity during hover
     P = T*V_perp + kappa * T * (-V_perp/2 + np.sqrt(V_perp**2 / 4 + T/(2 * rho * disk_area)))
     P_cruise = P / eta_final
@@ -129,8 +129,8 @@ def PowerCruiseWing(MTOW, rho, V_cr, S):
 print('propeller blade radius = ', R_prop)
 
 
-#print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' [kW]')
-#print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' [kW]')
-#print('Battery weight = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[2],' [kg]')
+print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' [kW]')
+print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' [kW]')
+print('Battery weight = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[2],' [kg]')
 
 
