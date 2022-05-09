@@ -11,6 +11,7 @@ def DragPolar(C_L):
         C_D = 0.0163 + 0.058 * (C_L**2)
     return C_D
 def RC_AoA(V_cr, D_q_tot, rho, MTOW, g):
+    '''Rotor craft angle of attack estimator'''
     #Nominal drag force on fuselage during cruise
     D = 0.5 * rho * V_cr**2* D_q_tot
     #Equilibrium AoA

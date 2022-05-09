@@ -3,20 +3,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
-from DragEstimation import DragPolar
+from DragEstimation import DragPolar, RC_AoA
 from MassEstimation import BatteryMassFun
-
-def Cruise_Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW):
+def Cruise_Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW,D_q_tot):
     '''Inputs: R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW. Output: Preq_cruise.'''
     # Assumed values for power estimation
 
-    K = 4.65                                       # 4.5 in hover to 5 at mu = .5
-    sigma = 0.1                                    # solidity for the main rotor
-    kappa = 1.15                                   # induced power factor
-    C_d0 = 0.008                                   # profile drag coefficient of the blade
-    alpha_TPP = 5                                  # angle of attack in cruise [deg]
-    f = D_q_tot                                    # equivalent area estimated from reference A/C [m2]
-    A_rotor = N_prop * np.pi * R_prop**2           # rotor area in [m2]                              
+    K = 4.65                                        # 4.5 in hover to 5 at mu = .5
+    sigma = 0.1                                     # solidity for the main rotor
+    kappa = 1.15                                    # induced power factor
+    C_d0 = 0.008                                    # profile drag coefficient of the blade
+    alpha_TPP = RC_AoA(V_cr, D_q_tot, rho, MTOW, g) # angle of attack in cruise [deg]
+    f = D_q_tot                                     # equivalent area estimated from reference A/C [m2]
+    A_rotor = N_prop * np.pi * R_prop**2            # rotor area in [m2]                              
         
                         
     mu = (V_cr * np.cos(np.deg2rad(alpha_TPP))) / (omega_prop * R_prop) # advance ratio [~]
