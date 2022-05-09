@@ -17,6 +17,7 @@ eta_power_transfer = 0.97
 eta_battery = 0.95
 eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer
 eta_E = 200         # energy density of the battery in [Wh/kg]
+nu_discharge = 0.6  # discharge ratio of the battery for optimal lifetime
 
 W_PL = 250          # mass of the payload in kilograms [kg]
 PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
@@ -50,6 +51,13 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     S_h = 2             # Horizontal tail surface area [m^2]
     P_cruise = 200000   # Cruise power [W]
     # ^^^ This will be obtained from the calculations right? Yes
+    # Planform Characteristics
+    t_rh = 0.2
+    t_rv = 0.15
+    Lambda_v = 30
+    A_v = 3
+    A_h = 3
+
 
 elif VehicleConfig == 'VectoredThrust':
     Wing = True
