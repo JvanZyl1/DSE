@@ -52,12 +52,12 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, nu_discha
 ### Mass estimation methods for wing-equipped aircraft
 # Taken from Torenbeek chapter 8.
 
-def StructureMassFun(n_ult, D, l, W_MTOW):
+def StructureMassFun(n_ult, D, l, MTOW):
     '''
     This function estimates the mass of the structure as a whole
     based off the 'aircraft density' concept. Only used for preliminary OEW.
     '''
-    W_s = W_MTOW * 0.447 * np.sqrt(n_ult) * (l * D**2 / W_MTOW)**0.24
+    W_s = MTOW * 0.447 * np.sqrt(n_ult) * (l * D**2 / MTOW)**0.24
     return W_s
 
 def WingMassFun(W_MTOW, b, S_w, n_ult):
