@@ -106,7 +106,7 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     K_TO = 1.5     #safety factor takeoff
     T_TOL = K_TO * T
     P_TOL = (((T_TOL * V_TO)/2) * (np.sqrt(1+(2 * T_TOL)/(rho * V_TO**2 * disk_area))))/eta_final
-
+    P_hov = P_TOL
     """From here the battery weight code is replicated with calculated values"""
     t_CR = (R + R_div) / V_cr  # Calculate time in cruise + diversion
     t_TO = (h_TO / V_TO) * 2
@@ -115,7 +115,7 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     E_TO = t_TO * P_TOL
     E_total = (E_TO + E_CR) / 3600  # total energy needed in [Wh]
     W_bat = E_total / eta_E
-    return P_cruise,P_TOL,W_bat
+    return P_cruise,P_hov,W_bat
 
 
 def PowerCruiseWing(C_L, rho, V_cr, S):
