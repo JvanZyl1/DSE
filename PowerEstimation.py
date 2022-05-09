@@ -59,8 +59,7 @@ def Rotorcraft_CruiseDrag(V_cr,MTOW,Preq_cruise,S_body):
     '''Outputs order: Cruise drag, L/D and C_D'''
     D_cruise = Preq_cruise / V_cr # Total drag during cruise [N]
     L_D_cruise = (MTOW*V_cr)/Preq_cruise # L/D for cruise [-]
-    C_D_cruise = D_cruise / (0.5 *rho *V_cr**2 * S_body)
-    return D_cruise, L_D_cruise, C_D_cruise
+    return D_cruise, L_D_cruise
 def PowerEstimationHover(R_prop, N_prop, MTOW):
 
     thrust = MTOW / N_prop
