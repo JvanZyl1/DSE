@@ -4,7 +4,7 @@ import numpy as np
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
 from DragEstimation import DragPolar
-from MassEstimation import BatteryMassFun
+#from MassEstimation import BatteryMassFun
 
 def Cruise_Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW):
     '''Inputs: R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW. Output: Preq_cruise.'''
@@ -118,14 +118,12 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     W_bat = E_total / eta_E
     return P_cruise,P_TOL,W_bat
 
-
 def PowerCruiseWing(C_L, rho, V_cr, S):
     P_cruise = 0.5 * DragPolar(C_L) * rho * V_cr**3 * S / eta_final
     return P_cruise
 
 
 
-print('propeller blade radius = ', R_prop)
 
 
 #print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' [kW]')
