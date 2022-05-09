@@ -61,6 +61,6 @@ S_disk = np.pi*R_prop**2*N_prop #Rotor disk area [m^2]
 # Parasite CDA
 D_q_tot_x = (CD_fus*S_fus + CD_rot*S_disk + N_prop*CD_pyl*S_pylon + D_q_landinggear)
 # Assume that the reference area is the fuselage area
-CD0 = D_q_tot/S_fus #parasitic drag coefficient
+CD0 = D_q_tot_x/S_fus #parasitic drag coefficient
 print('CD0:', CD0)
 
