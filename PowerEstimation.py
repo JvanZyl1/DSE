@@ -118,9 +118,7 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     return P_cruise,P_TOL,W_bat
 
 
-def PowerCruiseWing(MTOW, rho, V_cr, S):
-    C_L = MTOW / (0.5 * rho * V_cr**2 * S)
-    print(C_L)
+def PowerCruiseWing(C_L, rho, V_cr, S):
     P_cruise = 0.5 * DragPolar(C_L) * rho * V_cr**3 * S / eta_final
     return P_cruise
 

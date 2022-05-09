@@ -12,7 +12,7 @@ n_iter = 10
 for i in range(n_iter):
     P_hov = PowerReq(MTOW, N_prop, R_prop, V_cr)[1]
     if Wing:
-        P_cruise = PowerCruiseWing(MTOW, rho, V_cr, S)
+        P_cruise = PowerCruiseWing(C_L, rho, V_cr, S)
     else:
         P_cruise = PowerReq(MTOW, N_prop, R_prop, V_cr)[0]
     print("Hover power: ", P_hov, '\n',
