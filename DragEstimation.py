@@ -26,7 +26,7 @@ def V_ind(T,rho,V,AoA,A_rot):
     V_ind_found = sc.newton(thrust_eq, V, args = (T,rho,V,AoA,A_rot))
     return V_ind_found
 def Windforces(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, D_q_tot_x):
-    '''Velocities and wind velocities in bodyframe.'''
+    '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
     Vx_rel = Vx - Vw_x
     Vy_rel = Vy - Vw_y
     Vz_rel = Vz - Vw_z
@@ -38,4 +38,5 @@ def Windforces(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, D_q_tot_x):
     Fw_x = -0.5 * rho * Vx_rel * V_infty * D_q_tot_x
     Fw_y = -0.5 * rho * Vy_rel * V_infty * D_q_tot_y
     Fw_z = -0.5 *rho *(Vz_rel + V_ind) * V_infty * D_q_tot_z
+    print("order: Fw_x, Fw_y, Fw_z")
     return Fw_x, Fw_y, Fw_z
