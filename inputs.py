@@ -24,14 +24,14 @@ PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
 
 g = 9.81            # gravitional acceleration [m/s2]
 
+# KittyHawk - LiftCruise;
+# Lilium Jet - VectorThrust;
+# Ehang 184 - Multirotor
 VehicleConfig = 'LiftCruise'
-# KittyHawk - LiftCruise; Ehang 184 - Multirotor; Lilium - VectorThrust
-
-
 if VehicleConfig == 'LiftCruise':     #KittyHawk
     Wing=True
     l_t = 3.344         # length from wing c/4 to root of tail [m]
-    #C_L = 0.8           # Lift coefficient in cruise
+    C_L = 1.2           # Lift coefficient in cruise
     b = 11              # Wing span [m]
     S = 10              # Wing surface area [m^2]
     N_prop = 12         # Number of propellers [-]
@@ -61,7 +61,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
 
 elif VehicleConfig == 'VectoredThrust':
     Wing = True
-    C_L = 0.8           # Lift coefficient in cruise
+    C_L = 0.52           # Lift coefficient in cruise
     S = 10
     b = 12
     V_cr = 203 / 3.6    # Cruise velocity [m/s]
@@ -108,3 +108,4 @@ V_TO = 3            # assumed take-off and descent velocity [m/s !]
 h_TO = 100          # assumed vertical travel distance in [m]
 rho = 1.225         # air density in [kg/m3]
 n_ult = 2           # ultimate load factor
+W_PL = 250          # mass of the payload in kilograms [kg]
