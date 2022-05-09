@@ -30,22 +30,22 @@ Tailplane group          * Inputs: S_h, S_v, n_ult
 import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
-n_TO = 1.5 # ratio of P_cruise / P_takeoff.
 
 ### These estimation routines are for the multirotor configuration
 
-def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_cruise):
+def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, nu_discharge):
     '''
     This function estimates the battery mass in [kg]
     based off the energy denisty and mission profile
     '''
-    t_CR = (R + R_div) * 1000 / (V_cr / 3.6)     # Calculate time in cruise + diversion
+    t_CR = (R + R_div) / (V_cr)     # Calculate time in cruise + diversion
     t_TO = (h_TO / V_TO) * 2                     # Calculate the time spent in vertical flight
     # Energy required for flight phases
     E_CR = t_CR * P_cruise
-    E_TO = t_TO * P_cruise * n_TO
+    E_TO = t_TO * P_hov
+    print(t_CR,t_TO)
     E_total = (E_TO + E_CR) / 3600               # total energy needed in [Wh]
-    W_bat = E_total / eta_E
+    W_bat = (E_total / eta_E) / nu_discharge
     Wts = np.array([["Battery Weight", W_bat]], dtype=object)
     return W_bat, Wts
 
