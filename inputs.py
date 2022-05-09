@@ -94,10 +94,12 @@ elif VehicleConfig == 'Multirotor':
     S_nac = 0
     N_nac = 0
 
-
-
-
-
+# Cost inputs
+CPI = 1.27              # 1 dollar in 2012 (date of literature) is worth as much as 1.27 now, found in https://www.bls.gov/data/inflation_calculator.htm
+ex_rate = 0.92          # Exchange rate dollar -> euro = 0.92
+cost_per_kwh = 132      # €, current cost per kWh for Li-ion batteries
+cost_per_motor = 5500   # €, estimate on price of an Emrax motor (used for other power estimations as well)
+N_ps = 500              # Estimation of product series
 
 
 # Mission profile characteristics

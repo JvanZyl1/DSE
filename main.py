@@ -5,20 +5,25 @@ from matplotlib import cm
 from inputs import *
 from PowerEstimation import *
 from MassEstimation import *
+from CostEstimation import *
 
 # Weight Estimation routine for KittyHawk
 
 n_iter = 10
 for i in range(n_iter):
-    P_hov = PowerReq(MTOW, N_prop, R_prop, V_cr)[1]
+
+    # Power estimation
+    P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr)[1]
     if Wing:
         P_cruise = PowerCruiseWing(C_L, rho, V_cr, S)
     else:
         P_cruise = PowerReq(MTOW, N_prop, R_prop, V_cr)[0]
-    print("Hover power: ", P_hov, '\n',
+    print("Hover power: ", P_TOL, '\n',
           "Cruise power: ", P_cruise)
-    BatWt, BatWts = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, nu_discharge)
-    PropWt, PropWts = PropGroupMassFun(N_prop, R_prop, B_prop, P_hov)
+
+    # Weight estimation
+    BatWt, BatWts, E_total = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discharge)
+    PropWt, PropWts = PropGroupMassFun(N_prop, R_prop, B_prop, P_TOL)
     FuseWt, FuseWts = FuselageGroupMassFun(MTOW, W_PL, l_t, V_cr, D, l, S_nac, N_nac)
     if Wing:
         WingWt, WingWts = WingGroupMassFun(MTOW, W_PL, b, S, n_ult)
@@ -30,6 +35,11 @@ for i in range(n_iter):
         MTOW = np.sum([PropWt, FuseWt, BatWt, W_PL])
     print(Weights)
     print("MTOW: ", MTOW)
+
+    # Cost estimation
+    W_struct = MTOW - (BatWt + PropWt + W_PL)
+    C_total = total_costs(MTOW, W_struct, E_total)
+
 # Get the estimate for the power required in cruise.
 # Ran = np.linspace(0.7, 1.5, 25)
 # Ns_prop = np.array([1, 2, 4, 8, 12, 16, 18, 24, 32])

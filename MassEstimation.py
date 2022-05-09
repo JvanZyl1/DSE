@@ -47,7 +47,7 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, nu_discha
     E_total = (E_TO + E_CR) / 3600               # total energy needed in [Wh]
     W_bat = (E_total / eta_E) / nu_discharge
     Wts = np.array([["Battery Weight", W_bat]], dtype=object)
-    return W_bat, Wts
+    return W_bat, Wts, E_total
 
 ### Mass estimation methods for wing-equipped aircraft
 # Taken from Torenbeek chapter 8.
@@ -231,7 +231,7 @@ def FuselageGroupMassFun(W_MTOW, W_PL, l_t, V_cr, D, l, S_nac, N_nac):
     W_nac = N_nac * NacelleMassFun(S_nac, V_cr)
     W_av = AvionicsMassFun(W_MTOW)
     W_fg = W_fs + W_fur + W_lg + W_nac + W_av
-    Wts = np.array([["Fuselage Structural Weight", W_fs], ["Furnishing Weight", W_fur], \
+    Wts = np.array([["Fuselage Structural Weight", W_fs], ["Furnishing Weight", W_fur],
             ["Landing Gear Weight", W_lg], ["Nacelles Weight", W_nac], ["Avionics Weight", W_av]], dtype=object)
     return W_fg, Wts
 
