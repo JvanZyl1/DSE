@@ -2,6 +2,7 @@
 
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
+import scipy.optimize as sc
 
 def DragPolar(C_L):
     '''Lift drag estimations for lift&cruise and VectorThrust.'''
@@ -10,14 +11,20 @@ def DragPolar(C_L):
     elif VehicleConfig == 'VectorThrust':
         C_D = 0.0163 + 0.058 * (C_L**2)
     return C_D
-def RC_AoA(V_cr, D_q_tot, rho, MTOW, g):
+def RC_AoA(V_cr, D_q_tot_x, rho, MTOW, g):
     '''Rotor craft angle of attack estimator'''
     #Nominal drag force on fuselage during cruise
-    D = 0.5 * rho * V_cr**2* D_q_tot
+    D = 0.5 * rho * V_cr**2* D_q_tot_x
     #Equilibrium AoA
-    alpha = np.atan2(D,MTOW * g)
+    alpha = np.arctan2(D,MTOW * g)
     return alpha
-
+def V_ind(T,rho,V,AoA,A_rot):
+    
+    def thrust_eq(V_ind,T,rho,V,AoA,A_rot):
+        f = T - 2*rho*A_rot*V_ind*np.sqrt(V**2 + 2*V*V_ind*np.sin(AoA) + V_ind**2)
+        return f
+    V_ind_found = sc.newton(thrust_eq, V, args = (T,rho,V,AoA,A_rot))
+    return V_ind_found
 def Windforces(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, D_q_tot_x):
     '''Velocities and wind velocities in bodyframe.'''
     Vx_rel = Vx - Vw_x
