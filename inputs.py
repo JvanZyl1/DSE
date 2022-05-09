@@ -95,17 +95,18 @@ elif VehicleConfig == 'Multirotor':
     N_nac = 0
 
 # Cost inputs
-CPI = 1.27              # 1 dollar in 2012 (date of literature) is worth as much as 1.27 now, found in https://www.bls.gov/data/inflation_calculator.htm
-ex_rate = 0.92          # Exchange rate dollar -> euro = 0.92
-cost_per_kwh = 132      # €, current cost per kWh for Li-ion batteries
-cost_per_motor = 5500   # €, estimate on price of an Emrax motor (used for other power estimations as well)
-N_ps = 500              # Estimation of product series
+yop = 2025              # Year of the start of production is expected
+# CPI_now = 1.27          # 1 dollar in 2012 (date of literature) is worth as much as 1.27 now, found in https://www.bls.gov/data/inflation_calculator.htm
+ex_rate = 0.90          # Exchange rate dollar -> euro = 0.92
+# cost_per_motor = 5500   # €, estimate on price of an Emrax motor (used for other power estimations as well)
+N_ps = 500              # Estimation of product series over 5 years
+N_psm = 20              # Estimation of product series over 1 month
+N_proto = 5             # Estimation of number of prototypes created for testing purposes
 
 
 # Mission profile characteristics
 R = 20000           # mission range in kilometers [m]
 R_div = 5000        # additional diversion range in kilometers [m]
-#V_cr = 200 / 3.6   # assumed cruise speed in kilometers per hour [km/h]
 V_TO = 3            # assumed take-off and descent velocity [m/s !]
 h_TO = 100          # assumed vertical travel distance in [m]
 rho = 1.225         # air density in [kg/m3]
