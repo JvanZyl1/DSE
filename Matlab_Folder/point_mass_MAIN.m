@@ -11,9 +11,9 @@ W = m*g; %N
 
 T = 10.5;
 rho = 1.225;
-C_D = 0.5;
-S = 2;
-time_delay = 0.1;
+C_D = 0.6;
+S = 2.1*1*pi;
+time_delay = 0.3;%0.1;
 
 rlist = [];
 F_control_minus_tau = [];

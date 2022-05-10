@@ -2,6 +2,8 @@ clear all
 close all
 clc
 
+%%% Not used any more
+
 m = 100; %kg
 g = 9.81; %m/s
 W = m*g; %N
