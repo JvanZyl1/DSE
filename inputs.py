@@ -64,18 +64,18 @@ elif VehicleConfig == 'VectoredThrust':
     S = 10
     b = 12
     V_cr = 203 / 3.6    # Cruise velocity [m/s]
-    N_prop = 24         # Number of propellers [-]
+    N_prop = 6         # Number of propellers [-]
     D = 1.6             # Diameter of fuselage [m]
-    l = 3.5             # Length of vehicle [m]
-    R_prop = 0.10       # Propeller radius [m]
-    B_prop = 20         # Number of blades per propeller [-]
+    l = 6            # Length of vehicle [m]
+    R_prop = 1.4       # Propeller radius [m]
+    B_prop = 5         # Number of blades per propeller [-]
     omega_prop = 6000   # Rotational velocity of propeller [rad/s]
     S_nac = 0.5         # Nacelle ? area [m^2]
-    N_nac = 24          # Number of nacelles ? [-]
+    N_nac = 6          # Number of nacelles ? [-]
     l_t = l             # length from wing c/4 to root of tail [m]
     Lambda = 0          # Wing sweep [rad]
     t_chord = 0.14      # Thickness of the chord at the root
-    MTOW = 1000         # Max take of weight [kg]
+    MTOW = 1300         # Max take of weight [kg]
     W_PL = 250          # mass of the payload in kilograms [kg]
 
 
