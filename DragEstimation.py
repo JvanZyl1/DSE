@@ -41,7 +41,7 @@ def V_ind_FOR_non_dim(V, gamma=0): #for forward flight
     return array[1]
 
 def V_ind_FOR(V, T, R, gamma=0):
-    return V_ind_FOR_non_dim(V) * np.sqrt(T/(2 * rho * np.pi * R ** 2))
+    return V_ind_FOR_non_dim(V, gamma) * np.sqrt(T/(2 * rho * np.pi * R ** 2))
 
 
 def Windforces_RC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z):
