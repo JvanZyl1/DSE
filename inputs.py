@@ -15,7 +15,7 @@ g = 9.81            # gravitional acceleration [m/s2]
 # KittyHawk - LiftCruise;
 # joby s4 - VectoredThrust;
 # Ehang 184 - Multirotor;
-VehicleConfig = 'Multirotor'
+VehicleConfig = 'LiftCruise'
 if VehicleConfig == 'LiftCruise':     #KittyHawk
     Wing=True
     l_t = 3.344         # length from wing c/4 to root of tail
