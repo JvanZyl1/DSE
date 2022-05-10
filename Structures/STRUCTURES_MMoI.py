@@ -1,7 +1,11 @@
 """STRUCTURES: Mass Moment of Inertia (MMoI)"""
 
 import numpy as np
+
 from math import *
+
+
+
 
 #   Weights
 W_rotors = np.array([50, 75, 75, 50])  # [kg]
@@ -10,10 +14,10 @@ W_rotors = np.array([50, 75, 75, 50])  # [kg]
 P_cg = np.array([0, 1, 2])
 
 # Rotor         [X, Y, Z]
-P_r = np.array([[1, 2, 3],
-                [4, 5, 6],
-                [7, 8, 9],
-                [10, 11, 12]
+P_r = np.array([[1, 2, 3],  # [m]
+                [4, 5, 6],  # [m]
+                [7, 8, 9],  # [m]
+                [10, 11, 12]  # [m]
                 ])
 
 
@@ -34,7 +38,7 @@ def relative_pos(p_arr, p_cg):
     for n in range(i):
         for m in range(j):
             p_arr[n, m] = (p_arr[n, m] - p_cg[m])
-    return p_arr
+    return p_arr  # [m]
 
 
 #   Inertia's due position
@@ -52,7 +56,7 @@ def inertia(p_arr, p_cg, w_arr):
     i_mass = np.zeros(i)
     for n in range(i):
         i_mass[n] = w_arr[n] * (p_arr[n, 0] ** 2 + p_arr[n, 1] ** 2 + p_arr[n, 2] ** 2)
-    return i_mass
+    return i_mass  # [kg m^2]
 
 
 #   Inertia's due to shape
@@ -68,7 +72,8 @@ def inertia_r(n_blades, r_rot, w_blade):
     :return: MMoI of a rotor
     """
     i_mass = n_blades * w_blade * (r_rot / 2) ** 2
-    return i_mass
+    return i_mass  # [kg m^2]
+
 
 #   Total MMoI
 print(inertia(P_r, P_cg, W_rotors))

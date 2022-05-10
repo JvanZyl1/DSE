@@ -1,6 +1,7 @@
 "C.G. Estimation"
 
 #Inputs
+
 M_Fuselage=
 M_Landinggear=
 M_Prop=
