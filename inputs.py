@@ -17,7 +17,7 @@ eta_power_transfer = 0.97
 eta_battery = 0.95
 eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer
 eta_E = 200         # energy density of the battery in [Wh/kg]
-nu_discharge = 0.6  # discharge ratio of the battery for optimal lifetime
+nu_discharge = 0.8  # discharge ratio of the battery for optimal lifetime
 
 W_PL = 250          # mass of the payload in kilograms [kg]
 PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
