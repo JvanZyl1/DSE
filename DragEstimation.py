@@ -49,7 +49,6 @@ def V_ind_FOR(V, T, R, gamma=0):
 
 def Windforces_RC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z):
     '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
-    CY = 0.5 # The drag coefficient is assumed to be of a sphere for the sides
     CY = 0.6 # Lateral force coefficient
     CX = parasite_drag()[0]  # Reference area is the fuselage wetted area
     Vx_rel = Vx - Vw_x
