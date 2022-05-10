@@ -30,7 +30,7 @@ def V_ind(T,rho,V,AoA,A_rot):
     return V_ind_found
 
 def drag_parasitic_fuselage(V): #for forward flight
-    return 0.5 * rho * V ** 2 * D_q_tot_x
+    return 0.5 * rho * V ** 2 * parasite_drag()[1]
 
 def FOR_AOA(V, gamma=0): #for forward flight
     return np.arcsin(drag_parasitic_fuselage(V)/ (MTOW * g) + np.sin(gamma))
