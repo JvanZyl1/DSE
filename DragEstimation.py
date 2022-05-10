@@ -14,6 +14,7 @@ def DragPolar(C_L):
     elif VehicleConfig == 'VectorThrust':
         C_D = 0.0163 + 0.058 * (C_L**2)
     return C_D
+
 def RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g):
     '''Rotor craft angle of attack estimator'''
     #Nominal drag force on fuselage during cruise
