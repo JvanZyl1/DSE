@@ -11,10 +11,10 @@ Cables assumed to be in line with engine for now, should almost change nothing i
 
 #Inputs
 M_Fuselage=ME.FuselageMassFun(l_t, V_cr, D, l)+ME.FurnishingMassFun(W_PL)
-M_Landinggear=ME.LandingGearMassFun(W_MTOW)
-M_Prop,_=ME.PropGroupMassFun(N_prop, R_prop, B_prop, P_cruise)
+M_Landinggear=ME.LandingGearMassFun(MTOW)
+M_Prop,_=ME.PropGroupMassFun(N_prop, R_prop, B_prop, P_cr)
 Props=N_prop
-M_Wing,_=ME.WingGroupMassFun(W_MTOW, W_PL, b, Lambda, S, t_chord, n_ult)
+M_Wing,_=ME.WingGroupMassFun(MTOW, W_PL, b, Lambda, S, t_chord, n_ult)
 M_Tail,_=ME.TailplaneGroupFun(S_h,S_v,n_ult)
 M_Payload=250 #[kg}
 

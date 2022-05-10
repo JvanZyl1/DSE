@@ -9,10 +9,7 @@ import matplotlib.pyplot as plt
 
 def DragPolar(C_L):
     '''Lift drag estimations for lift&cruise and VectorThrust.'''
-    if VehicleConfig == 'LiftCruise':
-        C_D = 0.0438 + 0.0294 * (C_L**2)
-    elif VehicleConfig == 'VectorThrust':
-        C_D = 0.0163 + 0.058 * (C_L**2)
+    C_D = 0.0438 + 0.0294 * (C_L**2)
     return C_D
 
 def RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g):

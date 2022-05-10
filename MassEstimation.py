@@ -38,6 +38,7 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, nu_discha
     This function estimates the battery mass in [kg]
     based off the energy density and mission profile
     '''
+    eta_E = eta_E * 1.08**(yop-2022)
     t_CR = (R + R_div) / (V_cr)     # Calculate time in cruise + diversion
     t_TO = (h_TO / V_TO) * 2                     # Calculate the time spent in vertical flight
     # Energy required for flight phases
