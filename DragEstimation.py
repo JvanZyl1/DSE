@@ -68,7 +68,6 @@ def Windforces_AC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, CL):
     '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
     S_fus = np.pi**2 * l * D/4 #Fuselage wetted area
     CX = DragPolar(CL)
-    CY_fus = 0.5
     CY_fus = 0.6
     CD_vertplate = 1.28
     CD_horplate = 0.01 # For wing estimate drag from flat plate.
@@ -128,13 +127,10 @@ def C(alpha,aeroparam,airfoilcsv):
 def deflector_analyser():
     V_cr = 0
     S_flap = 0.15 * 2 * R_prop
-    delta = np.arange(-15,-15,0.01)
     A_rot = np.pi*R_prop**2
     D_q_tot_x = parasite_drag()[1]
-    delta = np.arange(-15*np.pi/180,15*np.pi/180,0.01)
     T = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[1]
     AoA= RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]
-    A_rot = np.pi*R_prop**2
     Vind = V_ind(T,rho,V_cr,AoA,A_rot)
     AoA_ind = np.pi/2 - np.arctan2((V_cr*np.sin(AoA)+Vind),V_cr*np.cos(AoA))
     delta = np.arange(AoA_ind - 30*np.pi/180, AoA_ind + 30*np.pi/180,0.01)
