@@ -20,7 +20,7 @@ def RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g):
     Treq = np.sqrt(MTOW**2 + D**2)
     return alpha, Treq
 def V_ind(T,rho,V,AoA,A_rot):
-    
+    '''Thrust and A_rot for 1 rotor.'''
     def thrust_eq(V_ind,T,rho,V,AoA,A_rot):
         f = T - 2*rho*A_rot*V_ind*np.sqrt(V**2 + 2*V*V_ind*np.sin(AoA) + V_ind**2)
         return f
