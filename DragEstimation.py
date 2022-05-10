@@ -3,7 +3,7 @@ import csv
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
 import scipy.optimize as sc
-
+import matplotlib.pyplot as plt
 def DragPolar(C_L):
     '''Lift drag estimations for lift&cruise and VectorThrust.'''
     if VehicleConfig == 'LiftCruise':
@@ -11,13 +11,14 @@ def DragPolar(C_L):
     elif VehicleConfig == 'VectorThrust':
         C_D = 0.0163 + 0.058 * (C_L**2)
     return C_D
-def RC_AoA(V_cr, D_q_tot_x, rho, MTOW, g):
+def RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g):
     '''Rotor craft angle of attack estimator'''
     #Nominal drag force on fuselage during cruise
     D = 0.5 * rho * V_cr**2* D_q_tot_x
     #Equilibrium AoA
     alpha = np.arctan2(D,MTOW * g)
-    return alpha
+    Treq = np.sqrt(MTOW**2 + D**2)
+    return alpha, Treq
 def V_ind(T,rho,V,AoA,A_rot):
     
     def thrust_eq(V_ind,T,rho,V,AoA,A_rot):
@@ -62,18 +63,20 @@ def Windforces_AC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, CL):
     Fw_y = -0.5 * rho * Vy_rel * V_infty * S_side * CY
     print("order: Fw_x, Fw_y")
     return Fw_x, Fw_y
-def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap):
+def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap,airfoilcsv):
     A_rot = np.pi * R_prop**2 #[m^2]
-    V_ind = V_ind(T,rho,V,AoA,A_rot)
-    AoA_ind = np.pi/2 - np.arctan2((V*sin(AoA)+V_ind),V*cos(AoA))- delta
-    Vtot_eff = np.sqrt((V*sin(AoA)+V_ind)**2 + (V*cos(AoA))**2)
-    L = 0.5 * rho * Vtot_eff**2 * S_flap * CL
-    D = 0.5 * rho * Vtot_eff**2 * S_flap * CD
+    Vind = V_ind(T,rho,V,AoA,A_rot)
+    AoA_ind = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))
+    AoA_eff = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))- delta
+    Vtot_eff = np.sqrt((V*np.sin(AoA)+Vind)**2 + (V*np.cos(AoA))**2)
+    L = 0.5 * rho * Vtot_eff**2 * S_flap * C(AoA_eff, 'Cl',airfoilcsv)
+    D = 0.5 * rho * Vtot_eff**2 * S_flap * C(AoA_eff, 'Cd',airfoilcsv)
     # Maybe change to 3D transformation
     T = np.array([[np.cos(AoA_ind), np.sin(AoA_ind)],
                   [np.sin(AoA_ind), np.cos(AoA_ind)]])
     F_localaeroaxes = np.array([[L],[D]])
     F_bodyaxis = np.matmul(T,F_localaeroaxes)
+    return F_bodyaxis
     
     return F_bodyaxis
 def AirfoilParameters(Airfoilcsv):
@@ -95,3 +98,21 @@ def AirfoilParameters(Airfoilcsv):
                 rows[10][4]: values[:,4]}
     return Datadict
 #AirfoilParameters('Xfoil-NACA0012.csv')
+def C(alpha,aeroparam,airfoilcsv):
+    '''Input: AoA, string for aeroparam: 'Cl','Cd' or 'Cm'. Output: Aerodynamic coefficient'''
+    aerodict = AirfoilParameters(airfoilcsv)
+    return np.interp(alpha, aerodict['Alpha'],aerodict[aeroparam])
+S_flap = 0.15 * 2 * R_prop
+delta = np.arange(-5,5,0.01)
+
+T = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[1]
+AoA= RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]
+A_rot = np.pi*R_prop**2
+force =[]
+for d in delta: 
+    force.append(FlapForceEstimator(T, rho, V_cr, AoA, A_rot,d, S_flap,'Xfoil-NACA0012.csv'))
+forcelst =np.array(force)
+plt.plot(delta,forcelst[:,0])
+plt.show()
+plt.plot(delta,forcelst[:,1])
+plt.show()
