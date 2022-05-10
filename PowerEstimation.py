@@ -98,7 +98,9 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     E_total = (E_TO + E_CR) / 3600  # total energy needed in [Wh]
     W_bat = (E_total / eta_E) / nu_discharge
     return P_cruise,P_hov,W_bat
-
+def Lift_Drag_Cruise(MTOW,N_prop,R_prop,V_cr):
+    L_D = (MTOW * g)/PowerReq(MTOW,N_prop,R_prop,V_cr)[0]
+    return L_D
 
 
 def PowerCruiseWing(C_L, rho, V_cr, S):
