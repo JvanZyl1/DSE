@@ -49,6 +49,7 @@ def V_ind_FOR(V, T, R, gamma=0):
 def Windforces_RC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z):
     '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
     CY = 0.5 # The drag coefficient is assumed to be of a sphere for the sides
+    CY = 0.6 # Lateral force coefficient
     CX = parasite_drag()[0]  # Reference area is the fuselage wetted area
     Vx_rel = Vx - Vw_x
     Vy_rel = Vy - Vw_y
@@ -68,6 +69,7 @@ def Windforces_AC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, CL):
     S_fus = np.pi**2 * l * D/4 #Fuselage wetted area
     CX = DragPolar(CL)
     CY_fus = 0.5
+    CY_fus = 0.6
     CD_vertplate = 1.28
     CD_horplate = 0.01 # For wing estimate drag from flat plate.
     S_side = np.pi * l*D/4 # Side fuselage area (ellipse)
@@ -87,6 +89,7 @@ def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap,airfoilcsv):
     A_rot = np.pi * R_prop**2 #[m^2]
     Vind = V_ind(T,rho,V,AoA,A_rot)
     AoA_ind = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))
+
     AoA_eff = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))- delta
     Vtot_eff = np.sqrt((V*np.sin(AoA)+Vind)**2 + (V*np.cos(AoA))**2)
     L = 0.5 * rho * Vtot_eff**2 * S_flap * C(AoA_eff, 'Cl',airfoilcsv)
@@ -123,13 +126,21 @@ def C(alpha,aeroparam,airfoilcsv):
     return np.interp(alpha, aerodict['Alpha'],aerodict[aeroparam])
 
 def deflector_analyser():
+    V_cr = 0
     S_flap = 0.15 * 2 * R_prop
     delta = np.arange(-15,-15,0.01)
+    A_rot = np.pi*R_prop**2
     D_q_tot_x = parasite_drag()[1]
     delta = np.arange(-15*np.pi/180,15*np.pi/180,0.01)
     T = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[1]
     AoA= RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]
     A_rot = np.pi*R_prop**2
+    Vind = V_ind(T,rho,V_cr,AoA,A_rot)
+    AoA_ind = np.pi/2 - np.arctan2((V_cr*np.sin(AoA)+Vind),V_cr*np.cos(AoA))
+    delta = np.arange(AoA_ind - 30*np.pi/180, AoA_ind + 30*np.pi/180,0.01)
+    print(FlapForceEstimator(T, rho, V_cr, AoA, A_rot,AoA_ind, S_flap,'Xfoil-NACA0012.csv'))
+    
+    
     force =[]
     for d in delta: 
         force.append(FlapForceEstimator(T, rho, V_cr, AoA, A_rot,d, S_flap,'Xfoil-NACA0012.csv'))
