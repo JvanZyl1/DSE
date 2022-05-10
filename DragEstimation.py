@@ -5,9 +5,8 @@ from Parasitedrag_Estimation_Multirotor import *
 import scipy.optimize as sc
 from sympy.solvers import solve
 from sympy import Symbol
-
-
 import matplotlib.pyplot as plt
+
 def DragPolar(C_L):
     '''Lift drag estimations for lift&cruise and VectorThrust.'''
     if VehicleConfig == 'LiftCruise':
@@ -121,9 +120,10 @@ def C(alpha,aeroparam,airfoilcsv):
     '''Input: AoA, string for aeroparam: 'Cl','Cd' or 'Cm'. Output: Aerodynamic coefficient'''
     aerodict = AirfoilParameters(airfoilcsv)
     return np.interp(alpha, aerodict['Alpha'],aerodict[aeroparam])
-S_flap = 0.15 * 2 * R_prop
-delta = np.arange(-5,5,0.01)
+
 def analyse_deflector():
+    S_flap = 0.15 * 2 * R_prop
+    delta = np.arange(-15,-15,0.01)
     T = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[1]
     AoA= RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]
     A_rot = np.pi*R_prop**2
