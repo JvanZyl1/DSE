@@ -9,7 +9,7 @@ from CostEstimation import *
 
 # Weight Estimation routine for KittyHawk
 
-n_iter = 1
+n_iter = 20
 for i in range(n_iter):
 
     # Power estimation
@@ -33,14 +33,14 @@ for i in range(n_iter):
     else:
         Weights = np.vstack((BatWts,PropWts,FuseWts))
         MTOW = np.sum([PropWt, FuseWt, BatWt, W_PL])
-    print(Weights)
+    # print(Weights)
     print("MTOW: ", MTOW)
 
     # Cost estimation
     W_struct = MTOW - (BatWt + PropWt + W_PL)
-    C_total, C_list = total_costs(W_struct, E_total, P_TOL, R_prop)
+    C_unit, C_overhead, C_list = total_costs(W_struct, E_total, P_TOL, R_prop)
     print(C_list)
-    print(C_total)
+    print(C_unit, C_overhead)
 
 # Get the estimate for the power required in cruise.
 # Ran = np.linspace(0.7, 1.5, 25)

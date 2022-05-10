@@ -1,9 +1,8 @@
 import numpy as np
 '''Inputs script '''
 # Vehicle characteristics
-l = 3               # length of the vehicle in meters [m]
-D = 2               # diameter of the fuselage in meters [m]
-
+#l = 3               # length of the vehicle in meters [m]
+#D = 2               # diameter of the fuselage in meters [m]
 # Propeller data
 #N_prop = 4     #4     # number of propellers in meters squared [m2]
 #R_prop = 2     #3.7       # radius of each propeller in meters [m]
@@ -19,7 +18,6 @@ eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer
 eta_E = 200         # energy density of the battery in [Wh/kg]
 nu_discharge = 0.8  # discharge ratio of the battery for optimal lifetime
 
-W_PL = 250          # mass of the payload in kilograms [kg]
 PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
 
 g = 9.81            # gravitional acceleration [m/s2]
@@ -27,7 +25,7 @@ g = 9.81            # gravitional acceleration [m/s2]
 # KittyHawk - LiftCruise;
 # Lilium Jet - VectorThrust;
 # Ehang 184 - Multirotor
-VehicleConfig = 'Multirotor'
+VehicleConfig = 'LiftCruise'
 if VehicleConfig == 'LiftCruise':     #KittyHawk
     Wing=True
     l_t = 3.344         # length from wing c/4 to root of tail [m]
@@ -49,7 +47,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     n_ult = 2           # Ultimate load factor [-]
     S_v = 1.5           # Vertical tail surface area [m^2]
     S_h = 2             # Horizontal tail surface area [m^2]
-    P_cruise = 200000   # Cruise power [W]
+    # P_cruise = 200000   # Cruise power [W]
     # ^^^ This will be obtained from the calculations right? Yes
     # Planform Characteristics
     t_rh = 0.2
@@ -57,6 +55,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     Lambda_v = 30
     A_v = 3
     A_h = 3
+    W_PL = 250          # mass of the payload in kilograms [kg]
 
 
 elif VehicleConfig == 'VectoredThrust':
@@ -77,22 +76,24 @@ elif VehicleConfig == 'VectoredThrust':
     Lambda = 0          # Wing sweep [rad]
     t_chord = 0.14      # Thickness of the chord at the root
     MTOW = 1000         # Max take of weight [kg]
+    W_PL = 250          # mass of the payload in kilograms [kg]
 
 
 elif VehicleConfig == 'Multirotor':
     Wing = False
+    l = 2.1
+    D = 1.0
     V_cr = 100 / 3.6    # Cruise velocity [m/s]
     N_prop = 12          # Number of propellers [-]
     R_prop = 0.7        # Propeller radius [m]
     B_prop = 2          # Number of blades per propeller [-]
     omega_prop = 300    # Rotational velocity of propeller [rad/s]
-    MTOW = 600          # Max take of weight [kg]
+    MTOW = 350          # Max take of weight [kg]
     S_body = np.pi ** 2 * l * D / 4  # Assume fuselage to be an ellipse of revolution and calculate its wetted area
-    l = 2.5
-    w = 1.6
     l_t = l
     S_nac = 0
     N_nac = 0
+    W_PL = 120          # mass of the payload in kilograms [kg]
 
 # Cost inputs
 yop = 2025              # Year of the start of production is expected
@@ -111,4 +112,3 @@ V_TO = 3            # assumed take-off and descent velocity [m/s !]
 h_TO = 100          # assumed vertical travel distance in [m]
 rho = 1.225         # air density in [kg/m3]
 n_ult = 2           # ultimate load factor
-W_PL = 250          # mass of the payload in kilograms [kg]
