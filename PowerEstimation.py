@@ -108,13 +108,13 @@ def PowerCruiseWing(C_L, rho, V_cr, S):
 
 
 print('propeller blade radius = ', R_prop)
-P_TOL = PowerReq(MTOW,N_prop,R_prop,V_cr)[1]
-P_cruise = PowerCruiseWing(C_L, rho, V_cr, S)
 if VehicleConfig == 'Multirotor':
     print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' [kW]')
     print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' [kW]')
     print('Battery weight = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[2],' [kg]')
 else:
+    P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr)[1]
+    P_cruise = PowerCruiseWing(C_L, rho, V_cr, S)
     print('Power required cruise = ', PowerCruiseWing(C_L,rho,V_cr,S) / 1000, ' [kW]')
     print('Power required takeoff = ', PowerReq(MTOW, N_prop, R_prop, V_cr)[1] / 1000, ' [kW]')
     print('Battery weight = ', BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discharge)[0], ' [kg]')
