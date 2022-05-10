@@ -3,6 +3,9 @@
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
 import scipy.optimize as sc
+from sympy.solvers import solve
+from sympy import Symbol
+
 
 def DragPolar(C_L):
     '''Lift drag estimations for lift&cruise and VectorThrust.'''
@@ -16,8 +19,9 @@ def RC_AoA(V_cr, D_q_tot_x, rho, MTOW, g):
     #Nominal drag force on fuselage during cruise
     D = 0.5 * rho * V_cr**2* D_q_tot_x
     #Equilibrium AoA
-    alpha = np.arctan2(D,MTOW * g)
+    alpha = np.arctan2(D, MTOW * g)
     return alpha
+
 def V_ind(T,rho,V,AoA,A_rot):
     
     def thrust_eq(V_ind,T,rho,V,AoA,A_rot):
@@ -25,6 +29,22 @@ def V_ind(T,rho,V,AoA,A_rot):
         return f
     V_ind_found = sc.newton(thrust_eq, V, args = (T,rho,V,AoA,A_rot))
     return V_ind_found
+
+def drag_parasitic_fuselage(V): #for forward flight
+    return 0.5 * rho * V ** 2 * D_q_tot_x
+
+def FOR_AOA(V, gamma=0): #for forward flight
+    return np.arcsin(drag_parasitic_fuselage(V)/ (MTOW * g) + np.sin(gamma))
+
+def V_ind_FOR_non_dim(V, gamma=0): #for forward flight
+    v_i = Symbol('v_i')
+    array = solve(v_i ** 4 + (V**2 * v_i**2) + (2 * V * v_i**3 * np.sin(FOR_AOA(V, gamma))) - 1, v_i)
+    return array[1]
+
+def V_ind_FOR(V, T, R, gamma=0):
+    return V_ind_FOR_non_dim(V) * np.sqrt(T/(2 * rho * np.pi * R ** 2))
+
+
 def Windforces_RC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z):
     '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
     CY = 0.5 # The drag coefficient is assumed to be of a sphere for the sides
