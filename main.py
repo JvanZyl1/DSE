@@ -33,14 +33,18 @@ for i in range(n_iter):
     else:
         Weights = np.vstack((BatWts,PropWts,FuseWts))
         MTOW = np.sum([PropWt, FuseWt, BatWt, W_PL])
-    print(Weights)
+    # print(Weights)
     print("MTOW: ", MTOW)
 
     # Cost estimation
     W_struct = MTOW - (BatWt + PropWt + W_PL)
-    C_total, C_list = total_costs(W_struct, E_total, P_TOL, R_prop)
-    print(C_list)
-    print(C_total)
+    C_unit, C_overhead, C_list = total_costs(W_struct, E_total, P_TOL, R_prop)
+    # print(C_list)
+    print(C_overhead)
+
+    # Scaled to payload
+    print("MTOW scaled to payload: ", MTOW / W_PL * 250)
+    print("Unit cost scaled to payload: ", MTOW / W_PL * 250)
 
 # Get the estimate for the power required in cruise.
 # Ran = np.linspace(0.7, 1.5, 25)

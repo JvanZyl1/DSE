@@ -28,10 +28,12 @@ def total_costs(W_struct, E_total, P_TOL, R_prop):
     C_lg = -7500 * CPI * ex_rate                                                                                        # Landing gear, non-retracted so saving costs
     C_pl = 0.2 * (C_bat + C_motor + C_pms + C_prop + C_mat + C_tool + C_mfg + C_qc + C_av + C_lg)                       # Product liability
 
-    C_total = C_eng + C_bat + C_motor + C_pms + C_prop + C_mat + \
-              C_tool + C_mfg + C_ds + C_fto + C_qc + C_av + C_lg + C_pl                                                 # Total development / production costs
+    C_unit = C_bat + C_motor + C_pms + C_prop + C_mat + \
+              C_tool + C_mfg + C_qc + C_av + C_lg + C_pl                                                                # Total development / production costs
 
-    C_list = np.array([["Engineering costs: ", C_eng],
+    C_overhead = C_eng + C_ds + C_fto
+
+    C_list = np.array([["UNIT COSTS", ""],
                        ["Battery costs: ", C_bat],
                        ["Motor costs: ", C_motor],
                        ["Power management system costs: ", C_pms],
@@ -39,17 +41,19 @@ def total_costs(W_struct, E_total, P_TOL, R_prop):
                        ["Material costs: ", C_mat],
                        ["Tooling costs: ", C_tool],
                        ["Manufacturing costs: ", C_mfg],
-                       ["Development support costs: ", C_ds],
-                       ["Flight test operating costs: ", C_fto],
                        ["Quality control costs: ", C_qc],
                        ["Avionics costs: ", C_av],
-                       ["Product liability costs: ", C_pl]])
+                       ["Product liability costs: ", C_pl],
+                       ["OVERHEAD COSTS", ""],
+                       ["Engineering costs: ", C_eng],
+                       ["Development support costs: ", C_ds],
+                       ["Flight test operating costs: ", C_fto]])
 
     # Operating costs
     # C_ch = elec_cost * E_total / 0.85
     # C_mt = 60 * 0.3 * (h_TO / V_to + 20 / V_cruise)
 
-    return C_total, C_list
+    return C_unit, C_overhead, C_list
 
 
 
