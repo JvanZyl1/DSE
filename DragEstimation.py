@@ -84,21 +84,30 @@ def Windforces_AC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, CL):
 def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap,airfoilcsv):
     A_rot = np.pi * R_prop**2 #[m^2]
     Vind = V_ind(T,rho,V,AoA,A_rot)
+    # Getting the induced angle of attack under the rotor. Than rotate it
+    # to an airfoil perpendicular to the rotor (do: pi/2 - induced angle)
     AoA_ind = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))
-
+    # The effective angle of attack at airfoil (so rotating with its deflection (delta))
     AoA_eff = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))- delta
+    # Total velocity under rotor
     Vtot_eff = np.sqrt((V*np.sin(AoA)+Vind)**2 + (V*np.cos(AoA))**2)
+    # Lift force from the deflector
     L = 0.5 * rho * Vtot_eff**2 * S_flap * C(AoA_eff, 'Cl',airfoilcsv)
+    # Drag force from the deflector
     D = 0.5 * rho * Vtot_eff**2 * S_flap * C(AoA_eff, 'Cd',airfoilcsv)
     # Maybe change to 3D transformation
+    # Transformation from induced aero axis system to a rotor fixed axis system.
+    # x parallel to rotor and y normal down
     T = np.array([[np.cos(AoA_ind), np.sin(AoA_ind)],
                   [np.sin(AoA_ind), np.cos(AoA_ind)]])
+    
     F_localaeroaxes = np.array([[L],[D]])
     F_bodyaxis = np.matmul(T,F_localaeroaxes)
     return F_bodyaxis
 
 def AirfoilParameters(Airfoilcsv):
     '''Input csv, output dictionary with airfoil parameters'''
+    #Getting airfoil data from csv
     data = open(Airfoilcsv,'r')
     dat = csv.reader(data)
     rows =[]
@@ -110,6 +119,11 @@ def AirfoilParameters(Airfoilcsv):
             line[line.index(el)] = float(el)
         values[values.index(line)] = line
     values = np.array(values)
+    #Putting values in dict
+    #For AoA [rad]: Datadict['alpha']
+    #For Cl [-]: Datadict['Cl']
+    #For Cd [-]: Datadict['Cd']
+    #For Cm [-]: Datadict['Cm']
     Datadict = {rows[10][0]: np.pi/180 * values[:,0],
                 rows[10][1]: values[:,1],
                 rows[10][2]: values[:,2],
@@ -118,28 +132,35 @@ def AirfoilParameters(Airfoilcsv):
 #AirfoilParameters('Xfoil-NACA0012.csv')
 def C(alpha,aeroparam,airfoilcsv):
     '''Input: AoA, string for aeroparam: 'Cl','Cd' or 'Cm'. Output: Aerodynamic coefficient'''
+    #Finding Cl, Cd or Cm at a certain AoA.
     aerodict = AirfoilParameters(airfoilcsv)
     return np.interp(alpha, aerodict['Alpha'],aerodict[aeroparam])
 
 def deflector_analyser():
-    V_cr = 0
+    V=V_cr
+    #Flap area. Assume that it is as wide as a rotor and assume that the chord length is 15cm.
     S_flap = 0.15 * 2 * R_prop
+    #Area of 1 rotor.
     A_rot = np.pi*R_prop**2
+    #Parasite drag
     D_q_tot_x = parasite_drag()[1]
-    T = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[1]
-    AoA= RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]
-    Vind = V_ind(T,rho,V_cr,AoA,A_rot)
-    AoA_ind = np.pi/2 - np.arctan2((V_cr*np.sin(AoA)+Vind),V_cr*np.cos(AoA))
-    delta = np.arange(AoA_ind - 30*np.pi/180, AoA_ind + 30*np.pi/180,0.01)
-    print(FlapForceEstimator(T, rho, V_cr, AoA, A_rot,AoA_ind, S_flap,'Xfoil-NACA0012.csv'))
-    
-    
+    #Getting thrust and angle of attack at the specified velocity
+    T = RC_AoAandThrust(V, D_q_tot_x, rho, MTOW, g)[1]
+    AoA= RC_AoAandThrust(V, D_q_tot_x, rho, MTOW, g)[0]
+    # Induced velocity
+    Vind = V_ind(T,rho,V,AoA,A_rot)
+    #Induced AoA relative to deflector
+    AoA_ind = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))
+    #Choosing a range of deflector deflections [rad]
+    delta = np.arange(AoA_ind - 30*np.pi/180, AoA_ind + 30*np.pi/180,0.01)      
     force =[]
     for d in delta: 
-        force.append(FlapForceEstimator(T, rho, V_cr, AoA, A_rot,d, S_flap,'Xfoil-NACA0012.csv'))
+        force.append(FlapForceEstimator(T, rho, V, AoA, A_rot,d, S_flap,'Xfoil-NACA0012.csv'))
     forcelst =np.array(force)
+    #Plotting the force tangential to the rotor vs delta 
     plt.plot(delta,forcelst[:,0])
     plt.show()
+    #Plotting the force normal to the rotor vs delta
     plt.plot(delta,forcelst[:,1])
     plt.show()
     return
