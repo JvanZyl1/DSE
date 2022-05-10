@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
-from DragEstimation import DragPolar, RC_AoAandThrust
+from DragEstimation import DragPolar, RC_AoAandThrust 
 from MassEstimation import BatteryMassFun
 
 #def Cruise_Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW):
@@ -78,7 +78,7 @@ from MassEstimation import BatteryMassFun
 def PowerReq(MTOW,N_prop,R_prop,V_cr):
     """Function designed for multirotors (EHang's)"""
     T = (MTOW * g) * 1.1       #10 percent safety factor
-    tilt_cruise = 10       #angle of tilt during cruise in degree
+    tilt_cruise = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]*180/np.pi       #angle of tilt during cruise in degree
     disk_area = R_prop**2 * np.pi * N_prop
     kappa = 1.2       #correction factor for extra power losses, value taken from literature
     V_perp = (V_cr * np.sin(tilt_cruise * (np.pi/180)))      #perpendicular to rotor plane free stream velocity in [m/s]
