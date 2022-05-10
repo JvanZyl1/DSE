@@ -23,7 +23,7 @@ PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
 g = 9.81            # gravitional acceleration [m/s2]
 
 # KittyHawk - LiftCruise;
-# Lilium Jet - VectorThrust;
+# joby s4 - VectorThrust;
 # Ehang 184 - Multirotor
 VehicleConfig = 'LiftCruise'
 if VehicleConfig == 'LiftCruise':     #KittyHawk
@@ -72,7 +72,7 @@ elif VehicleConfig == 'VectoredThrust':
     omega_prop = 6000   # Rotational velocity of propeller [rad/s]
     S_nac = 0.5         # Nacelle ? area [m^2]
     N_nac = 6          # Number of nacelles ? [-]
-    l_t = l             # length from wing c/4 to root of tail [m]
+    l_t = 0.6*l             # length from wing c/4 to root of tail [m]
     Lambda = 0          # Wing sweep [rad]
     t_chord = 0.14      # Thickness of the chord at the root
     MTOW = 1300         # Max take of weight [kg]
