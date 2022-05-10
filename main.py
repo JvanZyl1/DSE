@@ -42,6 +42,9 @@ for i in range(n_iter):
     print(C_list)
     print(C_unit, C_overhead)
 
+    print("MTOW scaled to payload: ", MTOW / W_PL * 250)
+    print("Unit cost scaled to payload: ", C_unit / W_PL * 250)
+
 # Get the estimate for the power required in cruise.
 # Ran = np.linspace(0.7, 1.5, 25)
 # Ns_prop = np.array([1, 2, 4, 8, 12, 16, 18, 24, 32])
