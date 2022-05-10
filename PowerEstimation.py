@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
-from DragEstimation import DragPolar, RC_AoA
+from DragEstimation import DragPolar, RC_AoAandThrust
 from MassEstimation import BatteryMassFun
 
 #def Cruise_Power_estimation_rotorcraft(R_prop, N_prop, V_cr, omega_prop, rho, g, MTOW):
