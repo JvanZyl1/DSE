@@ -6,7 +6,7 @@ m = 100; %kg
 g = 9.81; %m/s
 W = m*g; %N
 
-T = 1;
+T = 1; %test for commit and push from matlab
 
 
 s=tf([1,0],[1]);
