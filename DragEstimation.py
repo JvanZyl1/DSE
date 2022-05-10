@@ -97,8 +97,7 @@ def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap,airfoilcsv):
     F_localaeroaxes = np.array([[L],[D]])
     F_bodyaxis = np.matmul(T,F_localaeroaxes)
     return F_bodyaxis
-    
-    return F_bodyaxis
+
 def AirfoilParameters(Airfoilcsv):
     '''Input csv, output dictionary with airfoil parameters'''
     data = open(Airfoilcsv,'r')

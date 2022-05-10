@@ -1,14 +1,5 @@
 import numpy as np
 '''Inputs script '''
-# Vehicle characteristics
-l = 3               # length of the vehicle in meters [m]
-D = 2               # diameter of the fuselage in meters [m]
-
-# Propeller data
-#N_prop = 4     #4     # number of propellers in meters squared [m2]
-#R_prop = 2     #3.7       # radius of each propeller in meters [m]
-#B_prop = 5              # number of blades per propeller
-#omega_prop = 300    # rotational speed of each propeller in rpm [min-1]
 
 # Efficiencies
 eta_prop = 0.8  # efficiencies, values taken from https://arc.aiaa.org/doi/pdf/10.2514/6.2021-3169
@@ -17,21 +8,18 @@ eta_power_transfer = 0.97
 eta_battery = 0.95
 eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer
 eta_E = 200         # energy density of the battery in [Wh/kg]
-nu_discharge = 0.6  # discharge ratio of the battery for optimal lifetime
-
-W_PL = 250          # mass of the payload in kilograms [kg]
+nu_discharge = 0.8  # discharge ratio of the battery for optimal lifetime
 PowWtRat = 7732     # power to weight ratio for the motor [W/kg]
-
 g = 9.81            # gravitional acceleration [m/s2]
 
 # KittyHawk - LiftCruise;
-# Lilium Jet - VectorThrust;
-# Ehang 184 - Multirotor
+# joby s4 - VectoredThrust;
+# Ehang 184 - Multirotor;
 VehicleConfig = 'Multirotor'
 if VehicleConfig == 'LiftCruise':     #KittyHawk
     Wing=True
-    l_t = 3.344         # length from wing c/4 to root of tail [m]
-    C_L = 1.2           # Lift coefficient in cruise
+    l_t = 3.344         # length from wing c/4 to root of tail
+    C_L = 0.8           # Lift coefficient in cruise
     b = 11              # Wing span [m]
     S = 10              # Wing surface area [m^2]
     N_prop = 12         # Number of propellers [-]
@@ -49,7 +37,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     n_ult = 2           # Ultimate load factor [-]
     S_v = 1.5           # Vertical tail surface area [m^2]
     S_h = 2             # Horizontal tail surface area [m^2]
-    P_cruise = 200000   # Cruise power [W]
+    # P_cruise = 200000   # Cruise power [W]
     # ^^^ This will be obtained from the calculations right? Yes
     # Planform Characteristics
     t_rh = 0.2
@@ -57,6 +45,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     Lambda_v = 30
     A_v = 3
     A_h = 3
+    W_PL = 250          # mass of the payload in kilograms [kg]
 
 
 elif VehicleConfig == 'VectoredThrust':
@@ -65,34 +54,46 @@ elif VehicleConfig == 'VectoredThrust':
     S = 10
     b = 12
     V_cr = 203 / 3.6    # Cruise velocity [m/s]
-    N_prop = 24         # Number of propellers [-]
+    N_prop = 6         # Number of propellers [-]
     D = 1.6             # Diameter of fuselage [m]
-    l = 3.5             # Length of vehicle [m]
-    R_prop = 0.10       # Propeller radius [m]
-    B_prop = 20         # Number of blades per propeller [-]
+    l = 6            # Length of vehicle [m]
+    R_prop = 1.4       # Propeller radius [m]
+    B_prop = 5         # Number of blades per propeller [-]
     omega_prop = 6000   # Rotational velocity of propeller [rad/s]
     S_nac = 0.5         # Nacelle ? area [m^2]
-    N_nac = 24          # Number of nacelles ? [-]
-    l_t = l             # length from wing c/4 to root of tail [m]
+    N_nac = 6          # Number of nacelles ? [-]
+    l_t = 0.6*l             # length from wing c/4 to root of tail [m]
     Lambda = 0          # Wing sweep [rad]
     t_chord = 0.14      # Thickness of the chord at the root
-    MTOW = 1000         # Max take of weight [kg]
+    MTOW = 1300         # Max take of weight [kg]
+    W_PL = 250          # mass of the payload in kilograms [kg]
+    S_h = 2
+    S_v = 1.5
+    t_rh = 0.2
+    t_rv = 0.15
+    Lambda_v = 30
+    A_v = 3
+    A_h = 3
 
 
 elif VehicleConfig == 'Multirotor':
     Wing = False
+    l = 2.1
+    D = 1.0
     V_cr = 100 / 3.6    # Cruise velocity [m/s]
     N_prop = 8          # Number of propellers [-]
     R_prop = 0.8        # Propeller radius [m]
     B_prop = 2          # Number of blades per propeller [-]
     omega_prop = 300    # Rotational velocity of propeller [rad/s]
-    MTOW = 600          # Max take of weight [kg]
+    MTOW = 350          # Max take of weight [kg]
     S_body = np.pi ** 2 * l * D / 4  # Assume fuselage to be an ellipse of revolution and calculate its wetted area
-    l = 2.5
-    w = 1.6
     l_t = l
     S_nac = 0
     N_nac = 0
+    W_PL = 120          # mass of the payload in kilograms [kg]
+    R_pyl = 0.05  # Pylon radius (assumed circular) [m]
+    l_pyl = 0.2   # Pylon length [m]
+
 
 # Cost inputs
 yop = 2025              # Year of the start of production is expected
@@ -111,4 +112,3 @@ V_TO = 3            # assumed take-off and descent velocity [m/s !]
 h_TO = 100          # assumed vertical travel distance in [m]
 rho = 1.225         # air density in [kg/m3]
 n_ult = 2           # ultimate load factor
-W_PL = 250          # mass of the payload in kilograms [kg]
