@@ -44,6 +44,7 @@ import numpy as np
 
 #For a quadrotor. Found at https://ntrs.nasa.gov/api/citations/20180003381/downloads/20180003381.pdf
 CD_fus = 0.0045 #use the wetted area as reference area
+CD_fus = 0.4 #use the fuselage crossectional area. CD is assumed from an ellipse.
 CD_rot = 0.0045 #use rotor disk area
 CD_pyl = 0.025  #use pylon wet area
 D_q_landinggear = 0.2*0.3048**2 #Landing gear CDA [m^2]
@@ -55,12 +56,16 @@ D_q_rothub_ref = S_disk_ref * CD_rot # Reference rotor disk area [m^2]
 D_q_pylons_ref = D_q_rot_ref - D_q_rothub_ref # Estimating rotor pylon drag [m^2]
 S_pylon = D_q_pylons_ref/(0.025*4) # Estimated pylon wet area [m^2]
 
+S_pylon = l_pyl * 2*np.pi *R_pyl*N_prop # Estimated pylon wet area [m^2]
+
 #Own design estimated from above parameters
 S_fus = np.pi**2*l*D/4 #Fuselage wetted area [m^2]
+S_fus = np.pi*D**2/4 #Fuselage cross-sectional area [m^2]
 S_disk = np.pi*R_prop**2*N_prop #Rotor disk area [m^2]
 # Parasite CDA
 D_q_tot_x = (CD_fus*S_fus + CD_rot*S_disk + N_prop*CD_pyl*S_pylon + D_q_landinggear)
 # Assume that the reference area is the fuselage area
+# Assume that the reference area is the fuselage crosssectional area
 CD0 = D_q_tot_x/S_fus #parasitic drag coefficient
 print('CD0:', CD0)
 
