@@ -1,5 +1,5 @@
 '''Drag Polars as derived for specific concepts by https://www.mdpi.com/2226-4310/6/3/26 '''
-
+import csv
 from inputs import *
 from Parasitedrag_Estimation_Multirotor import *
 import scipy.optimize as sc
@@ -62,3 +62,36 @@ def Windforces_AC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, CL):
     Fw_y = -0.5 * rho * Vy_rel * V_infty * S_side * CY
     print("order: Fw_x, Fw_y")
     return Fw_x, Fw_y
+def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap):
+    A_rot = np.pi * R_prop**2 #[m^2]
+    V_ind = V_ind(T,rho,V,AoA,A_rot)
+    AoA_ind = np.pi/2 - np.arctan2((V*sin(AoA)+V_ind),V*cos(AoA))- delta
+    Vtot_eff = np.sqrt((V*sin(AoA)+V_ind)**2 + (V*cos(AoA))**2)
+    L = 0.5 * rho * Vtot_eff**2 * S_flap * CL
+    D = 0.5 * rho * Vtot_eff**2 * S_flap * CD
+    # Maybe change to 3D transformation
+    T = np.array([[np.cos(AoA_ind), np.sin(AoA_ind)],
+                  [np.sin(AoA_ind), np.cos(AoA_ind)]])
+    F_localaeroaxes = np.array([[L],[D]])
+    F_bodyaxis = np.matmul(T,F_localaeroaxes)
+    
+    return F_bodyaxis
+def AirfoilParameters(Airfoilcsv):
+    '''Input csv, output dictionary with airfoil parameters'''
+    data = open(Airfoilcsv,'r')
+    dat = csv.reader(data)
+    rows =[]
+    for row in dat:
+        rows.append(row)
+    values = rows[11:]   
+    for line in values:
+        for el in line:
+            line[line.index(el)] = float(el)
+        values[values.index(line)] = line
+    values = np.array(values)
+    Datadict = {rows[10][0]: values[:,0],
+                rows[10][1]: values[:,1],
+                rows[10][2]: values[:,2],
+                rows[10][4]: values[:,4]}
+    return Datadict
+#AirfoilParameters('Xfoil-NACA0012.csv')
