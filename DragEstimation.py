@@ -22,6 +22,7 @@ def RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g):
     alpha = np.arctan2(D,MTOW * g)
     Treq = np.sqrt(MTOW**2 + D**2)
     return alpha, Treq
+
 def V_ind(T,rho,V,AoA,A_rot):
     '''Thrust and A_rot for 1 rotor.'''
     def thrust_eq(V_ind,T,rho,V,AoA,A_rot):
@@ -87,6 +88,7 @@ def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap,airfoilcsv):
     Vind = V_ind(T,rho,V,AoA,A_rot)
     AoA_ind = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))
     AoA_eff = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))- delta
+    print(AoA_eff)
     Vtot_eff = np.sqrt((V*np.sin(AoA)+Vind)**2 + (V*np.cos(AoA))**2)
     L = 0.5 * rho * Vtot_eff**2 * S_flap * C(AoA_eff, 'Cl',airfoilcsv)
     D = 0.5 * rho * Vtot_eff**2 * S_flap * C(AoA_eff, 'Cd',airfoilcsv)
@@ -111,6 +113,7 @@ def AirfoilParameters(Airfoilcsv):
         values[values.index(line)] = line
     values = np.array(values)
     Datadict = {rows[10][0]: values[:,0],
+    Datadict = {rows[10][0]: np.pi/180 * values[:,0],
                 rows[10][1]: values[:,1],
                 rows[10][2]: values[:,2],
                 rows[10][4]: values[:,4]}
@@ -122,14 +125,18 @@ def C(alpha,aeroparam,airfoilcsv):
     return np.interp(alpha, aerodict['Alpha'],aerodict[aeroparam])
 
 def analyse_deflector():
+def deflector_analyser():
     S_flap = 0.15 * 2 * R_prop
     delta = np.arange(-15,-15,0.01)
+    delta = np.arange(-15*np.pi/180,15*np.pi/180,0.01)
     T = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[1]
     AoA= RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]
     A_rot = np.pi*R_prop**2
     force =[]
     for d in delta: 
+    for d in delta:
         force.append(FlapForceEstimator(T, rho, V_cr, AoA, A_rot,d, S_flap,'Xfoil-NACA0012.csv'))
+
     forcelst =np.array(force)
     plt.plot(delta,forcelst[:,0])
     plt.show()
