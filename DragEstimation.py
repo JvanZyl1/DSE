@@ -8,7 +8,7 @@ def DragPolar(C_L):
     '''Lift drag estimations for lift&cruise and VectorThrust.'''
     if VehicleConfig == 'LiftCruise':
         C_D = 0.0438 + 0.0294 * (C_L**2)
-    elif VehicleConfig == 'VectoredThrust':
+    elif VehicleConfig == 'VectorThrust':
         C_D = 0.0163 + 0.058 * (C_L**2)
     return C_D
 def RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g):
@@ -104,15 +104,16 @@ def C(alpha,aeroparam,airfoilcsv):
     return np.interp(alpha, aerodict['Alpha'],aerodict[aeroparam])
 S_flap = 0.15 * 2 * R_prop
 delta = np.arange(-5,5,0.01)
-
-T = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[1]
-AoA= RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]
-A_rot = np.pi*R_prop**2
-force =[]
-for d in delta: 
-    force.append(FlapForceEstimator(T, rho, V_cr, AoA, A_rot,d, S_flap,'Xfoil-NACA0012.csv'))
-forcelst =np.array(force)
-plt.plot(delta,forcelst[:,0])
-plt.show()
-plt.plot(delta,forcelst[:,1])
-plt.show()
+def analyse_deflector():
+    T = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[1]
+    AoA= RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]
+    A_rot = np.pi*R_prop**2
+    force =[]
+    for d in delta: 
+        force.append(FlapForceEstimator(T, rho, V_cr, AoA, A_rot,d, S_flap,'Xfoil-NACA0012.csv'))
+    forcelst =np.array(force)
+    plt.plot(delta,forcelst[:,0])
+    plt.show()
+    plt.plot(delta,forcelst[:,1])
+    plt.show()
+    return
