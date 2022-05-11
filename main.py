@@ -47,6 +47,7 @@ for i in range(n_iter):
     # Scaled to payload
     print("MTOW scaled to payload: ", MTOW / W_PL * 250)
     print("Unit cost scaled to payload: ", C_unit / W_PL * 250)
+    print("Required energy scaled to payload: ", E_total / W_PL * 250)
 
 # Get the estimate for the power required in cruise.
 # Ran = np.linspace(0.7, 1.5, 25)

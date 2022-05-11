@@ -1,14 +1,5 @@
 import numpy as np
 '''Inputs script '''
-# Vehicle characteristics
-l = 3               # length of the vehicle in meters [m]
-D = 1.5               # diameter of the fuselage in meters [m]
-N_prop = 4          # number of propellers in meters squared [m2]
-R_prop = 0.5          # radius of each propeller in meters [m]
-omega_prop = 300    # rotational speed of each propeller in rpm [min-1]
-M_PL = 250          # mass of the payload in kilograms [kg]
-eta_E = 200         # energy density of the battery in [Wh/kg]\
-M_MTOW = 800        # maximum take-off weight in [kg]
 
 # Efficiencies
 eta_prop = 0.8  # efficiencies, values taken from https://arc.aiaa.org/doi/pdf/10.2514/6.2021-3169
@@ -40,6 +31,7 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     D = 1.5             # Diameter of the fuselage [m]
     S_nac = 3.76        # Nacelle ? area [m^2]
     N_nac = 6           # Number of nacelles ? [-]
+    omega_prop = 3500 * 2 * np.pi / 60    # Rotational velocity of propeller [rad/s]
     Lambda = 0          # Wing sweep [rad]
     t_chord = 0.3       # Thickness of the chord at the root
     n_ult = 2           # Ultimate load factor [-]
@@ -51,6 +43,8 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     A_v = 3
     A_h = 3
     W_PL = 250          # mass of the payload in kilograms [kg]
+    R_pyl = 0.05  # Pylon radius (assumed circular) [m]
+    l_pyl = 0.2   # Pylon length [m]
 
 
 elif VehicleConfig == 'VectoredThrust':
@@ -79,6 +73,8 @@ elif VehicleConfig == 'VectoredThrust':
     Lambda_v = 30
     A_v = 3
     A_h = 3
+    R_pyl = 0.05  # Pylon radius (assumed circular) [m]
+    l_pyl = 0.2   # Pylon length [m]
 
 
 elif VehicleConfig == 'Multirotor':
@@ -89,8 +85,6 @@ elif VehicleConfig == 'Multirotor':
     N_prop = 8          # Number of propellers [-]
     R_prop = 0.8        # Propeller radius [m]
     B_prop = 2          # Number of blades per propeller [-]
-    omega_prop = 3500 * 2 * np.pi / 60    # Rotational velocity of propeller [rad/s]
-    torque = 500        # Nm, for EMRAX 268 motor
     MTOW = 350          # Max take of weight [kg]
     S_body = np.pi ** 2 * l * D / 4  # Assume fuselage to be an ellipse of revolution and calculate its wetted area
     l_t = l
@@ -106,10 +100,16 @@ yop = 2025              # Year of the start of production is expected
 # CPI_now = 1.27          # 1 dollar in 2012 (date of literature) is worth as much as 1.27 now, found in https://www.bls.gov/data/inflation_calculator.htm
 ex_rate = 0.90          # Exchange rate dollar -> euro = 0.92
 # cost_per_motor = 5500   # €, estimate on price of an Emrax motor (used for other power estimations as well)
-N_ps = 500              # Estimation of product series over 5 years
-N_psm = 20              # Estimation of product series over 1 month
+N_ps = 800              # Estimation of product series over 5 years
+N_psm = N_ps/(12*5)              # Estimation of product series over 1 month
 N_proto = 5             # Estimation of number of prototypes created for testing purposes
 
+# Motor inputs
+torque = 90  # Nm, for EMRAX 268 motor
+cont_power = 20000
+max_power = 60000  # W
+omega_prop = 3500 * 2 * np.pi / 60  # Rotational velocity of propeller [rad/s]
+omega_max = 6500 * 2 * np.pi / 60
 
 # Mission profile characteristics
 R = 20000           # mission range in kilometers [m]
