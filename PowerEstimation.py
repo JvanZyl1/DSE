@@ -78,6 +78,7 @@ from MassEstimation import BatteryMassFun
 def PowerReq(MTOW,N_prop,R_prop,V_cr):
     """Function designed for multirotors (EHang's)"""
     T = (MTOW * g) * 1.1       #10 percent safety factor
+    CD0, D_q_tot_x = parasite_drag()
     tilt_cruise = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]*180/np.pi       #angle of tilt during cruise in degree
     disk_area = R_prop**2 * np.pi * N_prop
     kappa = 1.2       #correction factor for extra power losses, value taken from literature
@@ -88,16 +89,9 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     K_TO = 1.5     #safety factor takeoff
     T_TOL = K_TO * T
     P_TOL = (((T_TOL * V_TO)/2) * (np.sqrt(1+(2 * T_TOL)/(rho * V_TO**2 * disk_area))))/eta_final
-    P_hov = P_TOL
-    """From here the battery weight code is replicated with calculated values"""
-    t_CR = (R + R_div) / V_cr  # Calculate time in cruise + diversion
-    t_TO = (h_TO / V_TO) * 2
-    # Energy required for flight phases
-    E_CR = t_CR * P_cruise
-    E_TO = t_TO * P_TOL
-    E_total = (E_TO + E_CR) / 3600  # total energy needed in [Wh]
-    W_bat = (E_total / eta_E) / nu_discharge
-    return P_cruise,P_hov,W_bat
+    return P_cruise, P_TOL
+
+
 def Lift_Drag_Cruise(MTOW,N_prop,R_prop,V_cr):
     L_D = (MTOW * g)/PowerReq(MTOW,N_prop,R_prop,V_cr)[0]
     return L_D
@@ -106,10 +100,6 @@ def Lift_Drag_Cruise(MTOW,N_prop,R_prop,V_cr):
 def PowerCruiseWing(C_L, rho, V_cr, S):
     P_cruise = 0.5 * DragPolar(C_L) * rho * V_cr**3 * S / eta_final
     return P_cruise
-
-
-
-print('propeller blade radius = ', R_prop)
 
 
 print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' [kW]')

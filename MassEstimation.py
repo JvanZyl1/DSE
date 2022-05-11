@@ -33,7 +33,7 @@ from inputs import *
 
 ### These estimation routines are for the multirotor configuration
 
-def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, nu_discharge):
+def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discharge):
     '''
     This function estimates the battery mass in [kg]
     based off the energy density and mission profile
@@ -43,8 +43,7 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, nu_discha
     t_TO = (h_TO / V_TO) * 2                     # Calculate the time spent in vertical flight
     # Energy required for flight phases
     E_CR = t_CR * P_cruise
-    E_TO = t_TO * P_hov
-    print(t_CR,t_TO)
+    E_TO = t_TO * P_TOL
     E_total = (E_TO + E_CR) / 3600               # total energy needed in [Wh]
     W_bat = (E_total / eta_E) / nu_discharge
     Wts = np.array([["Battery Weight", W_bat]], dtype=object)
@@ -128,6 +127,7 @@ def BladeMassFun(N_prop, R_prop, B_prop, P_cruise):
     D_prop = 2 * R_prop
     P_to = 1.5 * P_cruise * 0.00134102 / N_prop      # Assumed take-off power per engine [hp], change later !!!
     W_blades = k_p * N_prop * (D_prop * P_to * np.sqrt(B_prop))**0.78174
+    print("Weights of one blade: ", W_blades / N_prop / B_prop)
     return W_blades
 
 def LandingGearMassFun(W_MTOW):
