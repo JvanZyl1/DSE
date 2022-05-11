@@ -40,8 +40,8 @@ def V_ind_FOR_non_dim(V, gamma=0): #for forward flight
     array = solve(v_i ** 4 + (V**2 * v_i**2) + (2 * V * v_i**3 * np.sin(FOR_AOA(V, gamma))) - 1, v_i)
     return array[1]
 
-def V_ind_FOR(V, T, R, gamma=0):
-    return V_ind_FOR_non_dim(V, gamma) * np.sqrt(T/(2 * rho * np.pi * R ** 2))
+def V_ind_FOR(V, T, gamma=0): #T is the thrust per rotor
+    return V_ind_FOR_non_dim(V, gamma) * np.sqrt(T/(2 * rho * np.pi * R_prop ** 2))
 
 
 def Windforces_RC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z):
@@ -61,6 +61,7 @@ def Windforces_RC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z):
     #Fw_z = -0.5 *rho *(Vz_rel + V_ind) * V_infty * S_side * CZ
     print("order: Fw_x, Fw_y")
     return Fw_x, Fw_y
+
 def Windforces_AC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, CL):
     '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
     S_fus = np.pi**2 * l * D/4 #Fuselage wetted area
@@ -81,6 +82,7 @@ def Windforces_AC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, CL):
     Fw_y = -0.5 * rho * Vy_rel * V_infty * S_side * CY
     print("order: Fw_x, Fw_y")
     return Fw_x, Fw_y
+
 def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap,airfoilcsv):
     A_rot = np.pi * R_prop**2 #[m^2]
     Vind = V_ind(T,rho,V,AoA,A_rot)
