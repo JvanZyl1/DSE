@@ -112,15 +112,15 @@ def HorTailPlaneMassFun(W_MTOW, S_h, A_h, t_rh):           # weight estimation f
           (174.04 * (t_rh**0.223))
     return W_h
 
-def EngineMassFun(P_cruise):               # based off the perofrmance of the EMRAX electric motors
+def EngineMassFun(P_TOL):               # based off the perofrmance of the EMRAX electric motors
     '''
     This function estimates motor weight based off EMRAX motor Power/Weight rating of ~7 kw/kg.
     It returns the weight off a SINGLE motor !!!
     '''
-    W_e = (P_cruise / PowWtRat) / N_prop
+    W_e = (P_TOL / PowWtRat) / N_prop
     return W_e
 
-def BladeMassFun(N_prop, R_prop, B_prop, P_cruise):
+def BladeMassFun(N_prop, R_prop, B_prop, P_TOL):
     '''
     This function estimates the mass of propeller blades
     based off the cruise / take-off overall power and propeller configuration.
@@ -128,9 +128,9 @@ def BladeMassFun(N_prop, R_prop, B_prop, P_cruise):
     '''
     k_p = 0.124
     D_prop = 2 * R_prop
-    P_to = 1.5 * P_cruise * 0.00134102 / N_prop      # Assumed take-off power per engine [hp], change later !!!
-    W_blades = k_p * N_prop * (D_prop * P_to * np.sqrt(B_prop))**0.78174
-    print("Weights of one blade: ", W_blades / N_prop / B_prop)
+    P_hp = P_TOL * 0.00134102 / N_prop      # Assumed take-off power per engine [hp], change later !!!
+    W_blades = k_p * N_prop * (D_prop * P_hp * np.sqrt(B_prop))**0.78174
+    print("Weight of one blade: ", W_blades / N_prop / B_prop)
     return W_blades
 
 def LandingGearMassFun(W_MTOW):
@@ -201,14 +201,14 @@ def AvionicsMassFun(W_MTOW):
     W_av = 18.1 + 0.008 * W_MTOW
     return W_av
 
-def PropGroupMassFun(N_prop, R_prop, B_prop, P_cruise):
+def PropGroupMassFun(N_prop, R_prop, B_prop, P_TOL):
     '''
     This function gives the weight of the whole propulsion group
     based off the motor and blade weight.
     '''
-    W_e = EngineMassFun(P_cruise)
+    W_e = EngineMassFun(P_TOL)
     W_engs = W_e * N_prop
-    W_bl = BladeMassFun(N_prop, R_prop, B_prop, P_cruise)
+    W_bl = BladeMassFun(N_prop, R_prop, B_prop, P_TOL)
     W_cab = CableMassFun(N_prop, W_e)
     W_pg = W_engs + W_bl + W_cab          # propulsion group is only cables, blades and motors :) NO NACELLE !a = np.array([["String",1,2]], dtype=object)
     Wts = np.array([["Blade Weight", W_bl], ["Engines Weight", W_engs], ["Cable Weight", W_cab]], dtype=object)

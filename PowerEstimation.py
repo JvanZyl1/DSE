@@ -90,22 +90,12 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     K_TO = 1.5     #safety factor takeoff
     T_TOL = K_TO * T
     P_TOL = (((T_TOL * V_TO)/2) * (np.sqrt(1+(2 * T_TOL)/(rho * V_TO**2 * disk_area))))/eta_final
-    P_hov = P_TOL
-    """From here the battery weight code is replicated with calculated values"""
-    t_CR = (R + R_div) / V_cr  # Calculate time in cruise + diversion
-    t_TO = (h_TO / V_TO) * 2
-    # Energy required for flight phases
-    E_CR = t_CR * P_cruise
-    E_TO = t_TO * P_TOL
-    E_total = (E_TO + E_CR) / 3600  # total energy needed in [Wh]
-    W_bat = (E_total / eta_E) / nu_discharge
-    return P_cruise,P_hov,W_bat
+    # P_TOL = P_TOL / np.cos(20*np.pi/180)  # For pretilted rotors
     return P_cruise, P_TOL
 
 
 def Lift_Drag_Cruise(MTOW,N_prop,R_prop,V_cr):
     L_D = (MTOW * g)/PowerReq(MTOW,N_prop,R_prop,V_cr)[0]
-    L_D = (MTOW * g * V_cr)/PowerReq(MTOW,N_prop,R_prop,V_cr)[0]
     return L_D
 
 
@@ -114,12 +104,7 @@ def PowerCruiseWing(C_L, rho, V_cr, S):
     return P_cruise
 
 
-
-print('propeller blade radius = ', R_prop)
-
-
 print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' [kW]')
 print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' [kW]')
-print('Battery weight = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[2],' [kg]')
 
 
