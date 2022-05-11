@@ -18,9 +18,8 @@ class Wing:
     B = 0.001  # m**2 boom cross-sectional area
     Cl = 0.5
     Cd = 0.1
-    file = "C:/Users/mitch/PycharmProjects/DSE/DSE GIT/airfoil.dat"
+    file = "C:/Users/mitch/PycharmProjects/DSE/DSE GIT/structures/airfoil.dat"
     airfoil = np.genfromtxt(file, float, skip_header=1)
-
 
 
 def Inertia(airfoil, boom_area):
@@ -30,11 +29,6 @@ def Inertia(airfoil, boom_area):
     return Ixx, Iyy, Ixy
 
 Ixx, Iyy, Ixy = Inertia(Wing.airfoil, Wing.B)
-
-
-W_beam = 200  # N
-L = 0  # N
-W_engine = 1000  # N
 
 
 class Engines:
@@ -64,14 +58,35 @@ engine3 = Engines(1000, 2500, 0.9)
 dz = 0.01
 z = np.arange(0, Wing.b + dz, dz)
 
-def V_step(force, r_position, wingspan):
+def V_step(z, force, r_position, wingspan):
     Vz = np.where(z < r_position*wingspan, 0, force)
     return Vz
 
-V = V_step(engine2.weight, engine2.rpos_z, Wing.b)
+def V_span(z, force, wingspan):
+    Vz = np.ones(np.size(z)) * force / wingspan
+    return Vz
 
+# Internal Load
+Lift = 0.5 * Wing.Cl rho * Wing.S * (V_cr*1.2)^2
+
+"""
+V = []
+V_L_Wing = V_span(z, Lift, Wing.b)
+V_W_Wing = -V_span(z, Wing.Weight, Wing.b)
+V_W_Engine1 = V_step(z, engine1.weight, engine1.rpos_z, Wing.b)
+V_W_Engine2 = V_step(z, engine2.weight, engine2.rpos_z, Wing.b)
+V_W_Engine3 = V_step(z, engine3.weight, engine3.rpos_z, Wing.b)
+V_L_Engine1 = V_step(z, engine1.max_lift, engine1.rpos_z, Wing.b)
+V_L_Engine2 = V_step(z, engine2.max_lift, engine2.rpos_z, Wing.b)
+V_L_Engine3 = V_step(z, engine3.max_lift, engine3.rpos_z, Wing.b)
+V.append(V_L_Wing), V.append(V_W_Wing), V.append(V_W_Engine1), V.append(V_L_Engine1)
+V.append(V_W_Engine2), V.append(V_L_Engine2), V.append(V_W_Engine3), V.append(V_L_Engine3)
+"""
+
+#V1 = V_step(z, engine1.weight, engine1.rpos_z, Wing.b)
+#V2 = V_span(z, 1000, 2)
 
 
 # Plot
-plt.plot(z, V)
+plt.plot(z, V2)
 plt.show()
