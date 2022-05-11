@@ -33,7 +33,6 @@ from inputs import *
 
 ### These estimation routines are for the multirotor configuration
 
-def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, nu_discharge):
 def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discharge):
     '''
     This function estimates the battery mass in [kg]
