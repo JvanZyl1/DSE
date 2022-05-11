@@ -89,7 +89,8 @@ elif VehicleConfig == 'Multirotor':
     N_prop = 8          # Number of propellers [-]
     R_prop = 0.8        # Propeller radius [m]
     B_prop = 2          # Number of blades per propeller [-]
-    omega_prop = 300    # Rotational velocity of propeller [rad/s]
+    omega_prop = 3500 * 2 * np.pi / 60    # Rotational velocity of propeller [rad/s]
+    torque = 500        # Nm, for EMRAX 268 motor
     MTOW = 350          # Max take of weight [kg]
     S_body = np.pi ** 2 * l * D / 4  # Assume fuselage to be an ellipse of revolution and calculate its wetted area
     l_t = l
@@ -108,6 +109,7 @@ ex_rate = 0.90          # Exchange rate dollar -> euro = 0.92
 N_ps = 500              # Estimation of product series over 5 years
 N_psm = 20              # Estimation of product series over 1 month
 N_proto = 5             # Estimation of number of prototypes created for testing purposes
+
 
 # Mission profile characteristics
 R = 20000           # mission range in kilometers [m]

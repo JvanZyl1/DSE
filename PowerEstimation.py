@@ -78,6 +78,7 @@ from MassEstimation import BatteryMassFun
 def PowerReq(MTOW,N_prop,R_prop,V_cr):
     """Function designed for multirotors (EHang's)"""
     T = (MTOW * g) * 1.1       #10 percent safety factor
+    tilt_cruise = RC_AoAandThrust(V_cr, parasite_drag()[1], rho, MTOW, g)[0]*180/np.pi       #angle of tilt during cruise in degree
     CD0, D_q_tot_x = parasite_drag()
     tilt_cruise = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]*180/np.pi       #angle of tilt during cruise in degree
     disk_area = R_prop**2 * np.pi * N_prop
@@ -89,6 +90,7 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
     K_TO = 1.5     #safety factor takeoff
     T_TOL = K_TO * T
     P_TOL = (((T_TOL * V_TO)/2) * (np.sqrt(1+(2 * T_TOL)/(rho * V_TO**2 * disk_area))))/eta_final
+    # P_TOL = P_TOL / np.cos(20*np.pi/180)  # For pretilted rotors
     return P_cruise, P_TOL
 
 
@@ -104,6 +106,5 @@ def PowerCruiseWing(C_L, rho, V_cr, S):
 
 print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' [kW]')
 print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' [kW]')
-print('Battery weight = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[2],' [kg]')
 
 
