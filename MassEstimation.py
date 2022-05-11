@@ -249,3 +249,6 @@ def TailplaneGroupFun(W_MTOW, S_h, t_rh, t_rv, Lambda_v, A_v, A_h):
     Wts = np.array([["Vertical Tail Weight", W_vt], ["Horizontal Tail Weight", W_ht]], dtype = object)
     return W_tg, Wts
 
+def Est_rotor_mass(S_rot):
+    S_rot_ft2 = S_rot/(0.3048**2) #[ft^2]
+    return (-194.685 + 12.164*S_rot_ft2)*0.4536
