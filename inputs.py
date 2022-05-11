@@ -1,5 +1,14 @@
 import numpy as np
 '''Inputs script '''
+# Vehicle characteristics
+l = 3               # length of the vehicle in meters [m]
+D = 1.5               # diameter of the fuselage in meters [m]
+N_prop = 4          # number of propellers in meters squared [m2]
+R_prop = 0.5          # radius of each propeller in meters [m]
+omega_prop = 300    # rotational speed of each propeller in rpm [min-1]
+M_PL = 250          # mass of the payload in kilograms [kg]
+eta_E = 200         # energy density of the battery in [Wh/kg]\
+M_MTOW = 800        # maximum take-off weight in [kg]
 
 # Efficiencies
 eta_prop = 0.8  # efficiencies, values taken from https://arc.aiaa.org/doi/pdf/10.2514/6.2021-3169
