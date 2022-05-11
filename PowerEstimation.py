@@ -95,7 +95,7 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr):
 
 
 def Lift_Drag_Cruise(MTOW,N_prop,R_prop,V_cr):
-    L_D = (MTOW * *V_cr*g)/PowerReq(MTOW,N_prop,R_prop,V_cr)[0]
+    L_D = (MTOW *V_cr*g)/PowerReq(MTOW,N_prop,R_prop,V_cr)[0]
     return L_D
 
 

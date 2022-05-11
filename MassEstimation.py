@@ -33,7 +33,6 @@ from inputs import *
 
 ### These estimation routines are for the multirotor configuration
 
-def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_hov, P_cruise, nu_discharge):
 def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discharge):
     '''
     This function estimates the battery mass in [kg]
@@ -44,7 +43,6 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discha
     t_TO = (h_TO / V_TO) * 2                     # Calculate the time spent in vertical flight
     # Energy required for flight phases
     E_CR = t_CR * P_cruise
-    E_TO = t_TO * P_hov
     print(t_CR,t_TO)
     E_TO = t_TO * P_TOL
     E_total = (E_TO + E_CR) / 3600               # total energy needed in [Wh]
