@@ -1,6 +1,13 @@
 import unittest
+# Here you can add the libraries you use for writing the tests
+import numpy as np
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Import ../Parasitedrag_Estimation_Multirotor.py
+# Import the file directly as shown, OR
+import CostEstimation as ce
 # to import from other folder, do parent folder.(other_folder).file_name
-from GIT.Drag_estimation import something
+import Control.Dynamics as cd
 
 # Here you can add the libraries you use for writing the tests
 
