@@ -78,7 +78,6 @@ from MassEstimation import BatteryMassFun
 def PowerReq(MTOW,N_prop,R_prop,V_cr):
     """Function designed for multirotors (EHang's)"""
     T = (MTOW * g) * 1.1       #10 percent safety factor
-    tilt_cruise = RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g)[0]*180/np.pi       #angle of tilt during cruise in degree
     tilt_cruise = RC_AoAandThrust(V_cr, parasite_drag()[1], rho, MTOW, g)[0]*180/np.pi       #angle of tilt during cruise in degree
     disk_area = R_prop**2 * np.pi * N_prop
     kappa = 1.2       #correction factor for extra power losses, value taken from literature
