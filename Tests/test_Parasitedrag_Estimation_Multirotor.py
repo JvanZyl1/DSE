@@ -5,6 +5,7 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # import ../Parasitedrag_Estimation_Multirotor.py
 #Import the file directly as shown
+# to import from other folder, do parent folder.(other_folder).file_name
 import Parasitedrag_Estimation_Multirotor as pm
 
 
@@ -19,6 +20,8 @@ class MyTestCase(unittest.TestCase):
         actual_CD0 = 0.644
         test_CD0 = pm.parasite_drag()[0]
         self.assertAlmostEqual(actual_CD0, test_CD0, 2)  # add assertion here
+    
+
 
 
 
