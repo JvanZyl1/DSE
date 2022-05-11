@@ -16,8 +16,10 @@ for i in range(n_iter):
     P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr)[1]
     if Wing:
         P_cruise = PowerCruiseWing(C_L, rho, V_cr, S)
+        P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr)[1]
     else:
         P_cruise = PowerReq(MTOW, N_prop, R_prop, V_cr)[0]
+        P_cruise, P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr)[0]
     print("Hover power: ", P_TOL, '\n',
           "Cruise power: ", P_cruise)
 
