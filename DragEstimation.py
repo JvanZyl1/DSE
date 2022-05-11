@@ -154,7 +154,7 @@ def deflector_analyser():
     #Induced AoA relative to deflector
     AoA_ind = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))
     #Choosing a range of deflector deflections [rad]
-    delta = np.arange(AoA_ind - 30*np.pi/180, AoA_ind + 30*np.pi/180,0.01)      
+    delta = np.arange(AoA_ind - 19*np.pi/180, AoA_ind + 17*np.pi/180,0.01)      
     force =[]
     for d in delta: 
         force.append(FlapForceEstimator(T, rho, V, AoA, A_rot,d, S_flap,'Xfoil-NACA0012.csv'))
