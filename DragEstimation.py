@@ -155,7 +155,15 @@ def C(alpha,aeroparam,airfoilcsv):
     #Finding Cl, Cd or Cm at a certain AoA.
     aerodict = AirfoilParameters(airfoilcsv)
     return np.interp(alpha, aerodict['Alpha'],aerodict[aeroparam])
-
+def F_maxsideDeflectorHover(T, rho, S_flap,airfoilcsv):
+    alpha = np.arange(-18*np.pi/180,18*np.pi/180,0.001)
+    CL_max = max(C(alpha,'Cl',airfoilcsv))
+    V=0
+    A_rot =np.pi*R_prop**2
+    AoA=0
+    Vind = V_ind(T,rho,V,AoA,A_rot)
+    Fsidemax = 0.5 * rho * Vind**2 * S_flap * CL_max
+    return Fsidemax
 def deflector_analyser():
     V=0
     #Flap area. Assume that it is as wide as a rotor and assume that the chord length is 15cm.
