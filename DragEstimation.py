@@ -94,7 +94,14 @@ def CY_Aircraft():
     elif VehicleConfig == 'Multirotor':
         CY = CY_fus
     return CY
-def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap,airfoilcsv):
+# T= RC_AoAandThrust(V_cr, parasite_drag()[1], rho, MTOW, g)[1]/N_prop #Thrust per rotor
+# V =0 #Hovering
+# AoA = RC_AoAandThrust(V_cr, parasite_drag()[1], rho, MTOW, g)[0] #AoA
+# delta = 10*np.pi/180
+# S_flap = 0.15 * 2 * R_prop # chord of the flap is assumed to be 15 cm and the width is assumed to be the diameter of the propeller
+# airfoilcsv ='Xfoil-NACA0012.csv' #NACA0012 data
+def FlapForceEstimator(T, rho, V, AoA,delta, S_flap,airfoilcsv):
+    '''Angles in rad'''
     A_rot = np.pi * R_prop**2 #[m^2]
     Vind = V_ind(T,rho,V,AoA,A_rot)
     # Getting the induced angle of attack under the rotor. Than rotate it
