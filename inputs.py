@@ -105,7 +105,7 @@ N_psm = N_ps/(12*5)              # Estimation of product series over 1 month
 N_proto = 5             # Estimation of number of prototypes created for testing purposes
 
 # Motor inputs
-torque = 90  # Nm, for EMRAX 268 motor
+torque = 90  # Nm, for EMRAX 268 motor, https://emrax.com/wp-content/uploads/2017/10/user_manual_for_emrax_motors.pdf
 av_power = 20000
 max_power = 60000  # W
 omega_prop = 3500 * 2 * np.pi / 60  # Rotational velocity of propeller [rad/s]
