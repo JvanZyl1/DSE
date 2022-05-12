@@ -8,19 +8,13 @@ def MOI_prop(R_prop):
     return I
 
 def reaction_time(omega, R_prop):  # Assuming EMRAX 268 motor
-    t_react = omega * MOI_prop(R_prop) / torque
+    t_react = abs(omega) * MOI_prop(R_prop) / torque
     return t_react
-
-def prop_thrust(P_TOL, R_prop, N_prop):
-    A = np.pi * R_prop**2
-    T = (P_TOL/N_prop)**(2/3) * (2 * rho * A)
-    return T
 
 def power_from_thrust(T, R_prop, N_prop=1):
     A = np.pi * R_prop**2 * N_prop
     P = (((T * V_TO) / 2) * (np.sqrt(1 + (2 * T) / (rho * V_TO ** 2 * A)))) / eta_final
     return P
-
 
 def in_plane_rotors(R_cont, N_cont, F_gust=1000):
     T_cont = F_gust / N_cont  # Thrust required per control propeller
@@ -38,8 +32,9 @@ def in_plane_rotors(R_cont, N_cont, F_gust=1000):
     return P_cont, P_total, t_react, chars
 
 
-def pretilted(F_gust=1000, theta=45):  # theta = tilt angle
-    theta = theta * np.pi/180
+def pretilted(F_gust, theta_deg):  # theta = tilt angle
+    print("For F_gust = ", F_gust, " and theta = ", theta_deg)
+    theta = theta_deg * np.pi/180
     T_cont = F_gust / np.sin(theta)  # N
     P_cont = power_from_thrust(T_cont, R_prop)  # Power during counteracting gust load
     T_TOL = MTOW * g / N_prop / np.cos(theta)
@@ -49,21 +44,34 @@ def pretilted(F_gust=1000, theta=45):  # theta = tilt angle
     t_react = reaction_time(omega_increase, R_prop)
     d_tilt_to_bod = 0.4 + 0.5 + R_prop
     d_prop_to_bod = -0.2 + 0.5 + R_prop
-    T1 = 0.25 * (F_gust / np.tan(theta) * (d_tilt_to_bod/d_prop_to_bod - 1) + MTOW * g)
-    T2 = 0
-    T3 = T1
-    T4 = (MTOW * g - F_gust / np.tan(theta) - 2 * T1) / 2
     T5 = T_cont
-    T6 = T4
-    print(T1, T2, T3, T4, T5, T6)
-    return P_increase, omega_increase, t_react
+    T5_z = T5/np.tan(theta)
+    T1 = (T5_z * d_tilt_to_bod / d_prop_to_bod) / 2
+    T3 = T1; T4 = 0; T6 = 0
+    if T5_z+T1+T3+T4+T6-MTOW*g < -0.05*MTOW*g:
+        while T5_z+T1+T3+T4+T6-MTOW*g < -0.05*MTOW*g:
+            T4 += 100
+            T6 += 100
+            T1 = (T5_z * d_tilt_to_bod / d_prop_to_bod + T4 + T6) / 2
+            T3 = T1
+
+    T_total = T1 + T3 + T4 + T5 + T6
+    P_total = power_from_thrust(T_total, R_prop, N_prop)
+
+    # CONSTRAINTS
+    if T5_z+T1+T3+T4+T6-MTOW*g > 0.05*MTOW*g:    # Too much lift to counteract gust
+        print("Error: Total thrust exceeds thrust to hover")
+        return
+    if omega_increase*60/(2*np.pi) > 3000:      # RPM too high for rotors for rotors
+        print("Error: RPM increase of tilted motor too high")
+        return
+    print("T1 = ", T1, "T3 = ", T3, "T4 = ", T4, "T5 = ", T5, "T6 = ", T6, )
+    return T_total, P_total, t_react, omega_increase*60/(2*np.pi)
 
 
-def tilt_rotors():
-    # TODO: Add Jonny's function
-    return
-
-print(pretilted())
+for F_gust in np.arange(100, 1100, 100):
+    for theta in np.arange(15, 50, 5):
+        print(pretilted(F_gust, theta))
 
 #for R_cont in np.arange(0.2, 0.9, 0.1):
 #    print(in_plane_rotors(R_cont, 3)[3])
