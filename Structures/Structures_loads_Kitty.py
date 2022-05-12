@@ -67,7 +67,7 @@ def V_span(z, force, wingspan):
     return Vz
 
 # Internal Load
-Lift = 0.5 * Wing.Cl rho * Wing.S * (V_cr*1.2)^2
+Lift = 0.5 * Wing.Cl*rho * Wing.S * (V_cr*1.2)^2
 
 """
 V = []
@@ -88,5 +88,5 @@ V.append(V_W_Engine2), V.append(V_L_Engine2), V.append(V_W_Engine3), V.append(V_
 
 
 # Plot
-plt.plot(z, V2)
-plt.show()
+#plt.plot(z, V2)
+#plt.show()
