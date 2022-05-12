@@ -44,15 +44,17 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
     t_react = reaction_time(omega_change, R_prop)
     T1 = MTOW * g / N_prop
     T2 = MTOW * g / N_prop / np.cos(theta)
+    T2_z = T2*np.cos(theta)
     T3 = MTOW * g / N_prop
     T4 = MTOW * g / N_prop
     T5 = MTOW * g / N_prop / np.cos(theta)
+    T5_z = T5*np.cos(theta)
     T6 = MTOW * g / N_prop
     d_tilt_to_bod = 0.4 + 0.5 + R_prop
     d_prop_to_bod = -0.2 + 0.5 + R_prop
     if P_increase > 0:
         T5 = T_cont
-        T5_z = T5/np.tan(theta)
+        T5_z = T5*np.cos(theta)
         T1 = (T5_z * d_tilt_to_bod / d_prop_to_bod) / 2
         T3 = T1; T4 = 0; T6 = 0
         if T5_z+T1+T3+T4+T6-MTOW*g < -0.05*MTOW*g:
@@ -63,10 +65,9 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
                 T3 = T1
     else:
         T2 -= F_gust / np.sin(theta)
-        T2_z = T2/np.tan(theta)
+        T2_z = T2*np.cos(theta)
         T1 += (F_gust / np.tan(theta) * d_tilt_to_bod / d_prop_to_bod) / 2
         T3 = T1
-        T5_z = T5/np.tan(theta)
 
         if T5_z+T2_z+T1+T3+T4+T6-MTOW*g < -0.05*MTOW*g:
             while T5_z+T2_z+T1+T3+T4+T6-MTOW*g < -0.05*MTOW*g:
@@ -79,7 +80,7 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
     P_total = power_from_thrust(T_total, R_prop, N_prop)
 
     # CONSTRAINTS
-    if T5_z+T1+T3+T4+T6-MTOW*g > 0.05*MTOW*g:    # Too much lift to counteract gust
+    if T5_z+T2_z+T1+T3+T4+T6-MTOW*g > 0.1*MTOW*g:    # Too much lift to counteract gust
         print("Error: Total thrust exceeds thrust to hover")
         return
     if omega_change*60/(2*np.pi) > 3000:      # RPM too high for rotors for rotors

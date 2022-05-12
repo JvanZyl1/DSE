@@ -42,28 +42,39 @@ class MyTestCase(unittest.TestCase):
     def test_pretilted_gustloads(self):
         """Assert whether the function pre_tilted calculates a higher RPM change,
         reaction time, and total required power for higher gust loads."""
-        T_total1, P_total1, t_react1, omega_increase1 = pm.pre_tilted(500, 45, MTOW)
-        T_total2, P_total2, t_react2, omega_increase2 = pm.pre_tilted(1000, 45, MTOW)
+        T_total1, P_total1, t_react1, omega_change1 = pm.pre_tilted(500, 45, MTOW)
+        T_total2, P_total2, t_react2, omega_change2 = pm.pre_tilted(1000, 45, MTOW)
 
-        self.assertGreater(omega_increase2, omega_increase1)
+        self.assertGreater(omega_change2, omega_change1)
         self.assertGreater(t_react2, t_react1)
         self.assertGreater(P_total2, P_total1)
 
     def test_pretilted_tiltangles(self):
         """Assert whether the function pre_tilted calculates a higher RPM change,
         reaction time, and total required power for smaller tilt angles."""
-        T_total1, P_total1, t_react1, omega_increase1 = pm.pre_tilted(100, 45, MTOW)
-        T_total2, P_total2, t_react2, omega_increase2 = pm.pre_tilted(100, 25, MTOW)
+        T_total1, P_total1, t_react1, omega_change1 = pm.pre_tilted(100, 45, MTOW)
+        T_total2, P_total2, t_react2, omega_change2 = pm.pre_tilted(100, 25, MTOW)
 
-        self.assertGreater(omega_increase2, omega_increase1)
+        self.assertGreater(omega_change2, omega_change1)
         self.assertGreater(t_react2, t_react1)
         self.assertGreater(P_total2, P_total1)
 
+    def test_pretilted_rpmchange(self):
+        """Assert whether the function pre_tilted chooses the right method of
+        disturbance rejection: decreasing the rpm of one motor, or increasing
+        the rpm for the other."""
+        T_total1, P_total1, t_react1, omega_change1 = pm.pre_tilted(10, 25, MTOW)
+        T_total2, P_total2, t_react2, omega_change2 = pm.pre_tilted(1000, 45, MTOW)
+
+        self.assertLess(omega_change1, 0)
+        self.assertGreater(omega_change2, 0)
 
 
     def test_pretilted_errors(self):
         """Assert that function pre_tilted stops when it is an invalid combination
-        of tilt angle and gust load"""
+        of (low) tilt angle and (high) gust load"""
+        self.assertRaises(TypeError, pm.pre_tilted(1000, 5, MTOW))
+
 
 
 
