@@ -9,7 +9,7 @@ from CostEstimation import *
 
 # Weight Estimation routine for KittyHawk
 
-n_iter = 1
+n_iter = 20
 for i in range(n_iter):
 
     # Power estimation

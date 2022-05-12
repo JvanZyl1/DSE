@@ -28,10 +28,10 @@ def total_costs(W_struct, E_total, P_TOL, R_prop):
     C_lg = -7500 * CPI * ex_rate                                                                                        # Landing gear, non-retracted so saving costs
     C_pl = 0.2 * (C_bat + C_motor + C_pms + C_prop + C_mat + C_tool + C_mfg + C_qc + C_av + C_lg)                       # Product liability
 
-    C_unit = C_bat + C_motor + C_pms + C_prop + C_mat + \
-              C_tool + C_mfg + C_qc + C_av + C_lg + C_pl                                                                # Total development / production costs
 
     C_overhead = C_eng + C_ds + C_fto
+    C_unit = (C_bat + C_motor + C_pms + C_prop + C_mat + C_tool + C_mfg + C_qc + C_av + C_lg + C_pl) + (C_overhead/N_ps)         # Total development / production costs
+
 
     C_list = np.array([["UNIT COSTS", ""],
                        ["Battery costs: ", C_bat],

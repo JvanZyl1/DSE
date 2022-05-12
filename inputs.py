@@ -106,7 +106,7 @@ N_proto = 5             # Estimation of number of prototypes created for testing
 
 # Motor inputs
 torque = 90  # Nm, for EMRAX 268 motor
-cont_power = 20000
+av_power = 20000
 max_power = 60000  # W
 omega_prop = 3500 * 2 * np.pi / 60  # Rotational velocity of propeller [rad/s]
 omega_max = 6500 * 2 * np.pi / 60
