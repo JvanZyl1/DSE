@@ -100,7 +100,7 @@ yop = 2025              # Year of the start of production is expected
 # CPI_now = 1.27          # 1 dollar in 2012 (date of literature) is worth as much as 1.27 now, found in https://www.bls.gov/data/inflation_calculator.htm
 ex_rate = 0.90          # Exchange rate dollar -> euro = 0.92
 # cost_per_motor = 5500   # €, estimate on price of an Emrax motor (used for other power estimations as well)
-N_ps = 800              # Estimation of product series over 5 years
+N_ps = 750              # Estimation of product series over 5 years
 N_psm = N_ps/(12*5)              # Estimation of product series over 1 month
 N_proto = 5             # Estimation of number of prototypes created for testing purposes
 

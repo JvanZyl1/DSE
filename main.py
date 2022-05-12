@@ -35,7 +35,7 @@ for i in range(n_iter):
     else:
         Weights = np.vstack((BatWts,PropWts,FuseWts))
         MTOW = np.sum([PropWt, FuseWt, BatWt, W_PL])
-    # print(Weights)
+    print(PropWts)
     print("MTOW: ", MTOW)
 
     # Cost estimation
