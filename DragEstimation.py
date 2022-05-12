@@ -18,7 +18,7 @@ def RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g):
     D = 0.5 * rho * V_cr**2* D_q_tot_x
     #Equilibrium AoA
     alpha = np.arctan2(D,MTOW * g)
-    Treq = np.sqrt(MTOW**2 + D**2)
+    Treq = np.sqrt((MTOW*g)**2 + D**2)
     return alpha, Treq
 
 def V_ind(T,rho,V,AoA,A_rot):
@@ -157,25 +157,29 @@ def C(alpha,aeroparam,airfoilcsv):
     return np.interp(alpha, aerodict['Alpha'],aerodict[aeroparam])
 
 def deflector_analyser():
-    V=V_cr
+    V=0
     #Flap area. Assume that it is as wide as a rotor and assume that the chord length is 15cm.
-    S_flap = 0.15 * 2 * R_prop
+    S_flap = 0.2 * 2 * R_prop
     #Area of 1 rotor.
     A_rot = np.pi*R_prop**2
     #Parasite drag
     D_q_tot_x = parasite_drag()[1]
     #Getting thrust and angle of attack at the specified velocity
-    T = RC_AoAandThrust(V, D_q_tot_x, rho, MTOW, g)[1]
+    T = RC_AoAandThrust(V, D_q_tot_x, rho, MTOW, g)[1]/N_prop
+    print(T)
     AoA= RC_AoAandThrust(V, D_q_tot_x, rho, MTOW, g)[0]
+    print(AoA)
     # Induced velocity
     Vind = V_ind(T,rho,V,AoA,A_rot)
+    print(T)
+    print(Vind)
     #Induced AoA relative to deflector
     AoA_ind = np.pi/2 - np.arctan2((V*np.sin(AoA)+Vind),V*np.cos(AoA))
     #Choosing a range of deflector deflections [rad]
-    delta = np.arange(AoA_ind - 19*np.pi/180, AoA_ind + 17*np.pi/180,0.01)      
+    delta = np.arange(AoA_ind - 17*np.pi/180, AoA_ind + 17*np.pi/180,0.01)      
     force =[]
     for d in delta: 
-        force.append(FlapForceEstimator(T, rho, V, AoA, A_rot,d, S_flap,'Xfoil-NACA0012.csv'))
+        force.append(FlapForceEstimator(T, rho, V, AoA, d, S_flap,'Xfoil-NACA0012.csv'))
     forcelst =np.array(force)
     #Plotting the force tangential to the rotor vs delta 
     plt.plot(delta,forcelst[:,0])

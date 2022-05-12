@@ -82,7 +82,7 @@ elif VehicleConfig == 'Multirotor':
     l = 2.1
     D = 1.0
     V_cr = 100 / 3.6    # Cruise velocity [m/s]
-    N_prop = 8          # Number of propellers [-]
+    N_prop = 4          # Number of propellers [-]
     R_prop = 0.8        # Propeller radius [m]
     B_prop = 2          # Number of blades per propeller [-]
     MTOW = 350          # Max take of weight [kg]
