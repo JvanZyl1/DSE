@@ -44,45 +44,56 @@ def V_ind_FOR(V, T, gamma=0): #T is the thrust per rotor
     return V_ind_FOR_non_dim(V, gamma) * np.sqrt(T/(2 * rho * np.pi * R_prop ** 2))
 
 
-def Windforces_RC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z):
-    '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
-    CY = 0.6 # Lateral force coefficient
-    CX = parasite_drag()[0]  # Reference area is the fuselage wetted area
-    Vx_rel = Vx - Vw_x
-    Vy_rel = Vy - Vw_y
-    Vz_rel = Vz - Vw_z
-    #http://www.israelbarrientos.org/personal/simulador_files/helimodel_gavrilet.pdf
-    V_infty = np.sqrt(Vx_rel**2 +Vy_rel**2 +(Vz_rel + V_ind)**2)
-    #Assume the body again to be a revoluted ellipse.
-    S_fus = np.pi**2 * l * D/4 #Fuselage wetted area
-    S_side = np.pi * l*D/4 # Side fuselage area (ellipse)
-    Fw_x = -0.5 * rho * Vx_rel * V_infty * S_fus *CX
-    Fw_y = -0.5 * rho * Vy_rel * V_infty * S_side * CY
-    #Fw_z = -0.5 *rho *(Vz_rel + V_ind) * V_infty * S_side * CZ
-    print("order: Fw_x, Fw_y")
-    return Fw_x, Fw_y
+##def Windforces_RC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z):
+##    '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
+##    CY = 0.6 # Lateral force coefficient
+##    CX = parasite_drag()[0]  # Reference area is the fuselage wetted area
+##    Vx_rel = Vx - Vw_x
+##    Vy_rel = Vy - Vw_y
+##    Vz_rel = Vz - Vw_z
+##    #http://www.israelbarrientos.org/personal/simulador_files/helimodel_gavrilet.pdf
+##    V_infty = np.sqrt(Vx_rel**2 +Vy_rel**2 +(Vz_rel + V_ind)**2)
+##    #Assume the body again to be a revoluted ellipse.
+##    S_fus = np.pi**2 * l * D/4 #Fuselage wetted area
+##    S_side = np.pi * l*D/4 # Side fuselage area (ellipse)
+##    Fw_x = -0.5 * rho * Vx_rel * V_infty * S_fus *CX
+##    Fw_y = -0.5 * rho * Vy_rel * V_infty * S_side * CY
+##    #Fw_z = -0.5 *rho *(Vz_rel + V_ind) * V_infty * S_side * CZ
+##    print("order: Fw_x, Fw_y")
+##    return Fw_x, Fw_y
 
-def Windforces_AC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, CL):
-    '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
-    S_fus = np.pi**2 * l * D/4 #Fuselage wetted area
-    CX = DragPolar(CL)
+##def Windforces_AC(rho,Vx, Vy, Vz, V_ind, Vw_x, Vw_y, Vw_z, CL):
+##    '''Velocities and wind velocities in bodyframe. It outputs the wind forces in three dimensions (bodyframe)'''
+##    Vx_rel = Vx - Vw_x
+##    Vy_rel = Vy - Vw_y
+##    Vz_rel = Vz - Vw_z
+##    CX = DragPolar(CL)
+##    CY_fus = 0.6
+##    CD_vertplate = 1.28
+##    
+##    S_side = np.pi * l*D/4 # Side fuselage area (ellipse)
+##    
+##   
+##    V_infty = np.sqrt(Vx_rel**2 +Vy_rel**2 +(Vz_rel + V_ind)**2)
+##    Fw_x = -0.5 * rho * Vx_rel * V_infty * S_fus * CX
+##    Fw_y = -0.5 * rho * Vy_rel * V_infty * S_side * CY
+##    print("order: Fw_x, Fw_y")
+##    return Fw_x, Fw_y
+def CY_Aircraft():
     CY_fus = 0.6
-    CD_vertplate = 1.28
-    CD_horplate = 0.01 # For wing estimate drag from flat plate.
-    S_side = np.pi * l*D/4 # Side fuselage area (ellipse)
+    if Wing == True:
+        V_sidewind = 15 #[m/s]
+        
+        S_side = np.pi * l*D/4 # Side fuselage area (ellipse)
+        CD_vertplate = 1.28 #Assume vertical tail to be a flat plate.
+    #For now assume that the horizontal tail and wing don't contribute to the drag
     if VehicleConfig == 'LiftCruise':
-        CY = 1/S_side*(S_fus * CY_fus + (S + S_h) * CD_horplate + S_v * CD_vertplate)
+        CY = 1/S_side * (S_side * CY_fus+ S_v * CD_vertplate)
     elif VehicleConfig == 'VectoredThrust':
-        CY = 1/S_side *(S_fus * CY_fus + S * CD_horplate)
-    Vx_rel = Vx - Vw_x
-    Vy_rel = Vy - Vw_y
-    Vz_rel = Vz - Vw_z
-    V_infty = np.sqrt(Vx_rel**2 +Vy_rel**2 +(Vz_rel + V_ind)**2)
-    Fw_x = -0.5 * rho * Vx_rel * V_infty * S_fus * CX
-    Fw_y = -0.5 * rho * Vy_rel * V_infty * S_side * CY
-    print("order: Fw_x, Fw_y")
-    return Fw_x, Fw_y
-
+        CY = CY_fus
+    elif VehicleConfig == 'Multirotor':
+        CY = CY_fus
+    return CY
 def FlapForceEstimator(T, rho, V, AoA, A_rot,delta, S_flap,airfoilcsv):
     A_rot = np.pi * R_prop**2 #[m^2]
     Vind = V_ind(T,rho,V,AoA,A_rot)
