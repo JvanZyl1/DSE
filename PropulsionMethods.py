@@ -1,10 +1,16 @@
 import numpy as np
 from inputs import *
-
+from MassEstimation import *
 MTOW = 650  # kg
 N_prop = 12  # -
-R_prop = 0.9  # m
+R_prop = 0.9  #
 
+def power_from_thrust(T, R_prop, N_prop=1):
+    A = np.pi * R_prop**2 * N_prop
+    P = (((T * V_wind_avg) / 2) * (np.sqrt(1 + (2 * T) / (rho * V_wind_avg ** 2 * A)))) / eta_final
+    return P
+
+rotormass = BladeMassFun(N_cont,R_cont,B_cont,power_from_thrust(T=(500/N_cont),R_prop=R_cont,N_prop=N_cont))
 
 def MOI_forjonny(MTOW, N_prop, R_prop):
 
@@ -18,17 +24,13 @@ def MOI_forjonny(MTOW, N_prop, R_prop):
 
 def MOI_prop(R_prop, B_prop):
     M = (28 - 2.25) / 2 / 7 * (R_prop*2)    # From literature, https://aircommand.com/pages/rotor-blade-selection-and-planning#
-    I = (1/3) * M * R_prop*R_prop * B_prop
+    I = (1/3) * rotormass * R_prop*R_prop * B_prop
     return I
 
 def reaction_time(omega, R_prop, B_prop):  # Assuming EMRAX 268 motor
     t_react = abs(omega) * MOI_prop(R_prop,B_prop) / torque
     return t_react
 
-def power_from_thrust(T, R_prop, N_prop=1):
-    A = np.pi * R_prop**2 * N_prop
-    P = (((T * V_wind_avg) / 2) * (np.sqrt(1 + (2 * T) / (rho * V_wind_avg ** 2 * A)))) / eta_final
-    return P
 
 def in_plane_rotors(R_cont, N_cont, F_gust=500):
     T_cont = F_gust / N_cont  # Thrust required per control propeller
