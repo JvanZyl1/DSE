@@ -101,7 +101,7 @@ elif VehicleConfig == 'Multirotor':
     # Parameters for in-plane control propellers
     R_cont = 0.2
     N_cont = 3
-    B_cont = 4
+    B_cont = 5
 # Cost inputs
 yop = 2025              # Year of the start of production is expected
 # CPI_now = 1.27          # 1 dollar in 2012 (date of literature) is worth as much as 1.27 now, found in https://www.bls.gov/data/inflation_calculator.htm
