@@ -44,7 +44,7 @@ def in_plane_rotors(R_cont, N_cont, F_gust=500):
     Mass = W_e + W_blades
     Ang_acc = omega / reaction_time(omega,R_cont, B_cont)
     Torque_req = Mass * R_cont**2 * Ang_acc
-    t_react = reaction_time(omega, R_cont)
+    t_react = reaction_time(omega, R_cont,B_cont)
 
     P_total = power_from_thrust(MTOW * g, R_prop, N_prop) + P_cont
 
@@ -54,7 +54,7 @@ def in_plane_rotors(R_cont, N_cont, F_gust=500):
                       ["Reaction time: ", t_react, "s"],
                       ["Torque required: ", Torque_req, "Nm"]])
 
-    return P_cont, P_total, t_react, omega, chars
+    return P_cont, P_total, t_react, omega, chars, W_blades
 
 
 def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
@@ -66,7 +66,7 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
     P_TOL = power_from_thrust(T_TOL, R_prop)  # Power during normal hover by tilted motor
     P_change = P_cont - P_TOL
     omega_change = (omega_max - omega_prop) / (max_power - av_power) * P_change
-    t_react = reaction_time(omega_change, R_prop)
+    t_react = reaction_time(omega_change, R_prop,B_cont)
     T1 = MTOW * g / N_prop
     T2 = MTOW * g / N_prop / np.cos(theta)
     T2_z = T2*np.cos(theta)
@@ -131,3 +131,7 @@ print("POWER REQUIRED", '\n', "in plane rotors: ", in_plane_rotors(0.4, 3, 500)[
 
 print(in_plane_rotors(R_cont, N_cont, F_gust=500)[4])
 
+# testmass = MOI_prop(R_cont,B_cont)[1]
+# testmass2 = in_plane_rotors(R_cont,N_cont,F_gust=500)[5]/B_cont
+# print(testmass, " Mass per rotor with Ole's method")
+# print(testmass2, " Mass per rotor with Alex's method")
