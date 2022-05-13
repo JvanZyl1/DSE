@@ -2,7 +2,7 @@ clear all
 close all
 clc
 
-Test = 3;
+Test = 4;
 
 h = 0.1; % Height of prop
 h_mass_prop = 0.5; %Where the prop_cg is placed in relation to prop height
@@ -46,5 +46,9 @@ elseif Test == 3
     if Bool ~= 1
         disp("Unit Test 3 Failed.")
     end
+elseif Test == 4
+    T_prop = 0;
+    sim('prop_tilt_gyro_model_1',T_prop);
+    error("Unit Test 4 passed")
 end
     
