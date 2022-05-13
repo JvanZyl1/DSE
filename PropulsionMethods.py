@@ -21,13 +21,20 @@ def in_plane_rotors(R_cont, N_cont, F_gust=500):
     P_cont = power_from_thrust(T_cont, R_cont)  # Power required per control propeller
     omega = (omega_max - omega_prop) / (max_power - av_power) * P_cont  # Required angular velocity of control propeller
     t_react = reaction_time(omega, R_cont)
-
     P_total = power_from_thrust(MTOW * g, R_prop) + P_cont * N_cont
-
+    W_e = (P_cont / PowWtRat) / N_cont
+    k_p = 0.124
+    D_prop = 2 * R_cont
+    P_hp = P_cont * 0.00134102 / N_cont  # Assumed take-off power per engine [hp], change later !!!
+    W_blades = k_p * N_prop * (D_prop * P_hp * np.sqrt(B_cont)) ** 0.78174
+    Mass = W_e + W_blades
+    Ang_acc = omega / reaction_time(omega,R_cont)
+    Torque_req = Mass * R_cont**2 * Ang_acc
     chars = np.array([["PROP RADIUS = ", R_cont, "m"],
                       ["Control power: ", P_cont/1000, "kW"],
                       ["Total power: ", P_total/1000, "kW"],
-                      ["Reaction time: ", t_react, "s"]])
+                      ["Reaction time: ", t_react, "s"],
+                      ["Torque required: ", Torque_req, "Nm"]])
 
     return P_cont, P_total, t_react, omega, chars
 
@@ -97,3 +104,4 @@ for F_gust in np.arange(100, 1100, 100):
 #for R_cont in np.arange(0.2, 0.9, 0.1):
 #    print(in_plane_rotors(R_cont, 3)[3])
 
+print(in_plane_rotors(R_cont, N_cont, F_gust=500)[4])
