@@ -125,3 +125,6 @@ V_TO = 3            # assumed take-off and descent velocity [m/s !]
 h_TO = 100          # assumed vertical travel distance in [m]
 rho = 1.225         # air density in [kg/m3]
 n_ult = 2           # ultimate load factor
+
+# Wind speed
+V_wind_avg = 20.7   #[m/s], average wind speed at 8 beaufort

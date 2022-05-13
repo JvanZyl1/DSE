@@ -27,7 +27,7 @@ def reaction_time(omega, R_prop, B_prop):  # Assuming EMRAX 268 motor
 
 def power_from_thrust(T, R_prop, N_prop=1):
     A = np.pi * R_prop**2 * N_prop
-    P = (((T * V_TO) / 2) * (np.sqrt(1 + (2 * T) / (rho * V_TO ** 2 * A)))) / eta_final
+    P = (((T * V_wind_avg) / 2) * (np.sqrt(1 + (2 * T) / (rho * V_wind_avg ** 2 * A)))) / eta_final
     return P
 
 def in_plane_rotors(R_cont, N_cont, F_gust=500):
@@ -130,4 +130,4 @@ print("POWER REQUIRED", '\n', "in plane rotors: ", in_plane_rotors(0.4, 3, 500)[
 #    print(in_plane_rotors(R_cont, 3)[3])
 
 print(in_plane_rotors(R_cont, N_cont, F_gust=500)[4])
-#
+
