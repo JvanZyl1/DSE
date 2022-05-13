@@ -16,7 +16,7 @@ def power_from_thrust(T, R_prop, N_prop=1):
     P = (((T * V_TO) / 2) * (np.sqrt(1 + (2 * T) / (rho * V_TO ** 2 * A)))) / eta_final
     return P
 
-def in_plane_rotors(R_cont, N_cont, F_gust=1000):
+def in_plane_rotors(R_cont, N_cont, F_gust=500):
     T_cont = F_gust / N_cont  # Thrust required per control propeller
     P_cont = power_from_thrust(T_cont, R_cont)  # Power required per control propeller
     omega = (omega_max - omega_prop) / (max_power - av_power) * P_cont  # Required angular velocity of control propeller
