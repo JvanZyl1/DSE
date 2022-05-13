@@ -105,3 +105,4 @@ for F_gust in np.arange(100, 1100, 100):
 #    print(in_plane_rotors(R_cont, 3)[3])
 
 print(in_plane_rotors(R_cont, N_cont, F_gust=500)[4])
+#
