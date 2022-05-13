@@ -1,6 +1,20 @@
 import numpy as np
 from inputs import *
-from PowerEstimation import *
+
+MTOW = 650  # kg
+N_prop = 6  # -
+R_prop = 0.9  # m
+
+
+def MOI_forjonny(MTOW, N_prop, R_prop):
+
+    M_prop = (28 - 2.25) / 2 / 7 * (R_prop * 2)
+    M_motor = 3  # From literature
+
+    Ixx = 0.5 * M_motor * 0.085**2 + (1/3) * M_prop * R_prop**2
+    I_yy = (1/3) * M_prop * (0.22-0.04)**2 + (1/3) * M_motor * 0.22**2
+    I_zz = I_yy
+    return Ixx, I_yy, I_zz
 
 def MOI_prop(R_prop, B_prop):
     M = (28 - 2.25) / 2 / 7 * (R_prop*2)    # From literature, https://aircommand.com/pages/rotor-blade-selection-and-planning#
@@ -30,6 +44,10 @@ def in_plane_rotors(R_cont, N_cont, F_gust=500):
     Mass = W_e + W_blades
     Ang_acc = omega / reaction_time(omega,R_cont, B_cont)
     Torque_req = Mass * R_cont**2 * Ang_acc
+    t_react = reaction_time(omega, R_cont)
+
+    P_total = power_from_thrust(MTOW * g, R_prop, N_prop) + P_cont
+
     chars = np.array([["PROP RADIUS = ", R_cont, "m"],
                       ["Control power: ", P_cont/1000, "kW"],
                       ["Total power: ", P_total/1000, "kW"],
@@ -44,11 +62,11 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
     theta = theta_deg * np.pi/180
     T_cont = F_gust / np.sin(theta)  # N
     P_cont = power_from_thrust(T_cont, R_prop)  # Power during counteracting gust load
-    T_TOL = MTOW * g / N_prop / np.cos(theta)
+    T_TOL = MTOW * g / N_prop / np.cos(theta)  # Thrust during normal hover by tilted motor
     P_TOL = power_from_thrust(T_TOL, R_prop)  # Power during normal hover by tilted motor
-    P_increase = P_cont - P_TOL
-    omega_change = (omega_max - omega_prop) / (max_power - av_power) * P_increase
-    t_react = reaction_time(omega_change, R_prop,B_prop)
+    P_change = P_cont - P_TOL
+    omega_change = (omega_max - omega_prop) / (max_power - av_power) * P_change
+    t_react = reaction_time(omega_change, R_prop)
     T1 = MTOW * g / N_prop
     T2 = MTOW * g / N_prop / np.cos(theta)
     T2_z = T2*np.cos(theta)
@@ -57,13 +75,13 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
     T5 = MTOW * g / N_prop / np.cos(theta)
     T5_z = T5*np.cos(theta)
     T6 = MTOW * g / N_prop
-    d_tilt_to_bod = 0.4 + 0.5 + R_prop
-    d_prop_to_bod = -0.2 + 0.5 + R_prop
-    if P_increase > 0:
+    d_tilt_to_bod = 0.4 + 0.5 + R_prop  # Estimated values of y-distance between center of tilted propeller and body
+    d_prop_to_bod = -0.2 + 0.5 + R_prop  # Estimated values of y-distance between center of normal propeller and body
+    if P_change > 0:
         T5 = T_cont
         T5_z = T5*np.cos(theta)
         T1 = (T5_z * d_tilt_to_bod / d_prop_to_bod) / 2
-        T3 = T1; T4 = 0; T6 = 0
+        T3 = T1; T2 = 0; T4 = 0; T6 = 0
         if T5_z+T1+T3+T4+T6-MTOW*g < -0.05*MTOW*g:
             while T5_z+T1+T3+T4+T6-MTOW*g < -0.05*MTOW*g:
                 T4 += 10
@@ -83,8 +101,9 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
                 T1 = (T5_z * d_tilt_to_bod / d_prop_to_bod + T4 + T6) / 2
                 T3 = T1
 
-    T_total = T1 + T3 + T4 + T5 + T6
+    T_total = T1 + T2 + T3 + T4 + T5 + T6
     P_total = power_from_thrust(T_total, R_prop, N_prop)
+    P_cont = P_total - power_from_thrust(MTOW * g, R_prop, N_prop)
 
     # CONSTRAINTS
     if T5_z+T2_z+T1+T3+T4+T6-MTOW*g > 0.1*MTOW*g:    # Too much lift to counteract gust
@@ -94,12 +113,18 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
         print("Error: RPM increase of tilted motor too high")
         return
     print("T1 = ", T1, "T3 = ", T3, "T4 = ", T4, "T5 = ", T5, "T6 = ", T6, )
-    return T_total, P_total, t_react, omega_change*60/(2*np.pi)
+    return P_cont, T_total, P_total, t_react, omega_change*60/(2*np.pi)
 
 
-for F_gust in np.arange(100, 1100, 100):
-    for theta in np.arange(15, 50, 5):
-        print(pre_tilted(F_gust, theta, MTOW))
+#for F_gust in np.arange(100, 1100, 100):
+#    for theta in np.arange(15, 50, 5):
+#        print(pre_tilted(F_gust, theta, MTOW))
+
+for theta in np.arange(15, 50, 1):
+    print("RESULT: ", pre_tilted(500, theta, MTOW))
+
+print("POWER REQUIRED", '\n', "in plane rotors: ", in_plane_rotors(0.4, 3, 500)[0], '\n',
+      "pretilted rotors: ", pre_tilted(500, 45, MTOW)[0])
 
 #for R_cont in np.arange(0.2, 0.9, 0.1):
 #    print(in_plane_rotors(R_cont, 3)[3])

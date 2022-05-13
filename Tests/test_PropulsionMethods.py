@@ -17,11 +17,6 @@ class MyTestCase(unittest.TestCase):
         test_MOI = pm.MOI_prop(3.5)
         self.assertAlmostEqual(actual_MOI, test_MOI, 0)
 
-    def test_reactiontime(self):
-        actual_t_react = 10
-        test_t_react = pm.reaction_time(900, 1)
-        self.assertEqual(actual_t_react, test_t_react)
-
     def test_power(self):
         actual_P = 26.91
         test_P = pm.power_from_thrust(10, 1, 1)
