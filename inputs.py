@@ -15,7 +15,7 @@ g = 9.81            # gravitional acceleration [m/s2]
 # KittyHawk - LiftCruise;
 # joby s4 - VectoredThrust;
 # Ehang 184 - Multirotor;
-VehicleConfig = 'Multirotor'
+VehicleConfig = 'LiftCruise'
 if VehicleConfig == 'LiftCruise':     #KittyHawk
     Wing=True
     l_t = 3.344         # length from wing c/4 to root of tail
@@ -42,9 +42,11 @@ if VehicleConfig == 'LiftCruise':     #KittyHawk
     Lambda_v = 30
     A_v = 3
     A_h = 3
-    W_PL = 250          # mass of the payload in kilograms [kg]
-    R_pyl = 0.05  # Pylon radius (assumed circular) [m]
-    l_pyl = 0.2   # Pylon length [m]
+    W_PL = 250              # mass of the payload in kilograms [kg]
+    R_pyl = 0.05            # Pylon radius (assumed circular) [m]
+    l_pyl = 0.2             # Pylon length [m]
+    CY = 0.6                # Assumed fuselage side drag coefficient
+    S_side = np.pi * l*D/4  # Side fuselage area (ellipse) [m^2]
 
 
 elif VehicleConfig == 'VectoredThrust':
@@ -75,7 +77,8 @@ elif VehicleConfig == 'VectoredThrust':
     A_h = 3
     R_pyl = 0.05  # Pylon radius (assumed circular) [m]
     l_pyl = 0.2   # Pylon length [m]
-
+    CY = 0.6      # Assumed fuselage side drag coefficient
+    S_side = np.pi * l*D/4  # Side fuselage area (ellipse) [m^2]
 
 elif VehicleConfig == 'Multirotor':
     Wing = False
@@ -93,7 +96,8 @@ elif VehicleConfig == 'Multirotor':
     W_PL = 120          # mass of the payload in kilograms [kg]
     R_pyl = 0.05  # Pylon radius (assumed circular) [m]
     l_pyl = 0.2   # Pylon length [m]
-
+    CY = 0.6      # Assumed fuselage side drag coefficient
+    S_side = np.pi * l*D/4  # Side fuselage area (ellipse) [m^2]
 
 # Cost inputs
 yop = 2025              # Year of the start of production is expected

@@ -79,21 +79,6 @@ def V_ind_FOR(V, T, gamma=0): #T is the thrust per rotor
 ##    Fw_y = -0.5 * rho * Vy_rel * V_infty * S_side * CY
 ##    print("order: Fw_x, Fw_y")
 ##    return Fw_x, Fw_y
-def CY_Aircraft():
-    CY_fus = 0.6
-    if Wing == True:
-        V_sidewind = 15 #[m/s]
-        
-        S_side = np.pi * l*D/4 # Side fuselage area (ellipse)
-        CD_vertplate = 1.28 #Assume vertical tail to be a flat plate.
-    #For now assume that the horizontal tail and wing don't contribute to the drag
-    if VehicleConfig == 'LiftCruise':
-        CY = 1/S_side * (S_side * CY_fus+ S_v * CD_vertplate)
-    elif VehicleConfig == 'VectoredThrust':
-        CY = CY_fus
-    elif VehicleConfig == 'Multirotor':
-        CY = CY_fus
-    return CY
 # T= RC_AoAandThrust(V_cr, parasite_drag()[1], rho, MTOW, g)[1]/N_prop #Thrust per rotor
 # V =0 #Hovering
 # AoA = RC_AoAandThrust(V_cr, parasite_drag()[1], rho, MTOW, g)[0] #AoA
