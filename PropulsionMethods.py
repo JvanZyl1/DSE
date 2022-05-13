@@ -11,7 +11,6 @@ def power_from_thrust(T, R_prop, N_prop=1):
     return P
 
 rotormass = BladeMassFun(N_cont,R_cont,B_cont,power_from_thrust(T=(500/N_cont),R_prop=R_cont,N_prop=N_cont))
-
 def MOI_forjonny(MTOW, N_prop, R_prop):
 
     M_prop = (28 - 2.25) / 2 / 7 * (R_prop * 2)
@@ -137,3 +136,4 @@ print(in_plane_rotors(R_cont, N_cont, F_gust=500)[4])
 # testmass2 = in_plane_rotors(R_cont,N_cont,F_gust=500)[5]/B_cont
 # print(testmass, " Mass per rotor with Ole's method")
 # print(testmass2, " Mass per rotor with Alex's method")
+print(rotormass)
