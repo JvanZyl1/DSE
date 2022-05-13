@@ -5,14 +5,15 @@ clc
 
 noise_power = 0.000000001;
 
-m = 600; %kg
+m = 640; %kg
 g = 9.81; %m/s
 W = m*g; %N
 
 T = 10.5;
 rho = 1.225;
 C_D = 0.6;
-S = 2.1*1*pi;
+%S = 1*1.8;
+S = 2.9*1;
 time_delay = 0.3;%0.1;
 
 rlist = [];
