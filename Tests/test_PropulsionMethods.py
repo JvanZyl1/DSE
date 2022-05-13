@@ -14,7 +14,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_MOI(self):
         actual_MOI = 105
-        test_MOI = pm.MOI_prop(3.5)
+        test_MOI = pm.MOI_prop(3.5, 2)
         self.assertAlmostEqual(actual_MOI, test_MOI, 0)
 
     def test_power(self):
@@ -22,13 +22,26 @@ class MyTestCase(unittest.TestCase):
         test_P = pm.power_from_thrust(10, 1, 1)
         self.assertAlmostEqual(actual_P, test_P, 0)
 
-    def test_inplanerotors(self):
+    def test_inplaneradius(self):
         """Assert whether the function in_plane_rotors calculates a larger RPM,
         a smaller reaction time, and a larger required force for a smaller
         propeller radius."""
 
         P_cont1, P_total1, t_react1, omega1, chars1 = pm.in_plane_rotors(0.5, 2)
         P_cont2, P_total2, t_react2, omega2, chars2 = pm.in_plane_rotors(2, 2)
+
+        self.assertGreater(omega1, omega2)
+        self.assertGreater(t_react2, t_react1)
+        self.assertGreater(P_cont1, P_cont2)
+
+
+    def test_inplaneblades(self):
+        """Assert whether the function in_plane_rotors calculates a larger RPM,
+        a smaller reaction time, and a larger required force for a smaller
+        propeller radius."""
+
+        P_cont1, P_total1, t_react1, omega1, chars1, W_blades1 = pm.in_plane_rotors(0.5, 2)
+        P_cont2, P_total2, t_react2, omega2, chars2, W_blades2 = pm.in_plane_rotors(0.5, 5)
 
         self.assertGreater(omega1, omega2)
         self.assertGreater(t_react2, t_react1)

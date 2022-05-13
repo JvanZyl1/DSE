@@ -88,7 +88,7 @@ elif VehicleConfig == 'Multirotor':
     N_prop = 8          # Number of propellers [-]
     R_prop = 0.8        # Propeller radius [m]
     B_prop = 2          # Number of blades per propeller [-]
-    #MTOW = 350          # Max take of weight [kg]
+    MTOW = 350          # Max take of weight [kg]
     S_body = np.pi ** 2 * l * D / 4  # Assume fuselage to be an ellipse of revolution and calculate its wetted area
     l_t = l
     S_nac = 0
@@ -102,6 +102,30 @@ elif VehicleConfig == 'Multirotor':
     R_cont = 0.2
     N_cont = 3
     B_cont = 5
+
+elif VehicleConfig=="DesignConcept":
+    Wing = False
+    l = 2.1
+    D = 1.0
+    V_cr = 100 / 3.6  # Cruise velocity [m/s]
+    N_prop = 12  # Number of propellers [-]
+    R_prop = 0.93  # Propeller radius [m]
+    B_prop = 2  # Number of blades per propeller [-]
+    MTOW = 650  # Max take of weight [kg]
+    S_body = np.pi ** 2 * l * D / 4  # Assume fuselage to be an ellipse of revolution and calculate its wetted area
+    l_t = l
+    S_nac = 0
+    N_nac = 0
+    W_PL = 250  # mass of the payload in kilograms [kg]
+    R_pyl = 0.05  # Pylon radius (assumed circular) [m]
+    l_pyl = 0.2  # Pylon length [m]
+    CY = 0.6  # Assumed fuselage side drag coefficient
+    S_side = np.pi * l * D / 4  # Side fuselage area (ellipse) [m^2]
+    # Parameters for in-plane control propellers
+    R_cont = 0.2
+    N_cont = 3
+    B_cont = 5
+
 # Cost inputs
 yop = 2025              # Year of the start of production is expected
 # CPI_now = 1.27          # 1 dollar in 2012 (date of literature) is worth as much as 1.27 now, found in https://www.bls.gov/data/inflation_calculator.htm

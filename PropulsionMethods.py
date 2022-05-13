@@ -1,9 +1,12 @@
 import numpy as np
 from inputs import *
 from MassEstimation import *
+
+
+# Propulsion methods are evaluated using the Multirotor concept using 6 sets of 2 counterrotating propellers.
 MTOW = 650  # kg
 N_prop = 12  # -
-R_prop = 0.9  #
+R_prop = 0.9  # m
 
 def power_from_thrust(T, R_prop, N_prop=1):
     A = np.pi * R_prop**2 * N_prop
@@ -11,10 +14,10 @@ def power_from_thrust(T, R_prop, N_prop=1):
     return P
 
 rotormass = BladeMassFun(N_cont,R_cont,B_cont,power_from_thrust(T=(500/N_cont),R_prop=R_cont,N_prop=N_cont))
-def MOI_forjonny(MTOW, N_prop, R_prop):
+def MOI_forjonny(R_prop):
 
     M_prop = (28 - 2.25) / 2 / 7 * (R_prop * 2)
-    M_motor = 3  # From literature
+    M_motor = 3  # From EMRAX literature
 
     Ixx = 0.5 * M_motor * 0.085**2 + (1/3) * M_prop * R_prop**2
     I_yy = (1/3) * M_prop * (0.22-0.04)**2 + (1/3) * M_motor * 0.22**2
@@ -45,7 +48,7 @@ def in_plane_rotors(R_cont, N_cont, F_gust=500):
     Mass = W_e + W_blades
     Ang_acc = omega / reaction_time(omega,R_cont, B_cont)
     Torque_req = Mass * R_cont**2 * Ang_acc
-    t_react = reaction_time(omega, R_cont,B_cont)
+    t_react = reaction_time(omega, R_cont, B_prop)
 
     P_total = power_from_thrust(MTOW * g, R_prop, N_prop) + P_cont
 
@@ -63,7 +66,7 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
     theta = theta_deg * np.pi/180
     T_cont = F_gust / np.sin(theta)  # N
     P_cont = power_from_thrust(T_cont, R_prop)  # Power during counteracting gust load
-    T_TOL = MTOW * g / N_prop / np.cos(theta)  # Thrust during normal hover by tilted motor
+    T_TOL = MTOW * g / (N_prop/2) / np.cos(theta)  # Thrust during normal hover by tilted motor
     P_TOL = power_from_thrust(T_TOL, R_prop)  # Power during normal hover by tilted motor
     P_change = P_cont - P_TOL
     omega_change = (omega_max - omega_prop) / (max_power - av_power) * P_change
@@ -71,11 +74,11 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
     T1 = MTOW * g / N_prop
     T2 = MTOW * g / N_prop / np.cos(theta)
     T2_z = T2*np.cos(theta)
-    T3 = MTOW * g / N_prop
-    T4 = MTOW * g / N_prop
-    T5 = MTOW * g / N_prop / np.cos(theta)
+    T3 = MTOW * g / (N_prop/2)
+    T4 = MTOW * g / (N_prop/2)
+    T5 = MTOW * g / (N_prop/2) / np.cos(theta)
     T5_z = T5*np.cos(theta)
-    T6 = MTOW * g / N_prop
+    T6 = MTOW * g / (N_prop/2)
     d_tilt_to_bod = 0.4 + 0.5 + R_prop  # Estimated values of y-distance between center of tilted propeller and body
     d_prop_to_bod = -0.2 + 0.5 + R_prop  # Estimated values of y-distance between center of normal propeller and body
     if P_change > 0:
@@ -113,7 +116,9 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
     if omega_change*60/(2*np.pi) > 3000:      # RPM too high for rotors for rotors
         print("Error: RPM increase of tilted motor too high")
         return
-    print("T1 = ", T1, "T3 = ", T3, "T4 = ", T4, "T5 = ", T5, "T6 = ", T6, )
+
+    print("T1 = ", T1, "T2 = ", T2, "T3 = ", T3, "T4 = ", T4, "T5 = ", T5, "T6 = ", T6, )
+
     return P_cont, T_total, P_total, t_react, omega_change*60/(2*np.pi)
 
 
@@ -124,16 +129,6 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
 for theta in np.arange(15, 50, 1):
     print("RESULT: ", pre_tilted(500, theta, MTOW))
 
-print("POWER REQUIRED", '\n', "in plane rotors: ", in_plane_rotors(0.4, 3, 500)[0], '\n',
-      "pretilted rotors: ", pre_tilted(500, 45, MTOW)[0])
-
-#for R_cont in np.arange(0.2, 0.9, 0.1):
-#    print(in_plane_rotors(R_cont, 3)[3])
-
 print(in_plane_rotors(R_cont, N_cont, F_gust=500)[4])
 
-# testmass = MOI_prop(R_cont,B_cont)[1]
-# testmass2 = in_plane_rotors(R_cont,N_cont,F_gust=500)[5]/B_cont
-# print(testmass, " Mass per rotor with Ole's method")
-# print(testmass2, " Mass per rotor with Alex's method")
-print(rotormass)
+
