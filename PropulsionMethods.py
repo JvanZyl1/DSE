@@ -2,7 +2,7 @@ import numpy as np
 from inputs import *
 
 MTOW = 650  # kg
-N_prop = 6  # -
+N_prop = 12  # -
 R_prop = 0.9  # m
 
 
