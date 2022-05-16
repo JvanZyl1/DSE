@@ -36,7 +36,8 @@ for i in range(n_iter):
         Weights = np.vstack((BatWts,PropWts,FuseWts))
         MTOW = np.sum([PropWt, FuseWt, BatWt, W_PL])
     print(PropWts)
-    print("MTOW: ", MTOW)
+    print("MTOW: ", MTOW, '\n')
+    print(BatWt / W_PL * 250)
 
     # Cost estimation
     W_struct = MTOW - (BatWt + PropWt + W_PL)
