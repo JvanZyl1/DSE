@@ -9,7 +9,7 @@ g = 9.81; %m/s
 W = m*g; %N
 
 T = 1; % test for push via matlab
-%hey it's German
+%hey it's German heheh
 
 s=tf([1,0],[1]);
 H_0 = 1/(m*s^2);
