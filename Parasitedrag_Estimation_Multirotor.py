@@ -44,7 +44,7 @@ import numpy as np
 
 def parasite_drag(R_prop, N_prop):
     #For a quadrotor. Found at https://ntrs.nasa.gov/api/citations/20180003381/downloads/20180003381.pdf
-    CD_fus = 0.25 #use the fuselage crossectional area. CD is assumed from an ellipse.
+    CD_fus = 0.05 #use the fuselage crossectional area. CD is assumed from an ellipse.
     CD_rot = 0.0045 #use rotor disk area
     CD_pyl = 0.025  #use pylon wet area
     D_q_landinggear = 0.2*0.3048**2 #Landing gear CDA [m^2]
