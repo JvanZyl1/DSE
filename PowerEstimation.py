@@ -106,5 +106,3 @@ def PowerCruiseWing(C_L, rho, V_cr, S):
 
 print('Power required cruise = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[0]/1000,' [kW]')
 print('Power required takeoff = ',PowerReq(MTOW,N_prop,R_prop,V_cr)[1]/1000,' [kW]')
-
-

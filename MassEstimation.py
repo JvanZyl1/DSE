@@ -30,6 +30,7 @@ Tailplane group          * Inputs: S_h, S_v, n_ult
 import matplotlib.pyplot as plt
 import numpy as np
 from inputs import *
+from PowerEstimation import *
 
 ### These estimation routines are for the multirotor configuration
 
@@ -250,3 +251,5 @@ def TailplaneGroupFun(W_MTOW, S_h, t_rh, t_rv, Lambda_v, A_v, A_h):
 def Est_rotor_mass(S_rot):
     S_rot_ft2 = S_rot/(0.3048**2) #[ft^2]
     return (-194.685 + 12.164*S_rot_ft2)*0.4536
+
+print(BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discharge))
