@@ -1,0 +1,12 @@
+clear all
+close all
+clc
+
+inputs;
+
+parasite_drag();
+RC_AoAandThrust(V_cr, D_q_tot_x, rho, MTOW, g);
+
+PowerReq(MTOW,N_prop,R_prop,V_cr)
+
+

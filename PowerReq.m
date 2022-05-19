@@ -1,4 +1,5 @@
 function [P_cruise,P_TOL] = PowerReq(MTOW,N_prop,R_prop,V_cr)
+global MTOW N_prop R_prop V_cr g D_q_tot_x rho 
 %required power for cruise and for takeoff
 %   Detailed explanation goes here
 T = (MTOW * g) * 1.1;
