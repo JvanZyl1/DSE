@@ -1,6 +1,10 @@
 import unittest
+
+import numpy as np
+
 import Structures_loads_Ehang as test
 from Materials import *
+
 
 class MyTestCase(unittest.TestCase):
     def test_v_beam(self):
@@ -8,26 +12,23 @@ class MyTestCase(unittest.TestCase):
         test_Vz = test.v_beam(3.6*9.81, 52*9.81 / 4, 2, 1, 8000)
         self.assertAlmostEqual(actual_Vz, test_Vz, 2)  # add assertion here
 
-    def test_m_beam1(self):
+    def test_m_beam(self):
         actual_Mz = 1863.641
         test_Mz = test.m_beam(3.6*9.81, 52*9.81 / 4, 2, 1, 8000)
         self.assertAlmostEqual(actual_Mz, test_Mz, 2)
-
-    def test_m_beam2(self):
         test_Mz_d = test.m_beam(test.W_beam, test.W_engine, test.d, test.d, test.L)
         self.assertEqual(test_Mz_d, 0)
 
-    def test_stress_beam1(self):
-        actual_sigma_x = 2.75686538e+08
+    def test_stress_beam(self):
+        actual_sigma_x = 2.75686538e+08/1.25
         test_sigma_x = test.stress_beam(3.6*9.81, 52*9.81 / 4, 2, 1, 8000, 0.13, 0.5e-3*0.13**3)[0]
         self.assertAlmostEqual(actual_sigma_x, test_sigma_x, -1)
-
-    def test_stress_beam2(self):
         test_sigma_x = test.stress_beam(test.W_beam, test.W_engine, test.d, 0, test.L, test.r, test.Ixx)
         if test.L >= test.W_beam + test.W_engine:
             self.assertGreaterEqual(test_sigma_x, 0, "More lift then weight ")
         else:
             self.assertLess(test_sigma_x, 0)
+
     def test_shear_beam(self):
         actual_tau = 5.37464722e+08
         test_tau = test.shear_beam(3.6*9.81, 52*9.81 / 4, 2, 1, 8000, 0.13, 0.5e-3, 0.13)[0]

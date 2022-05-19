@@ -1,11 +1,13 @@
 class material:
 
     def __init__(self, tensile_strength, yield_strength, E_modulus, shear_strength, weight):
-        self.sigma_t = tensile_strength #Pa
-        self.sigma_y = yield_strength #Pa
-        self.E_modulus = E_modulus #Pa
-        self.tau = shear_strength #Pa
-        self.weight = weight #kg/m**3
+        self.sigma_t = tensile_strength  # Pa
+        self.sigma_y = yield_strength  # Pa
+        self.E_modulus = E_modulus  # Pa
+        self.tau = shear_strength  # Pa
+        self.weight = weight  # kg/m**3
+
+
 
 #Materials
 aluminium = material( 444e6,  400e6,  70e9, 283e6, 2.8e3)
