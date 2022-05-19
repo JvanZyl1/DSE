@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 
 import Structures_loads_Ehang as test
-from Materials import *
+from Structures_Classes import *
 
 
 class MyTestCase(unittest.TestCase):
