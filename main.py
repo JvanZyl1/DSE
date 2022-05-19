@@ -13,18 +13,19 @@ n_iter = 20
 for i in range(n_iter):
 
     # Power estimation
-    P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr)[1]
+    P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr, V_TO)[1]
+    P_cont = 0
     if Wing:
         P_cruise = PowerCruiseWing(C_L, rho, V_cr, S)
-        P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr)[1]
+        P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr, V_TO)[1]
     else:
-        P_cruise = PowerReq(MTOW, N_prop, R_prop, V_cr)[0]
-        P_cruise, P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr)
+        P_cruise = PowerReq(MTOW, N_prop, R_prop, V_cr, V_TO)[0]
+        P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr, V_TO)[1]
     print("Hover power: ", P_TOL, '\n',
           "Cruise power: ", P_cruise)
 
     # Weight estimation
-    BatWt, BatWts, E_total = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discharge)
+    BatWt, BatWts, E_total = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, P_cont, nu_discharge)
     PropWt, PropWts = PropGroupMassFun(N_prop, R_prop, B_prop, P_TOL)
     FuseWt, FuseWts = FuselageGroupMassFun(MTOW, W_PL, l_t, V_cr, D, l, S_nac, N_nac)
     if Wing:
@@ -35,20 +36,17 @@ for i in range(n_iter):
     else:
         Weights = np.vstack((BatWts,PropWts,FuseWts))
         MTOW = np.sum([PropWt, FuseWt, BatWt, W_PL])
-    print(PropWts)
-    print("MTOW: ", MTOW, '\n')
-    print(BatWt / W_PL * 250)
-
     # Cost estimation
     W_struct = MTOW - (BatWt + PropWt + W_PL)
     C_unit, C_overhead, C_list = total_costs(W_struct, E_total, P_TOL, R_prop)
-    # print(C_list)
-    print(C_overhead)
+
+    print("Battery weight: ", BatWt)
 
     # Scaled to payload
     print("MTOW scaled to payload: ", MTOW / W_PL * 250)
-    print("Unit cost scaled to payload: ", C_unit / W_PL * 250)
+    # print("Unit cost scaled to payload: ", C_unit / W_PL * 250)
     print("Required energy scaled to payload: ", E_total / W_PL * 250)
+
 
 # Get the estimate for the power required in cruise.
 # Ran = np.linspace(0.7, 1.5, 25)

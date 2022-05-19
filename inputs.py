@@ -106,16 +106,17 @@ elif VehicleConfig == 'Multirotor':
 elif VehicleConfig=="DesignConcept":
     Wing = False
     l = 2.1
-    D = 1.0
+    D = 1.34
+    h = 1.
     V_cr = 100 / 3.6  # Cruise velocity [m/s]
-    N_prop = 12  # Number of propellers [-]
+    N_prop = 10  # Number of propellers [-]
     R_prop = 0.9  # Propeller radius [m]
+    A_disk = 1.2**2 * np.pi * 8 + 0.4**2 * np.pi * 2
     B_prop = 2  # Number of blades per propeller [-]
-    MTOW = 650  # Max take of weight [kg]
+    counterrotating = False
+    MTOW = 740  # Max take of weight [kg]
     S_body = np.pi ** 2 * l * D / 4  # Assume fuselage to be an ellipse of revolution and calculate its wetted area
     l_t = l
-    S_nac = 0
-    N_nac = 0
     W_PL = 250  # mass of the payload in kilograms [kg]
     R_pyl = 0.05  # Pylon radius (assumed circular) [m]
     l_pyl = 0.2  # Pylon length [m]
@@ -125,6 +126,8 @@ elif VehicleConfig=="DesignConcept":
     R_cont = 0.2
     N_cont = 3
     B_cont = 5
+    S_nac = 2 * np.pi * R_cont * 0.10
+    N_nac = 3
 
 # Cost inputs
 yop = 2025              # Year of the start of production is expected
@@ -146,9 +149,10 @@ omega_max = 6500 * 2 * np.pi / 60
 R = 20000           # mission range in kilometers [m]
 R_div = 5000        # additional diversion range in kilometers [m]
 V_TO = 3            # assumed take-off and descent velocity [m/s !]
-h_TO = 100          # assumed vertical travel distance in [m]
+h_TO = 450          # assumed vertical travel distance in [m]
 rho = 1.225         # air density in [kg/m3]
 n_ult = 2           # ultimate load factor
 
 # Wind speed
 V_wind_avg = 20.7   #[m/s], average wind speed at 8 beaufort
+F_side_max = 1000  # N

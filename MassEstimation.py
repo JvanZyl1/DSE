@@ -34,7 +34,7 @@ from PowerEstimation import *
 
 ### These estimation routines are for the multirotor configuration
 
-def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discharge):
+def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, P_cont, nu_discharge):
     '''
     This function estimates the battery mass in [kg]
     based off the energy density and mission profile
@@ -42,11 +42,12 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discha
     eta_E = eta_E * 1.08**(yop-2022)
     t_CR = (R + R_div) / (V_cr)     # Calculate time in cruise + diversion
     t_TO = (h_TO / V_TO) * 2                     # Calculate the time spent in vertical flight
+    t_cont = t_TO
     # Energy required for flight phases
     E_CR = t_CR * P_cruise
-    print(t_CR,t_TO)
     E_TO = t_TO * P_TOL
-    E_total = (E_TO + E_CR) / 3600               # total energy needed in [Wh]
+    E_cont = t_cont * P_cont
+    E_total = (E_TO + E_CR + E_cont) / 3600               # total energy needed in [Wh]
     W_bat = (E_total / eta_E) / nu_discharge
     Wts = np.array([["Battery Weight", W_bat]], dtype=object)
     return W_bat, Wts, E_total
@@ -111,7 +112,7 @@ def HorTailPlaneMassFun(W_MTOW, S_h, A_h, t_rh):           # weight estimation f
           (174.04 * (t_rh**0.223))
     return W_h
 
-def EngineMassFun(P_TOL):               # based off the perofrmance of the EMRAX electric motors
+def EngineMassFun(P_TOL, N_prop):               # based off the perofrmance of the EMRAX electric motors
     '''
     This function estimates motor weight based off EMRAX motor Power/Weight rating of ~7 kw/kg.
     It returns the weight off a SINGLE motor !!!
@@ -129,7 +130,6 @@ def BladeMassFun(N_prop, R_prop, B_prop, P_TOL):
     D_prop = 2 * R_prop
     P_hp = P_TOL * 0.00134102 / N_prop      # Assumed take-off power per engine [hp], change later !!!
     W_blades = k_p * N_prop * (D_prop * P_hp * np.sqrt(B_prop))**0.78174
-    print("Weight of one blade: ", W_blades / N_prop / B_prop)
     return W_blades
 
 def LandingGearMassFun(W_MTOW):
@@ -139,7 +139,7 @@ def LandingGearMassFun(W_MTOW):
     '''
     k_uc = 1.0 # based off Table 8-6 from Torenbeek.
     A_m = 9.1; B_m = 0.082; C_m = 0.019
-    A_n = 11.3; C_n = 0.0024;   #Main and nose LG weight coefficients
+    A_n = 11.3; C_n = 0.0024   #Main and nose LG weight coefficients
     W_uc_m = k_uc * (A_m + B_m*W_MTOW**0.75 + C_m * W_MTOW)
     W_uc_n = k_uc * (A_n +  + C_n * W_MTOW)
     W_uc = W_uc_n + W_uc_m
@@ -163,7 +163,7 @@ def NacelleMassFun(S_nac, V_cr):
     W_nac = 0.405 * np.sqrt(V_D) * (S_nac ** 1.3)
     return W_nac
 
-def CableMassFun(N_prop, W_e):
+def CableMassFun(N_prop, R_prop, W_e):
     '''
     This function estimate the cable length based off the values found in the NASA report:
     https://ntrs.nasa.gov/api/citations/20200000289/downloads/20200000289.pdf?attachment=true
@@ -205,10 +205,10 @@ def PropGroupMassFun(N_prop, R_prop, B_prop, P_TOL):
     This function gives the weight of the whole propulsion group
     based off the motor and blade weight.
     '''
-    W_e = EngineMassFun(P_TOL)
+    W_e = EngineMassFun(P_TOL, N_prop)
     W_engs = W_e * N_prop
     W_bl = BladeMassFun(N_prop, R_prop, B_prop, P_TOL)
-    W_cab = CableMassFun(N_prop, W_e)
+    W_cab = CableMassFun(N_prop, R_prop, W_e)
     W_pg = W_engs + W_bl + W_cab          # propulsion group is only cables, blades and motors :) NO NACELLE !a = np.array([["String",1,2]], dtype=object)
     Wts = np.array([["Blade Weight", W_bl], ["Engines Weight", W_engs], ["Cable Weight", W_cab]], dtype=object)
     return W_pg, Wts
@@ -248,8 +248,14 @@ def TailplaneGroupFun(W_MTOW, S_h, t_rh, t_rv, Lambda_v, A_v, A_h):
     Wts = np.array([["Vertical Tail Weight", W_vt], ["Horizontal Tail Weight", W_ht]], dtype = object)
     return W_tg, Wts
 
+def control_group_mass(N_cont, R_cont, B_cont, P_cont):
+    W_cb = BladeMassFun(N_cont, R_cont, B_cont, P_cont)
+    W_cm = EngineMassFun(P_cont, N_cont)
+    W_cg = W_cb + W_cm
+    Wts = np.array([["Control propellers weight: ", W_cb], ["Control motor weight: ", W_cm]], dtype = object)
+    return W_cg, Wts
+
+
 def Est_rotor_mass(S_rot):
     S_rot_ft2 = S_rot/(0.3048**2) #[ft^2]
     return (-194.685 + 12.164*S_rot_ft2)*0.4536
-
-print(BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, nu_discharge))

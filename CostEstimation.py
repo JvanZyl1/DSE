@@ -1,8 +1,3 @@
-clear all
-close all
-clc
-
-
 import numpy as np
 from inputs import *
 from MassEstimation import *
@@ -20,9 +15,8 @@ def total_costs(W_struct, E_total, P_TOL, R_prop):
     # Development / production costs
     C_eng = 0.083 * W_struct**0.791 * V_H**1.521 * N_ps**0.183 * 1.6 * 1.66 * 92 * CPI * ex_rate                        # Engineering https://www.researchgate.net/profile/Falk-Goetten/publication/337757069_Cost_Estimation_Methods_for_Hybrid-Electric_General_Aviation_Aircraft/links/5de87703299bf10bc3405695/Cost-Estimation-Methods-for-Hybrid-Electric-General-Aviation-Aircraft.pdf
 
-    C_bat = E_total * (132-(132-73)/(yop-2022)) * QDF * ex_rate                                                         # Batteries, TODO: reduction in cost per kwh
-    print("Engineering: ", C_eng, "Battery: ", C_bat)
-    C_motor = 174 * P_TOL * CPI * QDF * ex_rate                                                                         # Motors, TODO: check if this is similar to current motors.
+    C_bat = E_total * (132-(132-73)/(yop-2022)) * QDF * ex_rate                                                         # Batteries
+    C_motor = 174 * P_TOL * CPI * QDF * ex_rate                            # Motors, TODO: check if this is similar to current motors.
     C_pms = 150 * P_TOL * CPI * QDF * ex_rate                                                                           # Power management system, plusminus 80% of motor costs.
     C_prop = 210 * N_prop * CPI * (R_prop*2)**2 * (P_TOL/(N_prop*(R_prop*2)))**0.12 * QDF * ex_rate                     # Propellers
     C_mat = 24.896 * W_struct**0.689 * V_H**0.624 * N_ps**0.792 * CPI * 1.05 * 1.33 * QDF * ex_rate / N_ps                     # Materials
@@ -38,7 +32,6 @@ def total_costs(W_struct, E_total, P_TOL, R_prop):
 
     C_overhead = C_eng + C_ds + C_fto
     C_unit = (C_bat + C_motor + C_pms + C_prop + C_mat + C_tool + C_mfg + C_qc + C_av + C_lg + C_pl) + (C_overhead/N_ps)         # Total development / production costs
-    print(C_eng, C_bat, C_overhead)
 
     C_list = np.array([["UNIT COSTS", ""],
                        ["Battery costs: ", C_bat],

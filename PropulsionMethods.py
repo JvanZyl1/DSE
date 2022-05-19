@@ -2,12 +2,6 @@ import numpy as np
 from inputs import *
 from MassEstimation import *
 
-
-# Propulsion methods are evaluated using the Multirotor concept using 6 sets of 2 counterrotating propellers.
-MTOW = 650  # kg
-N_prop = 12  # -
-R_prop = 0.9  # m
-
 def power_from_thrust(T, R_prop, N_prop=1):
     A = np.pi * R_prop**2 * N_prop
     P = (((T * V_wind_avg) / 2) * (np.sqrt(1 + (2 * T) / (rho * V_wind_avg ** 2 * A)))) / eta_final
@@ -126,9 +120,9 @@ def pre_tilted(F_gust, theta_deg, MTOW):  # theta = tilt angle
 #    for theta in np.arange(15, 50, 5):
 #        print(pre_tilted(F_gust, theta, MTOW))
 
-for theta in np.arange(15, 50, 1):
-    print("RESULT: ", pre_tilted(500, theta, MTOW))
-
-print(in_plane_rotors(R_cont, N_cont, F_gust=500)[4])
+#for theta in np.arange(15, 50, 1):
+#    print("RESULT: ", pre_tilted(500, theta, MTOW))
+#
+#print(in_plane_rotors(R_cont, N_cont, F_gust=500)[4])
 
 

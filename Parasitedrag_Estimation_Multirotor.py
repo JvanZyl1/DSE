@@ -42,7 +42,7 @@ import numpy as np
 ##Re = rho*V*l/mu
 ##print(log10(Re))
 
-def parasite_drag():
+def parasite_drag(R_prop, N_prop):
     #For a quadrotor. Found at https://ntrs.nasa.gov/api/citations/20180003381/downloads/20180003381.pdf
     CD_fus = 0.25 #use the fuselage crossectional area. CD is assumed from an ellipse.
     CD_rot = 0.0045 #use rotor disk area
