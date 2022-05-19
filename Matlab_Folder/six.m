@@ -21,3 +21,6 @@ T_max = 5000; %Nm
 dwx = T_max/I_xx;
 dwy = T_max/I_yy;
 dwz = T_max/I_zz;
+
+
+
