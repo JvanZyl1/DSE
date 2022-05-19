@@ -19,3 +19,4 @@ class Material:
         self.E_modulus = E_modulus  # Pa
         self.tau = shear_strength  # Pa
         self.density = density  # kg/m**3
+
