@@ -22,5 +22,14 @@ dwx = T_max/I_xx;
 dwy = T_max/I_yy;
 dwz = T_max/I_zz;
 
+m = 300;
+A = eye(3);
+B = [1/m; 1/m; 1/m];
+C = eye(3);
+D = zeros(3);
+sys = ss(A,B,C,D);
+
+
+
 
 
