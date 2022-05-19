@@ -1,3 +1,8 @@
+clear all
+close all
+clc
+
+
 import numpy as np
 from inputs import *
 from MassEstimation import *
