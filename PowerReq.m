@@ -1,5 +1,5 @@
 function [P_cruise,P_TOL] = PowerReq(MTOW,N_prop,R_prop,V_cr)
-%UNTITLED Summary of this function goes here
+%required power for cruise and for takeoff
 %   Detailed explanation goes here
 T = (MTOW * g) * 1.1;
 [CD0, D_q_tot_x] = parasite_drag()   ;
