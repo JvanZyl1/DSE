@@ -11,7 +11,7 @@ g = 9.81          ;  % gravitional acceleration [m/s2]
 
 
 
-Wing = False ;
+
 l = 2.1 ;
 D = 1.0 ;
 V_cr = 100 / 3.6 ; % Cruise velocity [m/s]
