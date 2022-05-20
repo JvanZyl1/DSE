@@ -1,7 +1,7 @@
 clear all
 close all
 clc
-
+% Ole
 %%% Not used any more
 
 m = 100; %kg
