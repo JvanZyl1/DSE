@@ -1,4 +1,4 @@
-function [gyroData] = gyroscope(angvel, acc)
+function [gyroData] = fungyroscope(angvel, acc)
     %% Ouputs: Angular velocity
     % Create gyroscope sensor object
     params = gyroparams         
