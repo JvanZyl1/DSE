@@ -1,5 +1,5 @@
 function [gyroData] = gyroscope(angvel, acc)
-
+    %% Ouputs: Angular velocity
     % Create gyroscope sensor object
     params = gyroparams         
     

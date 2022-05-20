@@ -1,5 +1,5 @@
 function [accelData] = accelerometer(angvel, acc)
-    
+    %% Outputs: translational acceleration
     %
     % Create gyroscope sensor object
     params = accelparams 
