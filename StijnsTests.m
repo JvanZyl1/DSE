@@ -17,12 +17,18 @@ parasite_drag();
 %[W_bat, ~] = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, nu_discharge)
 x = [];
 y = [];
+x2 = [];
+y2 = [];
 for i = 1:200
     V_cr_man = (i+100)/3.6;
     RC_AoAandThrust(V_cr_man, MTOW);
     [y(i)] = BatteryMassFun(V_cr_man, V_TO, h_TO);
     [x(i)] = V_cr_man*3.6;
-    
+    [cruisepower,~,~] = PowerReq(MTOW,V_cr_man);
+    [y2(i)] = cruisepower;
+    disp(cruisepower);
 end
+figure(1)
 plot(x,y)
-
+figure(2)
+plot(x,y2)

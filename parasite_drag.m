@@ -16,5 +16,4 @@ S_disk = R_prop_big^2 * pi * N_prop_big + R_prop_small^2 * pi * N_prop_small ;%R
 D_q_tot_x = (CD_fus*S_fus + CD_rot*S_disk + (N_prop_big+N_prop_small)*CD_pyl*S_pylon + D_q_landinggear);
 % Assume that the reference area is the fuselage crosssectional area
 CD0 = D_q_tot_x/S_fus; %parasitic drag coefficient
-disp(CD0)
 end
