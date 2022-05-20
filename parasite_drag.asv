@@ -1,6 +1,5 @@
 function [CD0, D_q_tot_x] = parasite_drag()
-inputs;
-%global l_pyl R_pyl N_prop D R_prop 
+global l_pyl R_pyl N_prop D R_prop 
 %For a quadrotor. Found at https://ntrs.nasa.gov/api/citations/20180003381/downloads/20180003381.pdf
 CD_fus = 0.05; %use the fuselage crossectional area. CD is assumed from an ellipse.
 CD_rot = 0.0045; %use rotor disk area
