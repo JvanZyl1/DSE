@@ -1,7 +1,10 @@
-function [gyroData] = gyroscope(angvel, acc)
+function [gyroData] = fungyroscope(angvel, acc)
 
     % Create gyroscope sensor object
-    params = gyroparams         
+    params = gyroparams;         
+
+    disp angvel
+    disp acc
     
     % Parameters for simulated signal
     N = 1;       % Number of samples

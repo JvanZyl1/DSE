@@ -1,4 +1,4 @@
-function [accelData] = accelerometer(angvel, acc)
+function [accelData] = funaccelerometer(angvel, acc)
     
     %
     % Create gyroscope sensor object
