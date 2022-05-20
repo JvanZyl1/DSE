@@ -3,13 +3,15 @@ Classes
 """
 
 
-class Lift:
+class Load:
+    C_D = 1
+    rho = 1.225
 
-    def __init__(self, L_x, L_y, L_z):
-        self.L_x = L_x
-        self.L_y = L_y
-        self.L_z = L_z
-        self.total = self.L_x + self.L_y + self.L_z
+    def __init__(self, L, gustspeed, P, torque):
+        self.L = L
+        self.D = 0.5*self.C_D*self.rho*gustspeed**2
+        self.P = P
+        self.T = torque
 
 
 class Material:
@@ -20,3 +22,4 @@ class Material:
         self.E_modulus = E_modulus  # Pa
         self.tau = shear_strength  # Pa
         self.density = density  # kg/m**3
+

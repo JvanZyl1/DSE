@@ -16,7 +16,7 @@ class Beam(VTOL):
         self.weight_engine = weight_engine * 9.81
         self.thickness = thickness
         self.Ixx = thickness * radius ** 3
-
+        self.Iyy = thickness * radius ** 3
 
 
 class Fuselage(VTOL):

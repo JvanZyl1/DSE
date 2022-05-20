@@ -1,14 +1,14 @@
 # Imports
-from STRUC_Classes import Lift, Material
+from STRUC_Classes import Load, Material
 from STRUC_Design import Beam
+
+# Values
+SF = 1.25
+
 # Lift assignment
-Vertical_max = Lift(8000, 0, 0)
-Ground = Lift(0, 0, 0)
-Gust1 = Lift(8000, 0, 500)
-Gust2 = Lift(8000, 500, 0)
-Gust3 = Lift(8000, 354, 354)
-Gust4 = Lift(8000, -354, 354)
-Gust5 = Lift(8000, 354, -354)
+Vertical_max = Load(8000, 0, 0, 1000)
+Ground = Load(0, 0, 0, 0)
+Gust = Load(8000, 21, 5000, 1000)
 
 
 
