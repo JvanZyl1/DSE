@@ -2,6 +2,7 @@ clear all
 close all
 clc
 % Ole
+% Mitchell
 %%% Not used any more
 
 m = 100; %kg
