@@ -27,8 +27,7 @@ imu.Gyroscope.TemperatureBias = 0.25 * 3.14159 / 180;       % rad/s
 imu.Gyroscope.AccelerationBias = 0.3;
 
 % Define real accelerations
-acc(:,1) = 1
-
+acc(:,1) = 1;
 [~, gyroData] = imu(acc, angvel);
 
 
