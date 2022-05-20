@@ -17,7 +17,6 @@ P_to = P_takeoff/1000
 P_cr = P_CR/1000
 [W_bat, ~] = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, nu_discharge)
 for V_test = 100:200
-    [y,~,~] = PowerReq(MTOW,V_test);
-    y
-end
+    y = 
+
 
