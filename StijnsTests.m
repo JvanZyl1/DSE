@@ -10,6 +10,11 @@ inputs;
 parasite_drag();
 RC_AoAandThrust(V_cr, rho, MTOW, g);
 
-[P_cr,P_takeoff] = PowerReq(MTOW,N_prop,R_prop,V_cr)
+
+[~,P_takeoff,~] = PowerReq(MTOW,V_cr);
+[P_CR,~,~] = PowerReq(MTOW,V_cr);
+P_to = P_takeoff/1000
+P_cr = P_CR/1000
+[W_bat, ~] = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, nu_discharge)
 
 
