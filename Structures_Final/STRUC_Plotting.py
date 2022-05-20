@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from STRUC_Stiffness import *
+from STRUC_Stress import *
 
 x, y, z = axes(use_beam)
 V_x, V_y = v_beam(use_beam, use_loadcase)
@@ -36,11 +36,11 @@ ax4.set(xlabel=r'$z$ [m]', ylabel=r'$\bar{M}_x$ [N/m]')
 ax4.grid(True)
 ax4.axhline(0, color='black', lw=1.2)
 fig2.savefig("Loading_diagrams_yz")
-
+print(sigma_buckling(use_beam, use_material))
 fig3, (ax5, ax6) = plt.subplots(1, 2, sharey=True)
 ax5.plot(sigma_zx[0], x)
 ax5.plot(np.ones(np.size(x)) * use_material.sigma_t, x, '-.r')
-ax5.plot(-np.ones(np.size(x)) * use_material.sigma_t, x, '-.r', label='line1')
+ax5.plot(-np.ones(np.size(x)) * sigma_buckling(use_beam, use_material), x, '-.r', label='line1')
 ax5.set_title("Bending stress xz-plane")
 ax5.set(xlabel=r'$\bar{\sigma}_z$ [Pa]', ylabel="x [m]")
 ax5.grid(True)
@@ -57,7 +57,7 @@ fig3.savefig("Stress_diagrams_xz")
 fig4, (ax7, ax8) = plt.subplots(1, 2, sharey=True)
 ax7.plot(sigma_zy[0], x)
 ax7.plot(np.ones(np.size(x)) * use_material.sigma_t, x, '-.r')
-ax7.plot(-np.ones(np.size(x)) * use_material.sigma_t, x, '-.r', label='line1')
+ax7.plot(-np.ones(np.size(x)) * sigma_buckling(use_beam, use_material), x, '-.r', label='line1')
 ax7.set_title("Bending stress yz-plane")
 ax7.set(xlabel=r'$\bar{\sigma}_z$ [Pa]', ylabel="x [m]")
 ax7.grid(True)

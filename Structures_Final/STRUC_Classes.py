@@ -16,10 +16,11 @@ class Load:
 
 class Material:
 
-    def __init__(self, tensile_strength, yield_strength, E_modulus, shear_strength, density):
+    def __init__(self, tensile_strength, yield_strength, E_modulus, shear_strength, density, G_modulus):
         self.sigma_t = tensile_strength  # Pa
         self.sigma_y = yield_strength  # Pa
         self.E_modulus = E_modulus  # Pa
         self.tau = shear_strength  # Pa
         self.density = density  # kg/m**3
+        self.G_modulus = G_modulus
 
