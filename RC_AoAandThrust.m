@@ -1,11 +1,11 @@
-function [alpha, Treq] = RC_AoAandThrust(V_cr, rho, MTOW, g)
+function [alpha, Treq] = RC_AoAandThrust(V_cr_man, rho, MTOW, g)
 inputs;
-parasite_drag;
+parasite_drag();
 [CD0, D_q_tot_x] = parasite_drag();
 %global V_cr D_q_tot_x rho MTOW g 
 'Rotor craft angle of attack estimator';
 %Nominal drag force on fuselage during cruise
-D = 0.5 * rho * V_cr^2* D_q_tot_x  ;
+D = 0.5 * rho * V_cr_man^2* D_q_tot_x  ;
 %Equilibrium AoA ;
 alpha = atan2(D,MTOW * g)  ;
 Treq = sqrt((MTOW*g)^2 + D^2) ;

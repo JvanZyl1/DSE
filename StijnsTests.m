@@ -8,16 +8,21 @@ inputs;
 
 
 parasite_drag();
-RC_AoAandThrust(V_cr, rho, MTOW, g);
 
 
-[~,P_takeoff,~] = PowerReq(MTOW,V_cr);
-[P_CR,~,~] = PowerReq(MTOW,V_cr);
-P_to = P_takeoff/1000
-P_cr = P_CR/1000
-[W_bat, ~] = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, nu_discharge)
-for V_test = 100:200
-    [y,~,~] = PowerReq(MTOW,V_test);
-    y
+%[~,P_takeoff,~] = PowerReq(MTOW,V_cr);
+%[P_CR,~,~] = PowerReq(MTOW,V_cr);
+%P_to = P_takeoff/1000
+%P_cr = P_CR/1000
+%[W_bat, ~] = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, nu_discharge)
+x = [];
+y = [];
+for i = 1:200
+    V_cr_man = (i+100)/3.6;
+    RC_AoAandThrust(V_cr_man, rho, MTOW, g);
+    [y(i)] = BatteryMassFun(R, R_div, V_cr_man, V_TO, h_TO, eta_E, nu_discharge);
+    [x(i)] = V_cr_man*3.6;
+    
 end
+plot(x,y)
 

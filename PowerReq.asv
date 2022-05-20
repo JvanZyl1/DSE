@@ -1,7 +1,7 @@
 function [P_cruise,P_TOL,P_cont] = PowerReq(MTOW,V_cr_man)
 %disp(V_cr)
 inputs;
-
+disp(V_cr)
 %global MTOW N_prop R_prop V_cr g D_q_tot_x rho V_TO eta_final 
 %required power for cruise and for takeoff
 %   Detailed explanation goes here
@@ -12,6 +12,8 @@ tilt_cruise = Cruise_ang_rad(1)*180/pi  ;     %angle of tilt during cruise in de
 disk_area = R_prop_big^2 * pi * N_prop_big + R_prop_small^2 * pi * N_prop_small ;
 kappa = 1.2   ;    %correction factor for extra power losses, value taken from literature
 V_perp = (V_cr_man * sin(tilt_cruise * (pi/180))) ;     %perpendicular to rotor plane free stream velocity in [m/s]
+disp(' V_perp = ')
+disp(V_perp)
 %v_i = sqrt((T/disk_area) * (1/(2 * rho)))     ;      %nduced velocity during hover
 P = T*V_perp + kappa * T * (-V_perp/2 + sqrt(V_perp^2 / 4 + T/(2 * rho * disk_area))) ;
 P_cruise = P / eta_final   ;
