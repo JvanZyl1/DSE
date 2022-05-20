@@ -1,4 +1,4 @@
-function [alpha, Treq] = RC_AoAandThrust(V_cr_man, rho, MTOW, g)
+function [alpha, Treq] = RC_AoAandThrust(V_cr_man, MTOW)
 inputs;
 parasite_drag();
 [CD0, D_q_tot_x] = parasite_drag();

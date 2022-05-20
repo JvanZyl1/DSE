@@ -19,8 +19,8 @@ x = [];
 y = [];
 for i = 1:200
     V_cr_man = (i+100)/3.6;
-    RC_AoAandThrust(V_cr_man, rho, MTOW, g);
-    [y(i)] = BatteryMassFun(R, R_div, V_cr_man, V_TO, h_TO, eta_E, nu_discharge);
+    RC_AoAandThrust(V_cr_man, MTOW);
+    [y(i)] = BatteryMassFun(V_cr_man, V_TO, h_TO);
     [x(i)] = V_cr_man*3.6;
     
 end

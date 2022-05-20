@@ -55,7 +55,7 @@ omega_max = 6500 * 2 * pi / 60  ;
 R = 20000      ;     % mission range in kilometers [m]
 R_div = 5000    ;    % additional diversion range in kilometers [m]
 V_TO = 3         ;   % assumed take-off and descent velocity [m/s !]
-h_TO = 100        ;  % assumed vertical travel distance in [m]
+h_TO = 450        ;  % assumed vertical travel distance in [m]
 rho = 1.225        ; % air density in [kg/m3]
 n_ult = 2           ;% ultimate load factor
 

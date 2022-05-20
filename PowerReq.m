@@ -7,7 +7,7 @@ inputs;
 %   Detailed explanation goes here
 T = (MTOW * g) * 1.1;
 %[CD0, D_q_tot_x] = parasite_drag()   ;
-Cruise_ang_rad = RC_AoAandThrust(V_cr_man, rho, MTOW, g) ;
+Cruise_ang_rad = RC_AoAandThrust(V_cr_man, MTOW) ;
 tilt_cruise = Cruise_ang_rad(1)*180/pi  ;     %angle of tilt during cruise in degree
 disk_area = R_prop_big^2 * pi * N_prop_big + R_prop_small^2 * pi * N_prop_small ;
 kappa = 1.2   ;    %correction factor for extra power losses, value taken from literature
