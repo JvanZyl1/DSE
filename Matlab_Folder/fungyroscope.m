@@ -1,5 +1,9 @@
 function [gyroData] = fungyroscope(angvel, acc)
+<<<<<<< HEAD
 
+=======
+    %% Ouputs: Angular velocity
+>>>>>>> c049a650b712d933853c77380eceb1da3495aa2c
     % Create gyroscope sensor object
     params = gyroparams;         
 
