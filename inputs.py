@@ -146,7 +146,7 @@ torque_cont = 32  # Nm, for EMRAX 268 motor, https://emrax.com/wp-content/upload
 torque_thrust = 90
 av_power = 20000
 max_power = 60000  # W
-omega_prop = 3500 * 2 * np.pi / 60  # Rotational velocity of propeller [rad/s]
+omega_prop = 1200 * 2 * np.pi / 60  # Rotational velocity of propeller [rad/s]
 omega_max = 6500 * 2 * np.pi / 60
 
 # Mission profile characteristics
