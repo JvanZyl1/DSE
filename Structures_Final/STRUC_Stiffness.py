@@ -8,7 +8,6 @@ Beam Loading and Stresses (for Ehang concept)
 # Imports
 from math import *
 import numpy as np
-from matplotlib import pyplot as plt
 from STRUC_Inputs import *
 
 # Input choices
@@ -47,8 +46,8 @@ def m_beam(beam, load):
 def stress_beam(beam, load):
     x, y, z = axes(beam)
     sigma_L_z = load.P / (2 * pi * beam.radius * beam.thickness)
-    sigma_bend_y = np.transpose([(m_beam(beam, load)[1] / beam.Ixx)]) * [x]
-    sigma_bend_x = np.transpose([(m_beam(beam,load)[0]) / beam.Iyy]) * [y]
+    sigma_bend_y = np.transpose([(m_beam(beam, load)[1] / beam.Ixx)]) * [y]
+    sigma_bend_x = np.transpose([(m_beam(beam,load)[0]) / beam.Iyy]) * [x]
     sigma_z_y = np.add(sigma_bend_y, sigma_L_z * np.ones(np.shape(sigma_bend_y)))
     sigma_z_x = np.add(sigma_bend_x, sigma_L_z * np.ones(np.shape(sigma_bend_x)))
     return sigma_z_x, sigma_z_y
@@ -56,9 +55,11 @@ def stress_beam(beam, load):
 
 def shear_beam(beam, load):
     x, y, z = axes(beam)
-    Vz = v_beam(beam, load)[0]
-    shear = np.transpose([Vz]) / (-pi * beam.thickness * beam.radius ** 4) * [y]
-    return shear
+    Vx = v_beam(beam, load)[0]
+    Vy = v_beam(beam, load)[1]
+    shear_x = np.transpose([Vx]) / (-pi * beam.thickness * beam.radius ** 4) * [y]
+    shear_y = np.transpose([Vy]) / (-pi * beam.thickness * beam.radius ** 4) * [x]
+    return shear_x, shear_y
 
 
 def weight_beam(material, beam):
@@ -68,46 +69,6 @@ def weight_beam(material, beam):
 
 print(weight_beam(use_material, use_beam))
 
-x, y, z = axes(use_beam)
-
-V_x, V_y = v_beam(use_beam, use_loadcase)
-M_x, M_y = m_beam(use_beam, use_loadcase)
-sigma_zx, sigma_zy = stress_beam(use_beam, use_loadcase)
-use_V = V_x
-use_M = M_y
-use_sigma_z = sigma_zx
 
 
-# Matplotlib
-fig1, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
-plt.gcf().subplots_adjust(left=0.15)
-ax1.plot(z, use_V)
-ax1.set_ylim(np.min(use_V), 0)
-ax1.set_title("Internal Load diagram")
-ax1.set(ylabel=r'$\bar{V}$ [N]')
-ax1.grid(True)
-ax1.axhline(0, color='black', lw=1.2)
-ax2.plot(z, use_M)
-ax2.set_title("Bending Moment diagram")
-ax2.set(xlabel=r'$z$ [m]', ylabel=r'$\bar{M}$ [N/m]')
-ax2.grid(True)
-ax2.axhline(0, color='black', lw=1.2)
-fig1.savefig("Loading_diagrams")
 
-fig2, (ax3, ax4) = plt.subplots(1, 2, sharey=True)
-ax3.plot(use_sigma_z[0], x)
-ax3.plot(np.ones(np.size(x)) * use_material.sigma_t, x, '-.r')
-ax3.plot(-np.ones(np.size(x)) * use_material.sigma_t, x, '-.r', label='line1')
-ax3.set_title("Bending stress")
-ax3.set(xlabel=r'$\bar{\sigma}_x$ [Pa]', ylabel="x [m]")
-ax3.grid(True)
-ax3.axhline(0, color='black', lw=1.2)
-ax4.plot(shear_beam(use_beam, use_loadcase)[0], x)
-ax4.plot(np.ones(np.size(x)) * use_material.tau / 1.25, x, '-.r')
-ax4.plot(-np.ones(np.size(x)) * use_material.tau / 1.25, x, '-.r')
-ax4.set_title("Shear stress")
-ax4.set(xlabel=r'$\bar{\tau}$ [Pa]')
-ax4.grid(True)
-ax4.axhline(0, color='black', lw=1.2)
-fig2.savefig("Stress_diagrams")
-plt.show()
