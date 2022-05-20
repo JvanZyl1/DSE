@@ -7,7 +7,7 @@ yline(0)
 title("Load factor under control maneuver.")
 xlabel("Time [s]")
 ylabel("g's")
-legend(["X", "Y", "Z"])
+legend
 
 subplot(1,3,2)
 plot(out.r.data, out.r.time)
