@@ -30,7 +30,7 @@ imu.Gyroscope.AccelerationBias = 0.3;
 %acc(:,1) = 1;
 [~, gyroData] = imu(acc, angvel);
 
-
+g
 % Plot simulated signal
 figure
 plot(t, angvel(:,1), '--', t, gyroData(:,1))
