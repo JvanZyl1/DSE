@@ -50,7 +50,8 @@ def BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, P_cont, n
     E_total = (E_TO + E_CR + E_cont) / 3600               # total energy needed in [Wh]
     W_bat = (E_total / eta_E) / nu_discharge
     Wts = np.array([["Battery Weight", W_bat]], dtype=object)
-    return W_bat, Wts, E_total
+    V_bat = E_total / bat_vol_dens
+    return W_bat, Wts, E_total, V_bat
 
 ### Mass estimation methods for wing-equipped aircraft
 # Taken from Torenbeek chapter 8.
@@ -200,6 +201,9 @@ def AvionicsMassFun(W_MTOW):
     W_av = 18.1 + 0.008 * W_MTOW
     return W_av
 
+def BeamsMassFun(T, P_TOL, N_prop, R_prop, B_prop):
+    beam_load = T / N_prop - BladeMassFun(N_prop, R_prop, B_prop, P_TOL) - EngineMassFun(P_TOL, N_prop)
+
 def PropGroupMassFun(N_prop, R_prop, B_prop, P_TOL):
     '''
     This function gives the weight of the whole propulsion group
@@ -238,15 +242,15 @@ def FuselageGroupMassFun(W_MTOW, W_PL, l_t, V_cr, D, l, S_nac, N_nac):
             ["Landing Gear Weight", W_lg], ["Nacelles Weight", W_nac], ["Avionics Weight", W_av]], dtype=object)
     return W_fg, Wts
 
-def TailplaneGroupFun(W_MTOW, S_h, t_rh, t_rv, Lambda_v, A_v, A_h):
-    '''
-    This functions returns the weight of the tailplane group
-    '''
-    W_ht = HorTailPlaneMassFun(W_MTOW, S_h, A_h, t_rh)
-    W_vt = VertTailPlaneMassFun(W_MTOW, S_v, A_v, Lambda_v, t_rv)
-    W_tg = W_ht + W_vt
-    Wts = np.array([["Vertical Tail Weight", W_vt], ["Horizontal Tail Weight", W_ht]], dtype = object)
-    return W_tg, Wts
+#def TailplaneGroupFun(W_MTOW, S_h, t_rh, t_rv, Lambda_v, A_v, A_h):
+#    '''
+#    This functions returns the weight of the tailplane group
+#    '''
+#    W_ht = HorTailPlaneMassFun(W_MTOW, S_h, A_h, t_rh)
+#    W_vt = VertTailPlaneMassFun(W_MTOW, S_v, A_v, Lambda_v, t_rv)
+#    W_tg = W_ht + W_vt
+#    Wts = np.array([["Vertical Tail Weight", W_vt], ["Horizontal Tail Weight", W_ht]], dtype = object)
+#    return W_tg, Wts
 
 def control_group_mass(N_cont, R_cont, B_cont, P_cont):
     W_cb = BladeMassFun(N_cont, R_cont, B_cont, P_cont)

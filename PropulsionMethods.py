@@ -23,7 +23,7 @@ def MOI_prop(R_prop, B_prop):
     I = (1/3) * rotormass * R_prop*R_prop * B_prop
     return I
 
-def reaction_time(omega, R_prop, B_prop):  # Assuming EMRAX 268 motor
+def reaction_time(omega, R_prop, B_prop, torque):  # Assuming EMRAX 268 motor
     t_react = abs(omega) * MOI_prop(R_prop,B_prop) / torque
     return t_react
 
@@ -32,7 +32,7 @@ def in_plane_rotors(R_cont, N_cont, F_gust=500):
     T_cont = F_gust / N_cont  # Thrust required per control propeller
     P_cont = power_from_thrust(T_cont, R_cont)  # Power required per control propeller
     omega = (omega_max - omega_prop) / (max_power - av_power) * P_cont  # Required angular velocity of control propeller
-    t_react = reaction_time(omega, R_cont,B_cont)
+    t_react = reaction_time(omega, R_cont,B_cont, torque)
     P_total = power_from_thrust(MTOW * g, R_prop) + P_cont * N_cont
     W_e = (P_cont / PowWtRat) / N_cont
     k_p = 0.124
@@ -40,17 +40,15 @@ def in_plane_rotors(R_cont, N_cont, F_gust=500):
     P_hp = P_cont * 0.00134102 / N_cont  # Assumed take-off power per engine [hp], change later !!!
     W_blades = k_p * N_prop * (D_prop * P_hp * np.sqrt(B_cont)) ** 0.78174
     Mass = W_e + W_blades
-    Ang_acc = omega / reaction_time(omega,R_cont, B_cont)
-    Torque_req = Mass * R_cont**2 * Ang_acc
-    t_react = reaction_time(omega, R_cont, B_prop)
+    t_react = reaction_time(omega, R_cont, B_prop, torque)
+    Ang_acc = omega / reaction_time(omega,R_cont, B_cont, torque)
 
     P_total = power_from_thrust(MTOW * g, R_prop, N_prop) + P_cont
 
     chars = np.array([["PROP RADIUS = ", R_cont, "m"],
                       ["Control power: ", P_cont/1000, "kW"],
                       ["Total power: ", P_total/1000, "kW"],
-                      ["Reaction time: ", t_react, "s"],
-                      ["Torque required: ", Torque_req, "Nm"]])
+                      ["Reaction time: ", t_react, "s"]])
 
     return P_cont, P_total, t_react, omega, chars, W_blades
 

@@ -90,7 +90,6 @@ def PowerReq(MTOW,N_prop,R_prop,V_cr, V_TO):
     K_TO = 1.5     #safety factor takeoff
     T_TOL = K_TO * T
     P_TOL = (((T_TOL * V_TO)/2) * (np.sqrt(1+(2 * T_TOL)/(rho * V_TO**2 * disk_area))))/eta_final
-    # P_TOL = P_TOL / np.cos(20*np.pi/180)  # For pretilted rotors
     return P_cruise, P_TOL
 
 

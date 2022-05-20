@@ -7,7 +7,7 @@ from inputs import *
 for N_prop in [10]:
 
     R_prop = np.sqrt(A_disk / N_prop / np.pi)
-
+    print("A_disk = ", A_disk)
     n_iter = 10
     for i in range(n_iter):
 
@@ -19,16 +19,17 @@ for N_prop in [10]:
         F_side_avg = 0.5 * 0.6 * rho * V_wind_avg**2 * l * h
         P_cont_avg = power_from_thrust(F_side_avg, R_cont, N_cont)
         P_cont_max = power_from_thrust(F_side_max, R_cont, N_cont)
-        print(P_cont_max, MTOW)
 
         # Weight estimation
-        BatWt, BatWts, E_total = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, P_cont_avg, nu_discharge)
+        BatWt, BatWts, E_total, V_bat = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, P_TOL, P_cruise, P_cont_avg, nu_discharge)
         PropWt, PropWts = PropGroupMassFun(N_prop, R_prop, B_prop, P_TOL)
         FuseWt, FuseWts = FuselageGroupMassFun(MTOW, W_PL, l_t, V_cr, D, l, S_nac, N_nac)
         ContWt, ContWts = control_group_mass(N_cont, R_cont, B_cont, P_cont_max)
         Weights = np.vstack((BatWts, PropWts, FuseWts, ContWts))
-        MTOW = np.sum([PropWt, FuseWt, BatWt, ContWt, W_PL])
+        W_beams = kg_per_m_beam * ((1 * 4 + 0.6 * 2) + (2 * 2 + 1 * 2))
+        MTOW = np.sum([PropWt, FuseWt, BatWt, ContWt, W_PL, W_beams])
 
+    print("Battery volume: ", V_bat)
     print("Battery weight: ", BatWt)
     print("MTOW: ", MTOW)
     print("Required energy: ", E_total)
