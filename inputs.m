@@ -6,7 +6,7 @@ eta_battery = 0.95 ;
 eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer ;
 eta_E = 200      ;   % energy density of the battery in [Wh/kg] 
 nu_discharge = 0.8 ;  % discharge ratio of the battery for optimal lifetime
-PowWtRat = 7732    ; % power to weight ratio for the motor [W/kg]
+PowWtRat = 5000    ; % power to weight ratio for the motor [W/kg]
 g = 9.81          ;  % gravitional acceleration [m/s2]
 
 
@@ -20,8 +20,8 @@ R_prop_big = 1.2 ; % Propeller radius [m]
 B_prop = 2 ; % Number of blades per propeller [-]
 C_prop_big = 0.2;
 N_prop_small = 2;
-R_prop_small = 0.52;
-MTOW = 650 ; % Max take of weight [kg]
+R_prop_small = 0.;
+% MTOW = 650 ; % Max take of weight [kg]
 S_body = pi ^ 2 * l * D / 4 ; % Assume fuselage to be an ellipse of revolution and calculate its wetted area
 l_t = l ;
 S_nac = 0 ;
@@ -41,7 +41,7 @@ B_cont = 5 ;
 % Cost inputs
 yop = 2025  ;            % Year of the start of production is expected
 % CPI_now = 1.27;          % 1 dollar in 2012 (date of literature) is worth as much as 1.27 now, found in https://www.bls.gov/data/inflation_calculator.htm
-ex_rate = 0.90   ;       % Exchange rate dollar -> euro = 0.92
+ex_rate = 0.90   ;       % Exchange rate dollar -> euro = 0.90
 % cost_per_motor = 5500 ;   % €, estimate on price of an Emrax motor (used for other power estimations as well)
 N_ps = 750    ;          % Estimation of product series over 5 years
 N_psm = N_ps/(12*5) ;              % Estimation of product series over 1 month

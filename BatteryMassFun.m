@@ -1,9 +1,7 @@
-function [W_bat, E_total] = BatteryMassFun(V_cr_man, V_TO, h_TO)
+function [W_bat, E_total] = BatteryMassFun(V_cr, V_TO, h_TO, P_cruise, P_TOL, P_cont)
 inputs;
-PowerReq(MTOW,V_cr_man);
-[P_cruise,P_TOL,P_cont] = PowerReq(MTOW,V_cr_man);
 eta_E = eta_E * 1.08^(yop-2022);
-t_CR = (R + R_div) / (V_cr_man)  ;   % Calculate time in cruise + diversion
+t_CR = (R + R_div) / (V_cr)  ;   % Calculate time in cruise + diversion
 t_TO = (h_TO / V_TO) * 2   ;                  % Calculate the time spent in vertical flight
 t_cont = t_TO  ;
 % Energy required for flight phases
