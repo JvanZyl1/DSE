@@ -1,5 +1,5 @@
 function [accelData] = accelerometer(angvel, acc)
-    %% Outputs: translational acceleration
+    % Outputs: translational acceleration
     %
     % Create gyroscope sensor object
     params = accelparams 
@@ -26,9 +26,14 @@ function [accelData] = accelerometer(angvel, acc)
     imu.Accelerometer.NoiseDensity = 150 / 1000 / 1000;
     imu.Accelerometer.TemperatureBias = 50 / 1000 / 1000;
     
-    
-    imu = imuSensor('SampleRate', Fs, 'Accelerometer', params);
+  
     
     accelData = imu(acc, angvel, orient);
+    
+    accelData(:,3) = accelData(:,3) - 9.81
+
+    accelData(:,1) = accelData(:,1) * -1
+    accelData(:,2) = accelData(:,2) * -1
+    accelData(:,3) = accelData(:,3) * -1
 
 end
