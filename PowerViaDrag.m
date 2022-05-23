@@ -2,7 +2,7 @@ function [cruisepower,P0,Pi,Pp] = PowerViaDrag(V_cr_man, MTOW)
 %UNTITLED2 Summary of this function goes here
 %Detailed explanation goes here
 inputs;
-V_cr_man = V_cr;
+%V_cr_man = V_cr;
 parasite_drag();
 RC_AoAandThrust(V_cr_man, MTOW);
 % Assumed values for power estimation

@@ -23,7 +23,7 @@ y3 = [];
 p0s = [];
 pis = [];
 pps = [];
-for i = 1:250
+for i = 1:200
     V_cr_man = (i+50)/3.6;
     RC_AoAandThrust(V_cr_man, MTOW);
     [y(i)] = BatteryMassFun(V_cr_man, V_TO, h_TO);
@@ -37,7 +37,7 @@ end
 figure(1)
 plot(x,y)
 figure(2)
-plot(x,y2)
+plot(x,y2/1000)
 figure(3)
 hold on
 plot(x,y3)
