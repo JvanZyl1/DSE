@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 from STRUC_Stress import *
-
+from STRUC_Beamdesign import *
+"""
 x, y, z = axes(use_beam)
 V_x, V_y = v_beam(use_beam, use_loadcase)
 M_x, M_y = m_beam(use_beam, use_loadcase)
@@ -70,4 +71,5 @@ ax8.set(xlabel=r'$\bar{\tau}$ [Pa]')
 ax8.grid(True)
 ax8.axhline(0, color='black', lw=1.2)
 fig4.savefig("Stress_diagrams_yz")
-plt.show()
+"""
+

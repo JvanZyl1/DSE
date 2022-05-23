@@ -24,10 +24,10 @@ n = 6
 # Beams
 beam1 = Beam(aluminium, 1.2, 0.08, 52 / n, 0.0035)
 beam2 = Beam(aluminium, 1.4, 0.08, 52 / n, 0.0035)  # The weight, radius and thickness should be iterated and is not correct here!!!!!!
-beam3 = Beam(aluminium, 2.0, 0.08, 52 / n, 0.0035)
-beam4 = Beam(aluminium, 2.4, 0.12, 52 / n, 0.0035)
+beam3 = Beam(aluminium, 2.0, 0.20, 52 / n, 0.007)
+beam4 = Beam(aluminium, 2.4, 0.19, 52 / n, 0.007)
 beam5 = Beam(aluminium, 10, 0.08, 52 / n, 0.0035)
 # Input  beam2
 use_material = aluminium
-use_beam = beam4
+use_beam = beam3
 use_loadcase = Gust

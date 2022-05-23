@@ -37,7 +37,24 @@ def m_beam(beam, load, pos_z):
     My = M_ay - M_ay * pos_z / beam.length + load.T
     return Mx, My
 
+def stress(beam, load, material, pos_z):
+    tensile_strength = material.sigma_t
+    buckling_strength = -(pi ** 2 * material.E_modulus / (beam.K * beam.length / beam.radius) ** 2 + 1.2 * pi ** 2 * (
+            material.E_modulus / material.G_modulus))
+    M_x, M_y = m_beam(beam, load, pos_z)
+    r1 = (M_y + sqrt(M_y ** 2 + 4 * 2 * pi * beam.thickness * tensile_strength * 2*pi * load.P)) / (4*pi*beam.thickness*tensile_strength)
+    r2 = (pi**3 * material.E_modulus*2 * beam.thickness) / (-M_y*beam.K**2*beam.length**2 + 2 * pi * load.P * beam.K**2 * beam.length**2)
 
+    #print(tensile_strength, buckling_strength)
+    print(r1, r2)
+
+for i in np.arange(0, 2.1, 0.1):
+    #print(m_beam(use_beam, use_loadcase, i))
+    stress(use_beam, use_loadcase, use_material, i)
+
+
+
+"""
 # Bending stress along x- and z-axis
 def stress_beam(beam, load, pos_z):
     x, y, z = axes(beam)
@@ -99,19 +116,5 @@ def iterate_radius(beam, load, material, pos_z):
         beam.radius += 0.001
         return iterate_radius(beam, load, material, pos_z)
 
-
 iterate_radius(use_beam, use_loadcase, use_material, 0.9)
-
 """
-# Failure Modes - Tensile Strength
-
-
-# Failure Modus - Buckling
-def sigma_buckling(beam, material):
-    sigma_b = pi**2 * material.E_modulus / (beam.K * beam.length / beam.radius)**2 + 1.2 * pi **2 * (material.E_modulus/material.G_modulus)
-    return sigma_b
-"""
-
-
-class equations:
-    pass
