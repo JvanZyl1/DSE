@@ -30,18 +30,11 @@ for i = 1:250
     [x(i)] = V_cr_man*3.6;
     [y2(i),~,~] = PowerReq(MTOW,V_cr_man);
     [y3(i),~,~,~] = PowerViaDrag(V_cr_man, MTOW);
-    [~,p0s(i),~,~] = (PowerViaDrag(V_cr_man, MTOW));
-    [~,~,pis(i),~] = PowerViaDrag(V_cr_man, MTOW);
-    [~,~,~,pps(i)] = PowerViaDrag(V_cr_man, MTOW);
+    
 end
 figure(1)
 plot(x,y)
 figure(2)
 plot(x,y2)
 figure(3)
-hold on
 plot(x,y3)
-plot(x,p0s/1000)
-plot(x,pis/1000,'--')
-plot(x,pps/1000,':')
-hold off
