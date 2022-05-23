@@ -32,7 +32,18 @@ for wx = 0:0.1:pi
     for wy = 0:0.1:pi
         for wz = 0:0.1:pi
             [pid_Mx, pid_My, pid_Mz] = angular_tune(wx,wy,wz, I_mat);
-            
+            wx_l = [wx_l; wx];
+            wy_l = [wy_l; wy];
+            wz_l = [wz_l; wz];
+            Kp_x = [Kp_x; pid_Mx(1)];
+            Ki_x = [Ki_x; pid_Mx(2)];
+            Kd_x = [Kd_x; pid_Mx(3)];
+            Kp_y = [Kp_y; pid_My(1)];
+            Ki_y = [Ki_y; pid_My(2)];
+            Kd_y = [Kd_y; pid_My(3)];
+            Kp_z = [Kp_z; pid_Mz(1)];
+            Ki_z = [Ki_z; pid_Mz(2)];
+            Kd_z = [Kd_z; pid_Mz(3)];
         end
     end
 end
