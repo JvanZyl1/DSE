@@ -18,6 +18,7 @@ V_cr = 100 / 3.6 ; % Cruise velocity [m/s]
 N_prop_big = 8 ; % Number of propellers [-]
 R_prop_big = 1.2 ; % Propeller radius [m]
 B_prop = 2 ; % Number of blades per propeller [-]
+C_prop_big = 0.2;
 N_prop_small = 2;
 R_prop_small = 0.52;
 MTOW = 650 ; % Max take of weight [kg]
@@ -34,6 +35,8 @@ S_side = pi * l * D / 4 ; % Side fuselage area (ellipse) [m^2]
 R_cont = 0.2 ;
 N_cont = 3 ;
 B_cont = 5 ;
+
+
 
 % Cost inputs
 yop = 2025  ;            % Year of the start of production is expected

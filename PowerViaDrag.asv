@@ -1,14 +1,14 @@
-function [cruisepower] = PowerViaDrag(V_cr_man, MTOW)
+function [cruisepower,P0,Pi,Pp] = PowerViaDrag(V_cr_man, MTOW)
 %UNTITLED2 Summary of this function goes here
 %Detailed explanation goes here
 inputs;
-V_cr_man
+%V_cr_man = V_cr;
 parasite_drag();
 RC_AoAandThrust(V_cr_man, MTOW);
 % Assumed values for power estimation
 
 K = 4.65  ;                                     % 4.5 in hover to 5 at mu = .5
-sigma = 0.1   ;                                 % solidity for the main rotor
+sigma = (R_prop_big * C_prop_big * B_prop)/   ;          % solidity for the main rotor
 kappa = 1.15    ;                               % induced power factor
 C_d0 = 0.008     ; % profile drag coefficient of the blade
 [alpha, ~] = RC_AoAandThrust(V_cr_man, MTOW);
@@ -35,8 +35,8 @@ C_Pp = 0.5 * mu^3 * (f/A_rotor) ;%Parisative power coefficient [-]
 Pp = C_Pp * P_fact    ;
     
 
-powers = ["Power components: " P0, Pi, Pp];
-tipspeed = ['The tip speed in m/s is: ' round(omega_prop * R_prop_big * (2 * pi / 60),2)]; 
+
+
 Preq_cruise = P0 + Pi + Pp   ; %Total power from components [W]
 cruisepower = round((Preq_cruise/1000),2);
 

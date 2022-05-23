@@ -8,7 +8,7 @@ RC_AoAandThrust(V_cr_man, MTOW);
 % Assumed values for power estimation
 
 K = 4.65  ;                                     % 4.5 in hover to 5 at mu = .5
-sigma = 0.1   ;                                 % solidity for the main rotor
+sigma = (R_prop_big * C_prop_big * B_prop)/(pi*R_prop_big^2);   % solidity for the main rotor
 kappa = 1.15    ;                               % induced power factor
 C_d0 = 0.008     ; % profile drag coefficient of the blade
 [alpha, ~] = RC_AoAandThrust(V_cr_man, MTOW);

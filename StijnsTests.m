@@ -23,8 +23,8 @@ y3 = [];
 p0s = [];
 pis = [];
 pps = [];
-for i = 1:200
-    V_cr_man = (i+50)/3.6;
+for i = 1:170
+    V_cr_man = (i+80)/3.6;
     RC_AoAandThrust(V_cr_man, MTOW);
     [y(i)] = BatteryMassFun(V_cr_man, V_TO, h_TO);
     [x(i)] = V_cr_man*3.6;
