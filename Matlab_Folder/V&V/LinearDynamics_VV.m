@@ -13,7 +13,7 @@ r_trajectory = [2;3;4];
 a_accelerometer_error = [1;2;3];
 
 
-i = 13;
+i = 14;
 if i == 1
     %Unit Test 1 : mass equal to 0
     m = 0;
@@ -75,7 +75,7 @@ elseif i == 12
     error("Unit Test 12 passed.")
     sim('LinearDynamics_V',10)
 elseif i == 13
-    %System Test 13 : increasing force
+    %Module Test 1 : increasing force
     sim('LinearDynamics_V', 10)
     subplot(2,2,1)
     plot(ans.F1);
@@ -101,4 +101,14 @@ elseif i == 13
     xlabel('t [s]', 'fontsize', 16);
     ylabel('r [m]', 'fontsize', 16);
     title('Time vs Position', 'fontsize', 16);
+elseif i == 14
+    %Subsystem Test 1 : PID controlled
+    r_trajectory = [5;4;3];
+    sim('LinearDynamics_V', 50);
+    plot(ans.r)
+    set(gca,'FontSize',16)
+    xlabel('t [s]', 'fontsize', 16);
+    ylabel('r [m]', 'fontsize', 16);
+    title('Time vs Deviation', 'fontsize', 16);
+    legend('x = 5', 'y = 4', 'z = 3')
 end
