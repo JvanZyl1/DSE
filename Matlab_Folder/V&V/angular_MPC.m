@@ -1,4 +1,4 @@
-function pid_Mx  = angular_MPC(wx_0, wy_0, wz_0, I_mat)
+function [MPC]  = angular_MPC(wx_0, wy_0, wz_0, I_mat)
 %% Load inertias
 %Inertia; %A file containing the inertia values, matrix and inverse
 I_xx = I_mat(1,1);
@@ -54,14 +54,11 @@ D = zeros(3);
 %% Make system
 
 sys = ss(A_mat,B_mat,C,D);
-trans_func = tf(sys);
+Plant = tf(sys);
 
-pid_Mx = pidtune(trans_func(1,1), 'PID');
-pid_Mx = [pid_Mx.Kp, pid_Mx.Ki, pid_Mx.Kd];
-
-pid_My = pidtune(trans_func(2,2), 'PID');
-pid_My = [pid_My.Kp, pid_My.Ki, pid_My.Kd];
-
-pid_Mz = pidtune(trans_func(3,3), 'PID');
-pid_Mz = [pid_Mz.Kp, pid_Mz.Ki, pid_Mz.Kd];
+MV = struct('Min',-1,'Max',1);
+Ts = 0.1
+p = 20;
+m = 3;
+MPC = mpc(Plant,Ts,p,m,[],MV);
 end
