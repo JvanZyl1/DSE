@@ -9,7 +9,7 @@ RC_AoAandThrust(V_cr_man, MTOW);
 
 K = 4.65  ;                                     % 4.5 in hover to 5 at mu = .5
 sigma = (R_prop_big * C_prop_big * B_prop)/(pi*R_prop_big^2);   % solidity for the main rotor
-kappa = 1.15    ;                               % induced power factor
+kappa = 1.2    ;                               % induced power factor
 C_d0 = 0.008     ; % profile drag coefficient of the blade
 [alpha, ~] = RC_AoAandThrust(V_cr_man, MTOW);
 alpha_TPP = alpha     ;  % angle of attack in cruise [deg]
@@ -38,6 +38,6 @@ Pp = C_Pp * P_fact    ;
 
 
 Preq_cruise = P0 + Pi + Pp   ; %Total power from components [W]
-cruisepower = round((Preq_cruise/1000),2);
+cruisepower = Preq_cruise/1000;
 
 end

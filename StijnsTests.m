@@ -16,23 +16,25 @@ parasite_drag();
 %P_cr = P_CR/1000
 %[W_bat, ~] = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, nu_discharge)
 x = [];
-y = [];
-x2 = [];
-y2 = [];
-y3 = [];
-p0s = [];
-pis = [];
-pps = [];
+y = [];     %battery weight midterm method (not necessarily wrong)
+y2 = [];    %Power required for cruise midterm method
+y3 = [];    %Power required drag method
+p0s = [];   %Parasite power
+pis = [];   %Induced power
+pps = [];   %Profile drag (profile and parasite might be switched)
+y4 = [];    %battery weight using new power required method (with drags) 
 for i = 1:170
     V_cr_man = (i+80)/3.6;
     RC_AoAandThrust(V_cr_man, MTOW);
-    [y(i)] = BatteryMassFun(V_cr_man, V_TO, h_TO);
+    [y(i),~] = BatteryMassFun(V_cr_man, V_TO, h_TO);
     [x(i)] = V_cr_man*3.6;
     [y2(i),~,~] = PowerReq(MTOW,V_cr_man);
     [y3(i),~,~,~] = PowerViaDrag(V_cr_man, MTOW);
     [~,p0s(i),~,~] = (PowerViaDrag(V_cr_man, MTOW));
     [~,~,pis(i),~] = PowerViaDrag(V_cr_man, MTOW);
     [~,~,~,pps(i)] = PowerViaDrag(V_cr_man, MTOW);
+    [y4(1),~] = BatteryMassViaDrag(V_cr_man, V_TO, h_TO);
+    y4
 end
 figure(1)
 plot(x,y)
@@ -45,3 +47,5 @@ plot(x,p0s/1000)
 plot(x,pis/1000,'--')
 plot(x,pps/1000,':')
 hold off
+figure(4)
+plot(x,y4)
