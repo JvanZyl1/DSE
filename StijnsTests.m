@@ -33,11 +33,11 @@ for i = 1:170
     [~,p0s(i),~,~] = (PowerViaDrag(V_cr_man, MTOW));
     [~,~,pis(i),~] = PowerViaDrag(V_cr_man, MTOW);
     [~,~,~,pps(i)] = PowerViaDrag(V_cr_man, MTOW);
-    [y4(1),~] = BatteryMassViaDrag(V_cr_man, V_TO, h_TO);
-    y4
+    [y4(i),~] = BatteryMassViaDrag(V_cr_man, V_TO, h_TO);
+    
 end
 figure(1)
-plot(x,y)
+plot(x,y,x,y4,'--')
 figure(2)
 plot(x,y2/1000)
 figure(3)
@@ -47,5 +47,3 @@ plot(x,p0s/1000)
 plot(x,pis/1000,'--')
 plot(x,pps/1000,':')
 hold off
-figure(4)
-plot(x,y4)
