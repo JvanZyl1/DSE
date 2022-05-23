@@ -8,8 +8,8 @@ RC_AoAandThrust(V_cr_man, MTOW);
 % Assumed values for power estimation
 
 K = 4.65  ;                                     % 4.5 in hover to 5 at mu = .5
-sigma = (R_prop_big * C_prop_big * B_prop)/   ;          % solidity for the main rotor
-kappa = 1.15    ;                               % induced power factor
+sigma = (R_prop_big * C_prop_big * B_prop)/(pi*R_prop_big^2);   % solidity for the main rotor
+kappa = 1.2    ;                               % induced power factor
 C_d0 = 0.008     ; % profile drag coefficient of the blade
 [alpha, ~] = RC_AoAandThrust(V_cr_man, MTOW);
 alpha_TPP = alpha     ;  % angle of attack in cruise [deg]
@@ -18,7 +18,7 @@ f = D_q_tot_x        ;                            % equivalent area estimated fr
 A_rotor = R_prop_big^2 * pi * N_prop_big + R_prop_small^2 * pi * N_prop_small   ;        % rotor area in [m2]
 mu = (V_cr_man * cos(deg2rad(alpha_TPP))) / (omega_prop * R_prop_big)   ; % advance ratio [~]
 % Calculate the dimensionalizing factor
-P_fact = rho * A_rotor * (R_prop_big*omega_prop)^3   ;
+P_fact = 0.5 rho * A_rotor * (R_prop_big*omega_prop)^3   ;
 %    % Caculate the thrust coefficient
 C_T = (MTOW * g / cos(deg2rad(alpha_TPP)) ) / (rho * (R_prop_big * omega_prop)^2 * A_rotor)   ;
 
@@ -38,6 +38,6 @@ Pp = C_Pp * P_fact    ;
 
 
 Preq_cruise = P0 + Pi + Pp   ; %Total power from components [W]
-cruisepower = round((Preq_cruise/1000),2);
+cruisepower = Preq_cruise/1000;
 
 end

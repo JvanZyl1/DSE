@@ -38,6 +38,8 @@ for i = 1:170
 end
 figure(1)
 plot(x,y,x,y4,'--')
+xlabel('Cruise speed [km/hr]')
+ylabel('Battery weight [kg]')
 figure(2)
 plot(x,y2/1000)
 figure(3)
