@@ -10,15 +10,16 @@ class VTOL:
 
 class Beam(VTOL):
     K = 8
+    n = 0
     def __init__(self, material, length, radius, weight_engine, thickness):
         self.weight = material.density*radius * 2 * pi * length * thickness
         self.length = length
         self.radius = radius
-        self.weight_engine = weight_engine * 9.81
         self.thickness = thickness
         self.Ixx = thickness * radius ** 3
         self.Iyy = thickness * radius ** 3
-
+        Beam.n += 1
+        self.weight_engine = weight_engine * 9.81
 
 class Fuselage(VTOL):
     pass
