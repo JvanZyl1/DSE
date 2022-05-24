@@ -8,19 +8,19 @@ RC_AoAandThrust(V_cr_man, MTOW);
 % Assumed values for power estimation
 
 K = 4.65  ;                                     % 4.5 in hover to 5 at mu = .5
-sigma = (R_prop_big * C_prop_big * B_prop)/(pi*R_prop_big^2);   % solidity for the main rotor
+sigma = (R_prop * C_prop * B_prop)/(pi*R_prop^2);   % solidity for the main rotor
 kappa = 1.2    ;                               % induced power factor
 C_d0 = 0.008     ; % profile drag coefficient of the blade
 [alpha, ~] = RC_AoAandThrust(V_cr_man, MTOW);
 alpha_TPP = alpha     ;  % angle of attack in cruise [deg]
 [~ , D_q_tot_x] = parasite_drag() ;
 f = D_q_tot_x        ;                            % equivalent area estimated from reference A/C [m2]
-A_rotor = R_prop_big^2 * pi * N_prop_big   ;        % rotor area in [m2]
-mu = (V_cr_man * cos(deg2rad(alpha_TPP))) / (omega_prop * R_prop_big)   ; % advance ratio [~]
+A_rotor = R_prop^2 * pi * N_prop   ;        % rotor area in [m2]
+mu = (V_cr_man * cos(deg2rad(alpha_TPP))) / (omega_prop * R_prop)   ; % advance ratio [~]
 % Calculate the dimensionalizing factor
-P_fact =  rho * A_rotor * (R_prop_big*omega_prop)^3   ;
+P_fact =  rho * A_rotor * (R_prop*omega_prop)^3   ;
 %    % Caculate the thrust coefficient
-C_T = (MTOW * g / cos(deg2rad(alpha_TPP)) ) / (rho * (R_prop_big * omega_prop)^2 * A_rotor)   ;
+C_T = (MTOW * g / cos(deg2rad(alpha_TPP)) ) / (rho * (R_prop * omega_prop)^2 * A_rotor)   ;
 
 C_P0 = sigma * C_d0 * (1 + (K * mu^2)) / 8     ;
 P0 = C_P0 * P_fact       ;

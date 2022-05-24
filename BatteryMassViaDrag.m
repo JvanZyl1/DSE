@@ -1,4 +1,4 @@
-function [W_bat, E_total] = BatteryMassViaDrag(V_cr_man, V_TO, h_TO)
+function [W_bat, E_total] = BatteryMassViaDrag(V_cr_man,MTOW)
 
 inputs;
 %V_cr_man = V_cr;
