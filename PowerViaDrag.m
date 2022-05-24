@@ -3,6 +3,7 @@ function [cruisepower,P0,Pi,Pp] = PowerViaDrag(V_cr_man, MTOW)
 %Detailed explanation goes here
 inputs;
 %V_cr_man = V_cr;
+%MTOW = 650;
 parasite_drag();
 RC_AoAandThrust(V_cr_man, MTOW);
 % Assumed values for power estimation
@@ -35,7 +36,7 @@ C_Pp = 0.5 * mu^3 * (f/A_rotor) ;%Parisative power coefficient [-]
 Pp = C_Pp * P_fact    ;
     
 
-
+mu
 
 Preq_cruise = P0 + Pi + Pp   ; %Total power from components [W]
 cruisepower = Preq_cruise/1000;
