@@ -1,4 +1,4 @@
-function [W_pg] = propulsiongroup_mass(N_prop, R_prop, B_prop, P_TOL)
+function [W_pg] = propulsiongroup_mass(P_TOL)
 inputs;
 % Global PowWtRat
 %disp([PowWtRat, P_TOL, N_prop])

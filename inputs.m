@@ -17,7 +17,7 @@ N_prop = 8 ; % Number of propellers [-]
 R_prop = 1.2 ; % Propeller radius [m]
 A_disk = R_prop^2 * pi * N_prop;
 B_prop = 2 ; % Number of blades per propeller [-]
-C_prop_big = 0.2;
+C_prop = 0.2;
 % MTOW = 650 ; % Max take of weight [kg]
 S_body = pi ^ 2 * l * D / 4 ; % Assume fuselage to be an ellipse of revolution and calculate its wetted area
 l_t = l ;
@@ -59,5 +59,5 @@ rho = 1.225        ; % air density in [kg/m3]
 n_ult = 2           ;% ultimate load factor
 
 % Wind speed
-V_wind_avg = 20.7  ; %[m/s], average wind speed at 8 beaufort
+V_wind_avg = 21  ; %[m/s], average wind speed at 8 beaufort
 dist_force = 500   ; %[N], force expected to be experienced by side gusts

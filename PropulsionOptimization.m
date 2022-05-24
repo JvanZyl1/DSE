@@ -16,10 +16,10 @@ for i=1:n_iter
     P_cont_max = power_from_thrust(dist_force, R_cont, N_cont);
     
     % Weight estimation
-    [BatWt, E_total] = BatteryMassFun(V_cr, V_TO, h_TO, P_cruise, P_TOL, P_cont_avg);
-    [PropWt] = propulsiongroup_mass(N_prop, R_prop, B_prop, P_TOL);
+    [BatWt, E_total] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
+    [PropWt] = propulsiongroup_mass(P_TOL);
     [FuseWt] = fuselagegroup_mass(MTOW, V_cr);
-    [ContWt, ~, ~] = controlgroup_mass(N_cont, R_cont, B_cont, P_cont_max);
+    [ContWt, ~, ~] = controlgroup_mass(P_cont_max);
     W_beams = 40;  % TODO
     MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
 end

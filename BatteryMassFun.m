@@ -1,4 +1,4 @@
-function [W_bat, E_total] = BatteryMassFun(V_cr, V_TO, h_TO, P_cruise, P_TOL, P_cont)
+function [W_bat, E_total] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
 inputs;
 eta_E = eta_E * 1.08^(yop-2022);
 t_CR = (R + R_div) / (V_cr)  ;   % Calculate time in cruise + diversion
