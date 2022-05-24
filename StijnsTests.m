@@ -30,15 +30,12 @@ for i = 1:170
     [y(i),~] = BatteryMassFun(V_cr_man, P_cruise, P_TOL, P_cont);
     [x(i)] = V_cr_man*3.6;
     [y2(i),~,~] = PowerReq(MTOW,V_cr_man);
-    [y3(i),~,~,~] = PowerViaDrag(V_cr_man, MTOW);
-    [~,p0s(i),~,~] = (PowerViaDrag(V_cr_man, MTOW));
-    [~,~,pis(i),~] = PowerViaDrag(V_cr_man, MTOW);
-    [~,~,~,pps(i)] = PowerViaDrag(V_cr_man, MTOW);
+    [y3(i),p0s(i),pis(i),pps(i)] = PowerViaDrag(V_cr_man, MTOW);
     [y4(i),~] = BatteryMassViaDrag(V_cr_man, MTOW);
     
 end
 figure(1)
-plot(x,y4)
+plot(x,y,x,y4,'--')
 xlabel('Cruise speed [km/hr]')
 ylabel('Battery weight [kg]')
 figure(2)

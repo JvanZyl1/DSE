@@ -16,7 +16,7 @@ C_d0 = 0.008     ; % profile drag coefficient of the blade
 alpha_TPP = alpha     ;  % angle of attack in cruise [deg]
 [~ , D_q_tot_x] = parasite_drag() ;
 f = D_q_tot_x        ;                            % equivalent area estimated from reference A/C [m2]
-A_rotor = R_prop^2 * pi * N_prop   ;        % rotor area in [m2]
+A_rotor = A_disk   ;        % rotor area in [m2]
 mu = (V_cr_man * cos(deg2rad(alpha_TPP))) / (omega_prop * R_prop)   ; % advance ratio [~]
 % Calculate the dimensionalizing factor
 P_fact =  rho * A_rotor * (R_prop*omega_prop)^3   ;
