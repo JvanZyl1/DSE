@@ -19,3 +19,5 @@ I_zz = 2;
 I_mat = [I_xx I_xy I_xz;
     I_yx I_yy I_yz;
     I_zx I_zy I_zz];
+
+[A,B,C,D,U,Y,X,DX] = temp_func(2,2,2,I_mat, [10;20;15], [2;2;2])
