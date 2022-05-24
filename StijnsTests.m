@@ -5,7 +5,7 @@ clc
 %global l_pyl R_pyl N_prop D
 
 inputs;
-
+MTOW = 700;
 
 parasite_drag();
 
@@ -26,7 +26,7 @@ y4 = [];    %battery weight using new power required method (with drags)
 for i = 1:170
     V_cr_man = (i+80)/3.6;
     RC_AoAandThrust(V_cr_man, MTOW);
-    [y(i),~] = BatteryMassFun(V_cr_man, V_TO, h_TO);
+    [y(i),~] = BatteryMassFun(V_cr_man, V_TO, h_TO,P_cruise, P_TOL, P_cont);
     [x(i)] = V_cr_man*3.6;
     [y2(i),~,~] = PowerReq(MTOW,V_cr_man);
     [y3(i),~,~,~] = PowerViaDrag(V_cr_man, MTOW);
