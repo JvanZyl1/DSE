@@ -36,7 +36,6 @@ C_Pp = 0.5 * mu^3 * (f/A_rotor) ;%Parisative power coefficient [-]
 Pp = C_Pp * P_fact    ;
     
 
-mu
 
 Preq_cruise = P0 + Pi + Pp   ; %Total power from components [W]
 cruisepower = Preq_cruise/1000;

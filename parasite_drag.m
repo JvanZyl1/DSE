@@ -11,7 +11,7 @@ S_pylon = l_pyl * 2*pi *R_pyl*(N_prop); % Estimated pylon wet area [m^2]
 
 %Own design estimated from above parameters
 S_fus = pi*D^2/4 ;%Fuselage cross-sectional area [m^2]
-S_disk = R_prop^2 * pi * N_prop   ;%Rotor disk area [m^2]
+S_disk = A_disk   ;%Rotor disk area [m^2]
 % Parasite CDA
 D_q_tot_x = (CD_fus*S_fus + CD_rot*S_disk + (N_prop)*CD_pyl*S_pylon + D_q_landinggear);
 % Assume that the reference area is the fuselage crosssectional area

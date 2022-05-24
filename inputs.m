@@ -47,7 +47,7 @@ N_proto = 5       ;      % Estimation of number of prototypes created for testin
 % Motor inputs
 av_power = 20000 ;
 max_power = 60000 ; % W
-omega_prop = 2000 * 2 * pi / 60 ; % Rotational velocity of propeller [rad/s]
+omega_prop = 1500 * 2 * pi / 60 ; % Rotational velocity of propeller [rad/s]
 omega_max = 6500 * 2 * pi / 60  ;
 
 % Mission profile characteristics
