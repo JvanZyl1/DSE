@@ -1,15 +1,16 @@
 function [P_cruise,P_TOL,P_cont] = PowerReq(MTOW, V_cr_man)
 %disp(V_cr_man)
 inputs;
-
-%global  g rho V_TO eta_final 
+%MTOW = 650;
+%V_cr_man = V_cr;
 %required power for cruise and for takeoff
 T = (MTOW * g) * 1.1;
 %[CD0, D_q_tot_x] = parasite_drag()   ;
-Cruise_ang_rad = RC_AoAandThrust(V_cr_man, MTOW) ;
-tilt_cruise = Cruise_ang_rad(1)*180/pi  ;     %angle of tilt during cruise in degree
+[Cruise_ang_rad,~] = RC_AoAandThrust(V_cr_man, MTOW) ;
+%tilt_cruise = Cruise_ang_rad(1)*180/pi  ;%angle of tilt during cruise in degree
+%tilt_cruise
 kappa = 1.2   ;    %correction factor for extra power losses, value taken from literature
-V_perp = (V_cr_man * sin(tilt_cruise * (pi/180))) ;     %perpendicular to rotor plane free stream velocity in [m/s]
+V_perp = (V_cr_man * sin(Cruise_ang_rad)) ;     %perpendicular to rotor plane free stream velocity in [m/s]
 %v_i = sqrt((T/A_disk) * (1/(2 * rho)))     ;      %nduced velocity during hover
 P = T*V_perp + kappa * T * (-V_perp/2 + sqrt(V_perp^2 / 4 + T/(2 * rho * A_disk))) ;
 P_cruise = P / eta_final   ;
