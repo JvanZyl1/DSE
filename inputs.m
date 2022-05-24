@@ -12,11 +12,11 @@ g = 9.81          ;  % gravitional acceleration [m/s2]
 
 l = 2.1 ;
 D = 1.0 ;
-V_cr = 100 / 3.6 ; % Cruise velocity [m/s]
+V_cr = 200 / 3.6 ; % Cruise velocity [m/s]
 N_prop = 8 ; % Number of propellers [-]
 R_prop = 1.2 ; % Propeller radius [m]
 A_disk = R_prop^2 * pi * N_prop;
-B_prop = 2 ; % Number of blades per propeller [-]
+B_prop = 4 ; % Number of blades per propeller [-]
 C_prop = 0.2;
 % MTOW = 650 ; % Max take of weight [kg]
 S_body = pi ^ 2 * l * D / 4 ; % Assume fuselage to be an ellipse of revolution and calculate its wetted area

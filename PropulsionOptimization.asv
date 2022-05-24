@@ -7,7 +7,7 @@ clc
 inputs;
 MTOW = 700;  % kg
 
-n_iter = 10;
+n_iter = 100;
 for i=1:n_iter
     % Thrust power estimation
     [P_cruise, P_TOL, P_cont_avg] = PowerReq(MTOW, V_cr);
@@ -23,8 +23,6 @@ for i=1:n_iter
     W_beams = 60;  % TODO
     MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
 end
-
-
 
 
 fprintf('Battery weight: %f \n',BatWt)
