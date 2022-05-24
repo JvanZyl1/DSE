@@ -13,8 +13,8 @@ g = 9.81          ;  % gravitional acceleration [m/s2]
 l = 2.1 ;
 D = 1.0 ;
 V_cr = 100 / 3.6 ; % Cruise velocity [m/s]
-N_prop = 8 ; % Number of propellers [-]
-R_prop = 1.2 ; % Propeller radius [m]
+N_prop_big = 8 ; % Number of propellers [-]
+R_prop_big = 1.2 ; % Propeller radius [m]
 A_disk = R_prop^2 * pi * N_prop;
 B_prop = 2 ; % Number of blades per propeller [-]
 C_prop_big = 0.2;
@@ -32,6 +32,7 @@ S_side = pi * l * D / 4 ; % Side fuselage area (ellipse) [m^2]
 R_cont = 0.2 ;
 N_cont = 3 ;
 B_cont = 5 ;
+
 A_disk_cont = R_cont^2 * pi * N_cont;
 
 

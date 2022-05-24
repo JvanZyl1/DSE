@@ -1,4 +1,4 @@
-function [P_cruise,P_TOL,P_cont] = PowerReq(MTOW, V_cr, A_disk, A_disk_cont)
+function [P_cruise,P_TOL,P_cont] = PowerReq(MTOW, V_cr)
 %disp(V_cr)
 inputs;
 
