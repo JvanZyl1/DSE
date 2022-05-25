@@ -8,6 +8,7 @@ eta_E = 200      ;   % energy density of the battery in [Wh/kg]
 nu_discharge = 0.8 ;  % discharge ratio of the battery for optimal lifetime
 PowWtRat = 5000    ; % power to weight ratio for the motor [W/kg]
 g = 9.81          ;  % gravitional acceleration [m/s2]
+redundancy_factor = 0.75   ; %here because of shitty requirement
 
 
 l = 2.1 ;

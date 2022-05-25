@@ -37,7 +37,7 @@ Pp = C_Pp * P_fact    ;
     
 
 
-Preq_cruise = P0 + Pi + Pp   ; %Total power from components [W]
+Preq_cruise = (P0 + Pi + Pp)/redundancy_factor   ; %Total power from components [W]
 cruisepower = Preq_cruise/1000;
 
 end
