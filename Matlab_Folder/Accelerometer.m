@@ -13,6 +13,7 @@ t = (0:(1/Fs):((N-1)/Fs)).';
 acc = zeros(N, 3);          %Input accelerations
 orient = quaternion.ones(N, 1);
 angvel = zeros(N, 3);
+acc(:,1) = 8*sin(2*pi*Fc*t);
 
 % Generate acceleration data
 imu = imuSensor('SampleRate', Fs, 'Accelerometer', params);
@@ -20,18 +21,19 @@ imu.Accelerometer.MeasurementRange = 10;   % Maximum acceleration accelerometer 
 imu.Accelerometer.Resolution = 1/Fs;           % Step size of digital measurements
 
 % Biases
-imu.Accelerometer.BiasInstability = 7.5 / 1000;
-imu.Accelerometer.NoiseDensity = 150 / 1000 / 1000;
+imu.Accelerometer.BiasInstability = 150 / 1000;
+imu.Accelerometer.NoiseDensity = 300 / 1000 / 1000;
 imu.Accelerometer.TemperatureBias = 50 / 1000 / 1000;
 
 
-imu = imuSensor('SampleRate', Fs, 'Accelerometer', params);
 
 accelData = imu(acc, angvel, orient);
+accelData = accelData * -1
 
 % Plot simulated signal
 figure
-plot(t,accelData)
+plot(t, acc(:,1), t, accelData(:,1))
 xlabel('Time (s)')
 ylabel('Acceleratio (m/s^2)')
-title('Ideal Acceleration Data')
+legend('x (ground truth)', 'x (gyroscope)')
+title('Acceleration Data')
