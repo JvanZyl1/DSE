@@ -11,6 +11,6 @@ D = 0.5 * rho * V_cr_man^2* D_q_tot_x  ;
 %Equilibrium AoA ;
 alpha = atan2(D,MTOW * g)  ;
 Treq = sqrt((MTOW*g)^2 + D^2) ;
-alpha
+
 
 end

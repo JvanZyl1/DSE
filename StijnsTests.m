@@ -5,7 +5,7 @@ clc
 %global l_pyl R_pyl N_prop D
 
 inputs;
-MTOW = 650;
+MTOW = 750;
 
 parasite_drag();
 
