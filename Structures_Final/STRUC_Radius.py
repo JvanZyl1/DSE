@@ -31,6 +31,9 @@ def v_beam(beam, load, pos_z):
     return Vx, Vy
 
 
+print(v_beam(use_beam, use_loadcase, 0))
+
+
 def m_beam(beam, load, pos_z):
     M_ax = (beam.weight / 2 + beam.weight_engine / beam.n - load.L / beam.n) * beam.length
     Mx = (beam.weight + beam.weight_engine / beam.n - load.L / beam.n) * pos_z - \
@@ -42,9 +45,9 @@ def m_beam(beam, load, pos_z):
 
 def deflection(beam, load, material, pos_z):
     _, _, M_ax, M_ay = m_beam(beam, load, pos_z)
-    v = 1 / (material.E_modulus * beam.Ixx) * (
-                -M_ay / 2 * pos_z * (-load.L + beam.weight + beam.weight_engine) / 3 * pos_z ** 3 - beam.weight / (
-                    24 * beam.length) * pos_z ** 4)
+    v = 1 / (material.E_modulus * beam.Ixx) * \
+        (-M_ax / 2 * pos_z ** 2 + (-load.L/beam.n + beam.weight + beam.weight_engine/beam.n) / 6 * pos_z ** 3 -
+         beam.weight / (24 * beam.length) * pos_z ** 4)
     return v
 
 
@@ -54,8 +57,9 @@ def radius(beam, load, material, pos_z):
     M_x, M_y, _, _ = m_beam(beam, load, pos_z)
 
     # Bending in lift-direction for TENSION
-    r1 = (abs(M_x) + sqrt(M_x ** 2 + 4 * 2 * pi * beam.thickness * tensile_strength * 2 * pi * load.P)) / \
-         (4 * pi * beam.thickness * tensile_strength)
+
+    r1 = (use_loadcase.P + sqrt(abs((use_loadcase.P ** 2) + 4 * 2 * pi * beam.thickness * tensile_strength
+                                    * 2 * pi * M_x))) / (4 * pi * beam.thickness * tensile_strength)
 
     # Bending in lift-direction for COMPRESSION
     r2 = (abs(M_x * beam.length ** 2) / (beam.thickness * pi ** 2 * material.E_modulus)) ** (1 / 4)
@@ -74,21 +78,42 @@ def radius(beam, load, material, pos_z):
     r6 = (abs(V_y / (-pi * beam.thickness * material.tau))) ** (1 / 3)
 
     # print(tensile_strength, buckling_strength)
-    return max(r1, r2, r3, r4, r5, r6)
+    return r1, r2, r3, r4, r5, r6
 
 
 for iteration in range(10):
     x_plt = []
     y_plt = []
+    y_plt1 = []
+    y_plt2 = []
+    y_plt3 = []
+    y_plt4 = []
+    y_plt5 = []
+    y_plt6 = []
+
+
+
     W = 0
     dt = 0.1
     for i in np.arange(0, use_beam.length + dt, dt):
         x_plt.append(i)
-        y_plt.append(radius(use_beam, use_loadcase, use_material, i))
+        y_plt.append(max(radius(use_beam, use_loadcase, use_material, i)))
+        y_plt1.append((radius(use_beam, use_loadcase, use_material, i)[0]))
+        y_plt2.append((radius(use_beam, use_loadcase, use_material, i)[1]))
+        y_plt3.append((radius(use_beam, use_loadcase, use_material, i)[2]))
+        y_plt4.append((radius(use_beam, use_loadcase, use_material, i)[3]))
+        y_plt5.append((radius(use_beam, use_loadcase, use_material, i)[4]))
+        y_plt6.append((radius(use_beam, use_loadcase, use_material, i)[5]))
         deflection(use_beam, use_loadcase, use_material, i)
-        W += 2 * pi * radius(use_beam, use_loadcase, use_material, i) * use_beam.thickness * use_material.density*dt
+        W += 2 * pi * max(radius(use_beam, use_loadcase, use_material, i)) * use_beam.thickness * use_material.density * dt
     use_beam.weight = W
 
-#use_beam.radius = np.array(y_plt)
-#print(use_beam.radius)
-print(v_beam(use_beam, use_loadcase, 1))
+print(use_beam.weight)
+plt.plot(x_plt, y_plt)
+plt.plot(x_plt, y_plt1)
+plt.plot(x_plt, y_plt2)
+plt.plot(x_plt, y_plt3)
+plt.plot(x_plt, y_plt4)
+plt.plot(x_plt, y_plt5)
+plt.plot(x_plt, y_plt6)
+plt.show()
