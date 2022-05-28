@@ -28,5 +28,5 @@ beam8 = Beam(aluminium, 2.0, 0.20, 52, 0.0050)
 
 # Input  beam
 use_material = aluminium
-use_beam = beam3
+use_beam = beam4
 use_loadcase = Vertical_max

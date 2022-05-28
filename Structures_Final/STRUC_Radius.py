@@ -13,25 +13,11 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def axes(beam):
-    dx, dy, dz = 0.005, 0.005, 0.01
-    z_ax = np.arange(0, beam.length + dz, dz)  # Beam span Direction
-    x_ax = np.arange(-beam.radius, beam.radius, dx)  # Vertical Direction
-    y_ax = np.arange(-beam.radius, beam.radius, dy)
-    return x_ax, y_ax, z_ax
-
-
-x, y, z = axes(use_beam)
-
-
 # Internal Load Function along z-axis
 def v_beam(beam, load, pos_z):
     Vy = beam.weight + beam.weight_engine / beam.n - load.L / beam.n - beam.weight * pos_z / beam.length
     Vx = -load.D
     return Vx, Vy
-
-
-print(v_beam(use_beam, use_loadcase, 0))
 
 
 def m_beam(beam, load, pos_z):
@@ -96,24 +82,26 @@ for iteration in range(10):
     W = 0
     dt = 0.1
     for i in np.arange(0, use_beam.length + dt, dt):
+        r = radius(use_beam, use_loadcase, use_material, i)
         x_plt.append(i)
-        y_plt.append(max(radius(use_beam, use_loadcase, use_material, i)))
-        y_plt1.append((radius(use_beam, use_loadcase, use_material, i)[0]))
-        y_plt2.append((radius(use_beam, use_loadcase, use_material, i)[1]))
-        y_plt3.append((radius(use_beam, use_loadcase, use_material, i)[2]))
-        y_plt4.append((radius(use_beam, use_loadcase, use_material, i)[3]))
-        y_plt5.append((radius(use_beam, use_loadcase, use_material, i)[4]))
-        y_plt6.append((radius(use_beam, use_loadcase, use_material, i)[5]))
+        y_plt.append(max(r))
+        y_plt1.append((r[0]))
+        y_plt2.append((r[1]))
+        y_plt3.append((r[2]))
+        y_plt4.append((r[3]))
+        y_plt5.append((r[4]))
+        y_plt6.append((r[5]))
         deflection(use_beam, use_loadcase, use_material, i)
-        W += 2 * pi * max(radius(use_beam, use_loadcase, use_material, i)) * use_beam.thickness * use_material.density * dt
+        W += 2 * pi * max(r) * use_beam.thickness * use_material.density * dt
     use_beam.weight = W
 
 print(use_beam.weight)
-plt.plot(x_plt, y_plt)
+
 plt.plot(x_plt, y_plt1)
 plt.plot(x_plt, y_plt2)
 plt.plot(x_plt, y_plt3)
 plt.plot(x_plt, y_plt4)
 plt.plot(x_plt, y_plt5)
 plt.plot(x_plt, y_plt6)
+plt.plot(x_plt, y_plt, '+b')
 plt.show()
