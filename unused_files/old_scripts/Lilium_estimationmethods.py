@@ -1,7 +1,6 @@
 import numpy as np
-import MassEstimation as EM
-import PowerEstimation as PM
-from inputs import *
+from unused_files.python_scripts import MassEstimation as EM, PowerEstimation as PM
+from unused_files.python_scripts.inputs import *
 
 """
 Weight estimation and sizing of a 2-person UAM vehicle based on the Lilium Jet.

@@ -5,7 +5,8 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # Import ../Parasitedrag_Estimation_Multirotor.py
 # Import the file directly as shown, OR
-import PowerEstimation as pe
+from unused_files.python_scripts import PowerEstimation as pe
+
 
 # Here you can add the libraries you use for writing the tests
 

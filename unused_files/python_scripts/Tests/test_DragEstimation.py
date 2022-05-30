@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # Import ../Parasitedrag_Estimation_Multirotor.py
 # Import the file directly as shown
 # to import from other folder, do parent folder.(other_folder).file_name
-import DragEstimation as de
+from unused_files.python_scripts import DragEstimation as de
 
 
 class MyTestCase(unittest.TestCase):

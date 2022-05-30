@@ -1,9 +1,10 @@
 import unittest
 import numpy as np
-from inputs import *
+from unused_files.python_scripts.inputs import *
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import PropulsionMethods as pm
+from unused_files.python_scripts import PropulsionMethods as pm
+
 
 class MyTestCase(unittest.TestCase):
     '''

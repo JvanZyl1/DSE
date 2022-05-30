@@ -5,6 +5,7 @@ eta_power_transfer = 0.97 ;
 eta_battery = 0.95 ;
 eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer ;
 eta_E = 200      ;   % energy density of the battery in [Wh/kg] 
+vol_dens = 450 ;  % volumetric energy density [Wh/L]
 nu_discharge = 0.8 ;  % discharge ratio of the battery for optimal lifetime
 PowWtRat = 5000    ; % power to weight ratio for the motor [W/kg]
 g = 9.81          ;  % gravitional acceleration [m/s2]
@@ -13,7 +14,7 @@ redundancy_factor = 0.75   ; %here because of shitty requirement
 
 l = 2.1 ;
 D = 1.0 ;
-V_cr = 200 / 3.6 ; % Cruise velocity [m/s]
+V_cr = 180 / 3.6 ; % Cruise velocity [m/s]
 N_prop = 8 ; % Number of propellers [-]
 R_prop = 1.2 ; % Propeller radius [m]
 A_disk = R_prop^2 * pi * N_prop;

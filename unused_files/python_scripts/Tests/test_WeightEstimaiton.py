@@ -4,10 +4,10 @@ import numpy as np
 # Import ../Parasitedrag_Estimation_Multirotor.py
 # Import the file directly as shown, OR
 # to import from other folder, do parent folder.(other_folder).file_name
-from inputs import *
-from MassEstimation import * 
-from PowerEstimation import *
-from CostEstimation import *
+from unused_files.python_scripts.inputs import *
+from unused_files.python_scripts.MassEstimation import *
+from unused_files.python_scripts.PowerEstimation import *
+from unused_files.python_scripts.CostEstimation import *
 # Here you can add the libraries you use for writing the tests
 
 P_cruise, P_TOL = PowerReq(MTOW, N_prop, R_prop, V_cr)

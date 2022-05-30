@@ -4,7 +4,7 @@ Beam Loading and Stresses
 """
 
 from math import *
-from inputs import *
+from unused_files.python_scripts.inputs import *
 import numpy as np
 from matplotlib import pyplot as plt
 
