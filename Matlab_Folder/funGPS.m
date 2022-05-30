@@ -15,6 +15,4 @@ function [newposition] = gps(position)
     newposition(2) = position(2) + r2;
     newposition(3) = position(3) + r3;
 
-    newposition
-
 end
