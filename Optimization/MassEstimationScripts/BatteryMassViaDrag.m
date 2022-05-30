@@ -7,7 +7,8 @@ PowerViaDrag(V_cr_man, MTOW);
 [~,P_TOL,P_cont] = PowerReq(MTOW,V_cr_man);
 [P_cruise_KW,~,~,~] = PowerViaDrag(V_cr_man, MTOW);
 P_cruise = P_cruise_KW*1000;
-eta_E = eta_E * 1.08^(yop-2022);
+% eta_E = eta_E * 1.08^(yop-2022);   % Fulvio recommended NOT to do this,
+% due to expected criticism
 t_CR = (R + R_div) / (V_cr_man)  ;   % Calculate time in cruise + diversion
 t_TO = (h_TO / V_TO) * 2   ;                  % Calculate the time spent in vertical flight
 t_cont = t_TO  ;

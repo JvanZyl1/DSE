@@ -26,14 +26,10 @@ n_iter = 10;
 %end
 
 %%%%%%%%%%%% MTOW ESTIMATION with new power estimation method %%%%%%%%%%%
-for V_cr in V_cr_list
+% for V_cr in V_cr_list
 for i=1:n_iter
     % Thrust power estimation
-    [~, P_TOL, P_cont_avg] = PowerReq(MTOW, V_cr);
-    [P_cruise, ~, ~, ~] = PowerViaDrag(V_cr, MTOW);
-    P_cruise = P_cruise * 1000;
-    % Control power estimation: separate power required on a continuous basis during TOL and maximum power required during strongest gust loads
-    P_cont_max = (((dist_force * V_wind_avg) / 2) * (sqrt(1 + (2 * dist_force) / (rho * V_wind_avg^2 * A_disk_cont)))) / eta_final;
+    [P_cruise, P_TOL,P_cont_avg, P_cont_max, ~, ~, ~] = PowerReq(MTOW, V_cr);
     
     % Weight estimation
     [BatWt, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
