@@ -69,7 +69,8 @@ D_AD = zeros(6);
 
 sys = ss(A_AD, B_AD, C_AD, D_AD);
 
-
+aaa = 2;
+bbb = 3;
 
 %A = eye(3);
 %B = [1/m; 1/m; 1/m];
