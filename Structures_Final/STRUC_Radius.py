@@ -14,94 +14,111 @@ from matplotlib import pyplot as plt
 
 
 # Internal Load Function along z-axis
-def v_beam(beam, load, pos_z):
-    Vy = beam.weight + beam.weight_engine / beam.n - load.L / beam.n - beam.weight * pos_z / beam.length
-    Vx = -load.D
-    return Vx, Vy
+def radii(part, load, material):
+    # Shorter parameters:
+    t = part.thickness
+    l = part.length
+    W = part.weight
+    We = part.weight_engine
+    L = load.L * SF
+    n = part.n
+    E = material.E_modulus
+    P = load.P * SF
+    tau = material.tau
+    sigma_y = material.sigma_t
 
+    # z-axis
+    dz = 0.01
+    z = np.arange(0, part.length + dz, dz)
 
-def m_beam(beam, load, pos_z):
-    M_ax = (beam.weight / 2 + beam.weight_engine / beam.n - load.L / beam.n) * beam.length
-    Mx = (beam.weight + beam.weight_engine / beam.n - load.L / beam.n) * pos_z - \
-         beam.weight * pos_z ** 2 / (2 * beam.length) - M_ax
-    M_ay = beam.length * load.D * beam.radius * 2 * beam.length
-    My = M_ay - M_ay * pos_z / beam.length + load.T
-    return Mx, My, M_ax, M_ay
+    def v_x(pos_z):
+        Vx = -load.D
+        return Vx
 
+    def v_y(pos_z):
+        Vy = W + We / n - L / n - W * pos_z / l
+        return Vy
 
-def deflection(beam, load, material, pos_z):
-    _, _, M_ax, M_ay = m_beam(beam, load, pos_z)
-    v = 1 / (material.E_modulus * beam.Ixx) * \
-        (-M_ax / 2 * pos_z ** 2 + (-load.L/beam.n + beam.weight + beam.weight_engine/beam.n) / 6 * pos_z ** 3 -
-         beam.weight / (24 * beam.length) * pos_z ** 4)
-    return v
+    def m_x(pos_z):
+        M_ax = (W / 2 + We / n - L / n) * l
+        Mx = (W + We / n - L / n) * pos_z - \
+             W * pos_z ** 2 / (2 * l) - M_ax
+        return Mx
 
+    def m_y(pos_z):
+        M_ay = l * load.D * part.radius * 2 * L #RADIUS IS HERE!!!!!! REITERATE
+        My = M_ay - M_ay * pos_z / l + load.T
+        return My
 
-def radius(beam, load, material, pos_z):
-    tensile_strength = material.sigma_t
-    V_x, V_y = v_beam(beam, load, pos_z)
-    M_x, M_y, _, _ = m_beam(beam, load, pos_z)
+    def radii(Vx, Vy, Mx, My):
 
-    # Bending in lift-direction for TENSION
+        # Bending in lift-direction for TENSION
+        def r1():
+            r1 = (P + sqrt(abs(((P) ** 2) + 4 * 2 * pi * t * sigma_y * 2 * pi * Mx))) / (4 * pi * t * sigma_y)
+            return r1
 
-    r1 = (use_loadcase.P + sqrt(abs((use_loadcase.P ** 2) + 4 * 2 * pi * beam.thickness * tensile_strength
-                                    * 2 * pi * M_x))) / (4 * pi * beam.thickness * tensile_strength)
+        # Bending in lift-direction for COMPRESSION
+        def r2():
+            if part.name == "beam":
+                r2 = (abs(Mx * l ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
+            elif part.name == "gear":
+                r2 = (P * l ** 2 / (2 * pi ** 3 * t)) ** 3
+            return r2
 
-    # Bending in lift-direction for COMPRESSION
-    r2 = (abs(M_x * beam.length ** 2) / (beam.thickness * pi ** 2 * material.E_modulus)) ** (1 / 4)
+        # Bending in axial-direction for TENSION
+        def r3():
+            r3 = (abs(My) + sqrt((My) ** 2 + 4 * 2 * pi * t * sigma_y * 2 * pi * P)) / (4 * pi * t * sigma_y)
+            return r3
 
-    # Bending in axial-direction for TENSION
-    r3 = (abs(M_y) + sqrt(M_y ** 2 + 4 * 2 * pi * beam.thickness * tensile_strength * 2 * pi * load.P)) / \
-         (4 * pi * beam.thickness * tensile_strength)
+        # Bending in axial-direction for COMPRESSION
+        def r4():
+            r4 = (abs(My * l ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
+            return r4
 
-    # Bending in axial-direction for COMPRESSION
-    r4 = (abs(M_y * beam.length ** 2) / (beam.thickness * pi ** 2 * material.E_modulus)) ** (1 / 4)
+        # Shear in lift-direction
+        def r5():
+            r5 = (abs(Vx / (-pi * t * tau))) ** (1 / 3)
+            return r5
 
-    # Shear in lift-direction
-    r5 = (abs(V_x / (-pi * beam.thickness * material.tau))) ** (1 / 3)
+        # Shear in axial-direction
+        def r6():
+            r6 = (abs(Vy / (-pi * t * tau))) ** (1 / 3)
+            return r6
 
-    # Shear in axial-direction
-    r6 = (abs(V_y / (-pi * beam.thickness * material.tau))) ** (1 / 3)
+        return r1(), r2(), r3(), r4(), r5(), r6()
 
-    # print(tensile_strength, buckling_strength)
-    return r1, r2, r3, r4, r5, r6
+    def deflection_y(pos_z, radius, Mx, Ly):
+        v = 1 / (E * part.thickness * radius **3) * (Mx / -2 * pos_z ** 2 + Ly / 6 * pos_z ** 3 - W / (24 * L) * pos_z ** 4)
+        return v
 
+    r = np.zeros((6, np.size(z)))
+    r_max = np.zeros(np.size(z))
+    defl = 0
+    W = 0
+
+    for j in range(np.size(z)):
+        for i in range(6):
+            r[i, j] = radii(v_x(z[j]), v_y(z[j]), m_x(z[j]), m_y(z[j]))[i]
+            r_max[j] = np.max(r[:, j])
+        if j < np.size(z)-1:
+            defl += deflection_y(z[j+1], r_max[j], m_x(z[j+1]), v_y(z[j+1])) - deflection_y(z[j], r_max[j], m_x(z[j]), v_y(z[j]))
+            W += 2 * pi * r_max[j] * t * use_material.density * dz
+    return z, r, r_max, defl, W
 
 for iteration in range(10):
-    x_plt = []
-    y_plt = []
-    y_plt1 = []
-    y_plt2 = []
-    y_plt3 = []
-    y_plt4 = []
-    y_plt5 = []
-    y_plt6 = []
-
-
-
-    W = 0
-    dt = 0.1
-    for i in np.arange(0, use_beam.length + dt, dt):
-        r = radius(use_beam, use_loadcase, use_material, i)
-        x_plt.append(i)
-        y_plt.append(max(r))
-        y_plt1.append((r[0]))
-        y_plt2.append((r[1]))
-        y_plt3.append((r[2]))
-        y_plt4.append((r[3]))
-        y_plt5.append((r[4]))
-        y_plt6.append((r[5]))
-        deflection(use_beam, use_loadcase, use_material, i)
-        W += 2 * pi * max(r) * use_beam.thickness * use_material.density * dt
+    z_axis, r, r_design, defl, W = radii(use_beam, use_loadcase, use_material)
     use_beam.weight = W
 
-print(use_beam.weight)
-
-plt.plot(x_plt, y_plt1)
-plt.plot(x_plt, y_plt2)
-plt.plot(x_plt, y_plt3)
-plt.plot(x_plt, y_plt4)
-plt.plot(x_plt, y_plt5)
-plt.plot(x_plt, y_plt6)
-plt.plot(x_plt, y_plt, '+b')
+for i in range(6):
+    plt.plot(z_axis, r[i])
+plt.plot(z_axis, r_design, '-.b')
+plt.title("Radius required")
+plt.xlabel("z [m]")
+plt.ylabel("r [m]")
 plt.show()
+
+print(defl, use_beam.weight)
+
+
+
+
