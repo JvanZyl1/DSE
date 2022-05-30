@@ -7,6 +7,7 @@ SF = 1.5
 
 # Lift assignment
 Vertical_max = Load(14000, 0, 0, 1000)
+Landing = Load(0, 0, 42000, 0)
 Ground = Load(0, 0, 0, 0)
 Gust = Load(21000, 21, 5000, 1000)
 
@@ -27,10 +28,10 @@ beam7 = Beam(aluminium, 2.0, 0.20, 52, 0.0050)
 beam8 = Beam(aluminium, 2.0, 0.20, 52, 0.0050)
 
 # Gear
-gear1 = Gear(aluminium, 5, 3, 2)
+gear1 = Gear(aluminium, 0.1, 0.05, 0.01)
 
 
 # Input  beam
 use_material = aluminium
-use_beam = beam2
-use_loadcase = Vertical_max
+use_beam = gear1
+use_loadcase = Landing

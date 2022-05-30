@@ -40,3 +40,7 @@ class Gear(Part):
         self.area = 2 * pi * thickness * radius
         self.length = 0.2
         self.radius = radius
+        self.thickness = thickness
+        self.weight_engine = 0
+        self.n = 1
+

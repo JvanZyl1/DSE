@@ -25,7 +25,7 @@ def radii(part, load, material):
     E = material.E_modulus
     P = load.P * SF
     tau = material.tau
-    sigma_y = material.sigma_t
+    sigma_y = material.sigma_y
 
     # z-axis
     dz = 0.01
@@ -62,7 +62,7 @@ def radii(part, load, material):
             if part.name == "beam":
                 r2 = (abs(Mx * (l*2) ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
             elif part.name == "gear":
-                r2 = (P * l ** 2 / (2 * pi ** 3 * t)) ** 3
+                r2 = (P * (l*2) ** 2 / (2 * pi ** 3 * t*E)) ** (1/3)
             return r2
 
         # Bending in axial-direction for TENSION
@@ -101,7 +101,8 @@ def radii(part, load, material):
             r[i, j] = radii(v_x(z[j]), v_y(z[j]), m_x(z[j]), m_y(z[j]))[i]
             r_max[j] = np.max(r[:, j])
         if j < np.size(z)-1:
-            defl += deflection_y(z[j+1], r_max[j], m_x(z[j+1]), v_y(z[j+1])) - deflection_y(z[j], r_max[j], m_x(z[j]), v_y(z[j]))
+            if part.name == "beam":
+                defl += deflection_y(z[j+1], r_max[j], m_x(z[j+1]), v_y(z[j+1])) - deflection_y(z[j], r_max[j], m_x(z[j]), v_y(z[j]))
             W += 2 * pi * r_max[j] * t * use_material.density * dz
     return z, r, r_max, defl, W
 
@@ -116,7 +117,7 @@ plt.title("Radius required")
 plt.xlabel("z [m]")
 plt.ylabel("r [m]")
 plt.show()
-
+print(r)
 print(defl, use_beam.weight)
 
 
