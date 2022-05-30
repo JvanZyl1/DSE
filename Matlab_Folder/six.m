@@ -26,6 +26,40 @@ C_D = 0.6;
 time_delay = 0.1;
 S = 1*1.8;
 
+%% Linear Dynamics Kalman Filter
+
+A_kal = [0 0 0 1 0 0;
+    0 0 0 0 1 0;
+    0 0 0 0 0 1;
+    0 0 0 0 0 0;
+    0 0 0 0 0 0;
+    0 0 0 0 0 0];
+
+B_kal = [0 0 0 0 0 0;
+    0 0 0 0 0 0;
+    0 0 0 0 0 0;
+    0 0 0 1/m 0 0;
+    0 0 0 0 1/m 0;
+    0 0 0 0 0 1/m];
+
+C_kal = eye(6);
+
+D_kal = zeros(6);
+
+%% Angular dynamics Kalman filter
+
+A_i = vertcat(zeros(3), zeros(3));
+A_ii = vertcat(eye(3), zeros(3));
+A_AD = horzcat(A_i, A_ii);
+
+B_i = vertcat(zeros(3), zeros(3));
+B_ii = vertcat(zeros(3), I_inv);
+B_AD = horzcat(B_i, B_ii);
+
+C_AD = eye(6);
+D_AD = zeros(6);
+
+sys = ss(A_AD, B_AD, C_AD, D_AD);
 
 
 
