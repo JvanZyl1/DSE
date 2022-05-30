@@ -1,5 +1,15 @@
+<<<<<<< Updated upstream
 function accelData = accelerometer(angvel, acc)
     % Outputs: translational acceleration
+=======
+<<<<<<< HEAD
+function [accelData] = funaccelerometer(angvel, acc)
+    
+=======
+function [accelData] = accelerometer(angvel, acc)
+    %% Outputs: translational acceleration
+>>>>>>> c049a650b712d933853c77380eceb1da3495aa2c
+>>>>>>> Stashed changes
     %
     % Create gyroscope sensor object
     params = accelparams 
