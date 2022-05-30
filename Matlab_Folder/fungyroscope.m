@@ -1,14 +1,5 @@
 function [gyroData] = fungyroscope(angvel, acc)
-<<<<<<< Updated upstream
-    
-% Outputs: Angular velocity
-=======
-<<<<<<< HEAD
-
-=======
-    %% Ouputs: Angular velocity
->>>>>>> c049a650b712d933853c77380eceb1da3495aa2c
->>>>>>> Stashed changes
+   
     % Create gyroscope sensor object
     params = gyroparams;         
 
@@ -37,7 +28,7 @@ function [gyroData] = fungyroscope(angvel, acc)
     imu.Gyroscope.NoiseDensity = 0.15 * 3.14159 / 180;          % rad/s
     imu.Gyroscope.RandomWalk = 0.017 * 3.14159 / 180;           % rad/sqrt(hr)
     imu.Gyroscope.TemperatureBias = 0.25 * 3.14159 / 180;       % rad/s
-    imu.Gyroscope.AccelerationBias = 0.3;
+    %imu.Gyroscope.AccelerationBias = 0.3;
     
     % Define real accelerations
     %acc(:,1) = 1;
