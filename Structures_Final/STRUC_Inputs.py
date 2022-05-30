@@ -20,7 +20,7 @@ carbon = Material(4274e6, 4274e6, 234e9, 55e6, 691.7, 0)
 beam1 = Beam(aluminium, 1.2, 0.08, 52, 0.0030)
 beam2 = Beam(aluminium, 1.4, 0.08, 52, 0.0030)
 beam3 = Beam(aluminium, 1.6, 0.20, 52, 0.0050)
-beam4 = Beam(aluminium, 5, 0.19, 52, 0.00000030)
+beam4 = Beam(aluminium, 5, 0.19, 52, 0.0030)
 beam5 = Beam(aluminium, 2.4, 0.08, 52, 0.0050)
 beam6 = Beam(aluminium, 2.0, 0.20, 52, 0.0050)
 beam7 = Beam(aluminium, 2.0, 0.20, 52, 0.0050)
@@ -32,5 +32,5 @@ gear1 = Gear(aluminium, 5, 3, 2)
 
 # Input  beam
 use_material = aluminium
-use_beam = beam4
+use_beam = beam2
 use_loadcase = Vertical_max

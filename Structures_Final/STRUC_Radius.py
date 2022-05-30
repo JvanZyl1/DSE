@@ -60,7 +60,7 @@ def radii(part, load, material):
         # Bending in lift-direction for COMPRESSION
         def r2():
             if part.name == "beam":
-                r2 = (abs(Mx * l ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
+                r2 = (abs(Mx * (l*2) ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
             elif part.name == "gear":
                 r2 = (P * l ** 2 / (2 * pi ** 3 * t)) ** 3
             return r2
@@ -72,7 +72,7 @@ def radii(part, load, material):
 
         # Bending in axial-direction for COMPRESSION
         def r4():
-            r4 = (abs(My * l ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
+            r4 = (abs(My * (l*2) ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
             return r4
 
         # Shear in lift-direction
