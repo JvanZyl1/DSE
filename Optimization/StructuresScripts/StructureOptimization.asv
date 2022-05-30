@@ -1,6 +1,4 @@
 function [outputArg1,outputArg2] = StructureOptimization(MTOW)
-    
-    n_ult = 3;
 
     % define lengths of the beams: [l1, l2, l3, l4, l5, l6, l7, l8]
     % define initial value of r (will be iterated n times)
@@ -10,7 +8,7 @@ function [outputArg1,outputArg2] = StructureOptimization(MTOW)
     t_list = [0.003, 0.004, 0.005, 0.006];
     r_init = 0.005;
 
-    load = Load(MTOW * n_ult, V_wind_avg, F_z, torque);
+    load = Load(MTOW * 1.5 * 1.1 * n_ult, V_wind_avg, F_z, torque)
     
     for length=lenghts
         beam = Beam(length, r_init, thickness);

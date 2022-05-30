@@ -4,6 +4,7 @@ classdef Beam
         l
         r
         t
+        We
         Ixx
         Iyy
     end
