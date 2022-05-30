@@ -1,15 +1,7 @@
 function[pid_Mx, pid_My, pid_Mz] = angular_tune(wx_0, wy_0, wz_0)
 %% Load inertias
-%Inertia; %A file containing the inertia values, matrix and inverse
-I_xx = 1.2;
-I_yy = 0.6;
-I_zz = 0.6;
-I_xy = 0.4;
-I_xz = 0.4;
-I_yx = 0.4;
-I_yz = 0.2;
-I_zx = 0.1;
-I_zy = 0.7;
+Inertia; %A file containing the inertia values, matrix and inverse
+
 
 %% Calculate A matrix
 %Calculate numerators

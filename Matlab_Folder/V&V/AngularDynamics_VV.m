@@ -21,4 +21,3 @@ M_aerod = [rand*10; rand*10; rand*10];
 theta_desiredV = [rand*pi; rand*pi; rand*pi];
 w_d_0 = [0;0;0];
 theta_d_0 = [0;0;0];
-[pid_Mx, pid_My, pid_Mz] = angular_tune(2,2,2);
