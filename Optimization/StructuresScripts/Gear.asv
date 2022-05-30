@@ -9,11 +9,9 @@ classdef Gear
     
     methods
         function obj = Beam(length, radius, thickness)
-            obj.l = length;
-            obj.r = radius;
-            obj.t = thickness;
-            obj.We = 0;
             obj.self.area = 2 * pi * thickness * radius;
+            obj.length = 0.2;
+            obj.radius = radius;
         end
     end
 end

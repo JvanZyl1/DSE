@@ -1,22 +1,25 @@
-classdef untitled
-    %UNTITLED Summary of this class goes here
-    %   Detailed explanation goes here
-    
+classdef Beam
     properties
-        Property1
+        K = 8;
+        l
+        r
+        t
+        Ixx
+        Iyy
     end
-    
+
     methods
-        function obj = untitled(inputArg1,inputArg2)
-            %UNTITLED Construct an instance of this class
-            %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
+        function obj = Beam(length, radius, thickness)
+            obj.l = length;
+            obj.r = radius;
+            obj.t = thickness;
+            obj.We = We;
+            obj.Ixx = thickness * radius ^ 3;
+            obj.Iyy = thickness * radius ^ 3;
         end
-        
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
+
+        function W_beam = weightest(obj,material)
+            W_beam = pi * obj.l * ((obj.r + obj.t/2)^2 - (obj.r - obj.t/2)^2) * material.density;
         end
     end
 end

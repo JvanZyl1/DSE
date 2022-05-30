@@ -4,7 +4,7 @@ Classes
 
 
 class Load:
-    C_D = 1
+    C_D = 1.
     rho = 1.225
 
     def __init__(self, L, gustspeed, P, torque):
