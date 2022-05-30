@@ -29,9 +29,9 @@ time_delay = 0.1;
 S = 1*1.8;
 
 %% Linear Dynamics Inputs
-F_aero = [1;2;3];
+%F_aero = [1;2;3];
 r_trajectory = [2;3;4];
-a_accelerometer_error = [1;2;3];
+%a_accelerometer_error = [1;2;3];
 
 
 %% Linear Dynamics Kalman Filter
