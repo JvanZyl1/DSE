@@ -1,4 +1,4 @@
-function [accelData] = accelerometer(angvel, acc)
+function accelData = accelerometer(angvel, acc)
     % Outputs: translational acceleration
     %
     % Create gyroscope sensor object
@@ -22,9 +22,9 @@ function [accelData] = accelerometer(angvel, acc)
     imu.Accelerometer.Resolution = 1/Fs;           % Step size of digital measurements
     
     % Biases
-    imu.Accelerometer.BiasInstability = 7.5 / 1000;
-    imu.Accelerometer.NoiseDensity = 150 / 1000 / 1000;
-    imu.Accelerometer.TemperatureBias = 50 / 1000 / 1000;
+    imu.Accelerometer.BiasInstability = 7.5 / 1000 * 9.81;
+    imu.Accelerometer.NoiseDensity = 150 / 1000 / 1000 * 9.81; 
+    imu.Accelerometer.TemperatureBias = 50 / 1000 / 1000 * 9.81;
     
   
     
