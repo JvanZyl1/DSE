@@ -74,7 +74,7 @@ sys = ss(A_AD, B_AD, C_AD, D_AD);
 aaa = 2;
 bbb = 3;
 
-pidtune(sys)
+pidtune(sys, 'PID')
 
 
 %A = eye(3);
