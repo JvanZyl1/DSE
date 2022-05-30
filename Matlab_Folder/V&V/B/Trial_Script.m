@@ -64,6 +64,8 @@ B_i = vertcat(zeros(3), zeros(3));
 B_ii = vertcat(zeros(3), I_inv);
 B_AD = horzcat(B_i, B_ii);
 
+
+
 C_AD = eye(6);
 D_AD = zeros(6);
 
@@ -72,8 +74,12 @@ sys = ss(A_AD, B_AD, C_AD, D_AD);
 aaa = 2;
 bbb = 3;
 
+pidtune(sys)
+
+
 %A = eye(3);
 %B = [1/m; 1/m; 1/m];
 %C = eye(3);
 %D = zeros(3);
 %sys = ss(A,B,C,D);
+
