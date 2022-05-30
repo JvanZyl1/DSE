@@ -42,5 +42,5 @@ class Gear(Part):
         self.radius = radius
         self.thickness = thickness
         self.weight_engine = 0
-        self.n = 1
+        self.n = 4
 

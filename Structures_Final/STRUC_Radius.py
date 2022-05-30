@@ -54,7 +54,7 @@ def radii(part, load, material):
 
         # Bending in lift-direction for TENSION
         def r1():
-            r1 = (P + sqrt(abs(((P) ** 2) + 4 * 2 * pi * t * sigma_y * 2 * pi * Mx))) / (4 * pi * t * sigma_y)
+            r1 = (P + sqrt(abs(((P / n) ** 2) + 4 * 2 * pi * t * sigma_y * 2 * pi * Mx))) / (4 * pi * t * sigma_y)
             return r1
 
         # Bending in lift-direction for COMPRESSION
@@ -62,12 +62,12 @@ def radii(part, load, material):
             if part.name == "beam":
                 r2 = (abs(Mx * (l*2) ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
             elif part.name == "gear":
-                r2 = (P * (l*2) ** 2 / (2 * pi ** 3 * t*E)) ** (1/3)
+                r2 = (P / n * (l*2) ** 2 / (2 * pi ** 3 * t*E)) ** (1/3)
             return r2
 
         # Bending in axial-direction for TENSION
         def r3():
-            r3 = (abs(My) + sqrt((My) ** 2 + 4 * 2 * pi * t * sigma_y * 2 * pi * P)) / (4 * pi * t * sigma_y)
+            r3 = (abs(My) + sqrt((My) ** 2 + 4 * 2 * pi * t * sigma_y * 2 * pi * P / n)) / (4 * pi * t * sigma_y)
             return r3
 
         # Bending in axial-direction for COMPRESSION
