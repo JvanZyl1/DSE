@@ -1,7 +1,7 @@
 """
 Classes
 """
-
+from matplotlib import pyplot as plt
 
 class Load:
     C_D = 1.
@@ -24,3 +24,31 @@ class Material:
         self.density = density  # kg/m**3
         self.G_modulus = G_modulus
 
+class Boom:
+    def __init__(self, pos_x, pos_y):
+        self.X = pos_x
+        self.Y = pos_y
+
+
+class CrossSection(Boom):
+    def __init__(self, pos_x, pos_y, pos_z, radius, booms = None):
+        self.Z = pos_z
+        self.radius = radius
+        super().__init__(pos_x, pos_y)
+        if booms is None:
+            self.booms = []
+        else:
+            self.booms = booms
+
+    def add_boom(self, boom_lst):
+        for boom in boom_lst:
+            if boom not in self.booms:
+                self.booms.append(boom)
+
+    def remove_boom(self, boom):
+        for boom in self.booms:
+            self.booms.remove(boom)
+
+    def print_booms(self):
+        for boom in self.booms:
+            print('-->', boom.X)
