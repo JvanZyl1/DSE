@@ -4,10 +4,10 @@ eta_motor = 0.95 ;
 eta_power_transfer = 0.97 ;
 eta_battery = 0.95 ;
 eta_final = eta_battery * eta_prop * eta_motor * eta_power_transfer ;
-eta_E = 200      ;   % energy density of the battery in [Wh/kg] 
+eta_E = 170      ;   % energy density of the battery in [Wh/kg] 
 vol_dens = 450 ;  % volumetric energy density [Wh/L]
 nu_discharge = 0.8 ;  % discharge ratio of the battery for optimal lifetime
-PowWtRat = 5000    ; % power to weight ratio for the motor [W/kg]
+PowWtRat = 7000    ; % power to weight ratio for the motor [W/kg]
 g = 9.81          ;  % gravitional acceleration [m/s2]
 redundancy_factor = 0.75   ; %here because of shitty requirement
 
@@ -21,7 +21,7 @@ A_disk = R_prop^2 * pi * N_prop;
 B_prop = 3 ; % Number of blades per propeller [-]
 C_prop = 0.2;
 % MTOW = 650 ; % Max take of weight [kg]
-S_body = pi ^ 2 * l * D / 4 ; % Assume fuselage to be an ellipse of revolution and calculate its wetted area
+S_body = 19.24 ; % Assume fuselage to be an ellipse of revolution and calculate its wetted area
 l_t = l ;
 S_nac = 0 ;
 N_nac = 0 ;
@@ -29,7 +29,7 @@ W_PL = 250 ; % mass of the payload in kilograms [kg]
 R_pyl = 0.05 ;  % Pylon radius (assumed circular) [m]
 l_pyl = 0.2  ;% Pylon length [m]
 CY = 0.6 ; % Assumed fuselage side drag coefficient
-S_side = pi * l * D / 4 ; % Side fuselage area (ellipse) [m^2]
+S_side = 19.24 ; % Side fuselage area (ellipse) [m^2]
 % Parameters for in-plane control propellers
 R_cont = 0.2 ;
 N_cont = 3 ;
@@ -54,7 +54,7 @@ omega_max = 6500 * 2 * pi / 60  ;
 
 % Mission profile characteristics
 R = 20000      ;     % mission range in kilometers [m]
-R_div = 5000    ;    % additional diversion range in kilometers [m]
+R_div = 4000    ;    % additional diversion range in kilometers [m]
 V_TO = 5         ;   % assumed take-off and descent velocity [m/s !]
 h_TO = 450        ;  % assumed vertical travel distance in [m]
 rho = 1.225        ; % air density in [kg/m3]
