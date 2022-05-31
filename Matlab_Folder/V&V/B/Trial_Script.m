@@ -71,11 +71,6 @@ D_AD = zeros(6);
 
 sys = ss(A_AD, B_AD, C_AD, D_AD);
 
-aaa = 2;
-bbb = 3;
-
-pidtune(sys)
-
 %% PID tune of angular shite
 A_2 = zeros(3);
 B_2 = I_inv;
@@ -83,7 +78,7 @@ C_2 = eye(3);
 D_2 = zeros(3);
 sys2 = ss(A_2, B_2, C_2, D_2)
 
-trans_func = tf(sys2);
+trans_func = tf(sys2)
 
 pid_Mx = pidtune(trans_func(1,1), 'PID');
 pid_Mx = [pid_Mx.Kp, pid_Mx.Ki, pid_Mx.Kd];
@@ -93,7 +88,7 @@ pid_My = [pid_My.Kp, pid_My.Ki, pid_My.Kd];
 
 pid_Mz = pidtune(trans_func(3,3), 'PID');
 pid_Mz = [pid_Mz.Kp, pid_Mz.Ki, pid_Mz.Kd];
->>>>>>> 951a8ea45b6ffa7a918221a1bbe49d4ec8bca7f7
+
 
 
 %A = eye(3);
@@ -101,4 +96,3 @@ pid_Mz = [pid_Mz.Kp, pid_Mz.Ki, pid_Mz.Kd];
 %C = eye(3);
 %D = zeros(3);
 %sys = ss(A,B,C,D);
-
