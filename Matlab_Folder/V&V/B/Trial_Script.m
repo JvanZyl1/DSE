@@ -89,7 +89,7 @@ pid_My = [pid_My.Kp, pid_My.Ki, pid_My.Kd];
 pid_Mz = pidtune(trans_func(3,3), 'PID');
 pid_Mz = [pid_Mz.Kp, pid_Mz.Ki, pid_Mz.Kd];
 
-
+load('MPCDesignerSession.mat');
 
 %A = eye(3);
 %B = [1/m; 1/m; 1/m];
