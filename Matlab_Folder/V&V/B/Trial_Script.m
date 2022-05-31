@@ -71,7 +71,7 @@ D_AD = zeros(6);
 
 sys = ss(A_AD, B_AD, C_AD, D_AD);
 
-%% PID tune of angular shite
+%% PID tune of angular 
 A_2 = zeros(3);
 B_2 = I_inv;
 C_2 = eye(3);
