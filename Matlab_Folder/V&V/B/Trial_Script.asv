@@ -76,7 +76,7 @@ A_2 = zeros(3);
 B_2 = I_inv;
 C_2 = eye(3);
 D_2 = zeros(3);
-sys2 = ss(A_2, B_2, C_2, D_2);
+sys2 = ss(A_2, B_2, C_2, D_2)
 
 trans_func = tf(sys2)
 
@@ -107,19 +107,12 @@ Mc_list =[];
 radx_list = [];
 rady_list = [];
 radz_list = [];
-xe_list =[];
-ye_list = [];
-ze_list = [];
-for i = 0:1 %c_MF
-    i = i/10;
-    c_MF = i;
-    for j = 1:2 %a_MF
+for i = 0:1
+    i = i/10
+    for j = 0:1
         j = j;
-        a_MF = j;
-        for k = 10 %K_gain
-            i
+        for k = 5:6
             k = k*100;
-            K_gain = k;
             sim('simgoid_terry.slx', 60);
             c_list = [c_list; i];
             a_list = [a_list; j];
@@ -129,10 +122,9 @@ for i = 0:1 %c_MF
             radx_list = [radx_list, ans.radx];
             rady_list = [rady_list, ans.rady];
             radz_list = [radz_list, ans.radz];
-            length(ans.errorx)
             xe_list = [xe_list, ans.errorx];
             ye_list = [ye_list, ans.errory];
-            ze_list = [ze_list, ans.errorz];
+            ze_list = [ze_list, ans.err
         end
     end
 end
