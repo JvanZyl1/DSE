@@ -3,10 +3,10 @@ SF = 1.5;
 n_ult = 2;
 
 % Lift assignment
-Vertical_max = Load(MTOW * g * n_ult * SF, 0, 0, 1000);
-Landing = Load(0, 0, 42000, 0);
+Vertical_max = Load(MTOW * g * n_ult * SF, 0, 0, 0);
+Landing = Load(0, 0, MTOW * g * n_ult * SF, 0);
 Ground = Load(0, 0, 0, 0);
-Gust = Load(21000, 21, 5000, 1000);
+Gust = Load(MTOW*g*SF, 21, 0, 0);
 
 % Materials
 aluminium = Material(444e6, 400e6, 70e9, 283e6, 2.8e3, 26.9e9);
