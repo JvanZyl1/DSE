@@ -52,3 +52,12 @@ class CrossSection(Boom):
     def print_booms(self):
         for boom in self.booms:
             print('-->', boom.X)
+    def plot_booms(self):
+        for boom in self.booms:
+            plt.plot(boom.X, boom.Y, '--')
+            plt.scatter(boom.X, boom.Y)
+            plt.title('Booms')
+        plt.xlabel('y [m]')
+        plt.ylabel('x [m]')
+        plt.axis('equal')
+        plt.show()
