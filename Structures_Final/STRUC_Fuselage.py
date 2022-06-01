@@ -31,4 +31,5 @@ class FuselageLoads:
 
 z_val = 0.3
 Fuselage = FuselageLoads(z_val)
-y = Fuselage.Vx()
+y = Fuselage.Mx()
+print(y)

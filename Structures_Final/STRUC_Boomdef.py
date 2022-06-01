@@ -1,10 +1,11 @@
 from STRUC_Classes import CrossSection, Boom
+from STRUC_Fuselage import FuselageLoads
 from matplotlib import pyplot as plt
 import numpy as np
 from math import *
 
+fuselage = FuselageLoads(0.1)
 cs_1 = CrossSection(np.array([0, 0.5]), np.array([0.2, 0.8]))
-cs_1.print_booms()
 boom_1_1 = Boom(cs_1.radius * np.cos(2 * pi * 0.1), cs_1.radius * np.sin(2 * pi * 0.1), 0.0003, 0.001)
 boom_1_2 = Boom(cs_1.radius * np.cos(2 * pi * 0.2), cs_1.radius * np.sin(2 * pi * 0.2), 0.0003, 0.002)
 boom_1_3 = Boom(cs_1.radius * np.cos(2 * pi * 0.3), cs_1.radius * np.sin(2 * pi * 0.3), 0.003, 0)
@@ -21,3 +22,4 @@ cs_1.boom_area()
 cs_1.plot_booms()
 cs_1.plot_skin()
 plt.show()
+cs_1.stresses()

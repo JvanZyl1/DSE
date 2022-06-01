@@ -33,20 +33,22 @@ class Boom:
         self.X = pos_x
         self.Y = pos_y
         self.A = A
-        self.B = 1
+        self.B = np.array([A, A])
         self.skin = skin
 
-    def boomarea(self, new_val):
+    def area(self, new_val):
         self.B = new_val
 
     def plot(self):
         plt.plot(self.X, self.Y, '--')
         plt.scatter(self.X, self.Y)
 
-    def stress_z(self, n_x, n_y, Mx, My):
-        pass
+    def stress_z(self, n_y, Mx, n_x=None, My=None):
+        sigma_z = Mx / (self.B * (self.Y - n_y))
+        print(sigma_z)
+        return sigma_z
 
-class CrossSection(Boom, FuselageLoads):
+class CrossSection(Boom):
     def __init__(self, pos_z, radius, pos_x=None, pos_y=None, A=None, booms=None, skin=None):
         self.Z = pos_z
         self.radius = radius
@@ -113,6 +115,7 @@ class CrossSection(Boom, FuselageLoads):
         nodes.append(nodes[1])
         skin_b1 = []
         skin_b2 = []
+
         for n in range(len(nodes)-1):
             b1 = sqrt((nodes[n].X[0] - nodes[n + 1].X[0]) ** 2 +
                       (nodes[n].Y[0] - nodes[n + 1].Y[0]) ** 2)
@@ -121,14 +124,29 @@ class CrossSection(Boom, FuselageLoads):
             skin_b1.append(b1)
             skin_b2.append(b2)
 
-        for n in range(0, len(nodes) - 2):
-            self.booms[n].boomarea(np.array([self.booms[n].A + skin_b1[n] * self.booms[n].skin / 6 * 2 +
+        for n in range(len(nodes) - 2):
+            self.booms[n].area(np.array([self.booms[n].B[0] + skin_b1[n] * self.booms[n].skin / 6 * 2 +
                                         skin_b1[n + 1] * self.booms[n+1].skin / 6 * (2),
-                                        self.booms[n].A + skin_b2[n] * self.booms[n].skin / 6 * 2 +
+                                        self.booms[n].B[1] + skin_b2[n] * self.booms[n].skin / 6 * 2 +
                                         skin_b2[n + 1] * self.booms[n+1].skin / 6 * (2)]))
+        for boom in self.booms:
+            print(boom.B)
         nodes.remove(nodes[0])
         nodes.remove(nodes[-1])
 
+    def step(self, pos_z_start):
+        if self.Z >= pos_z_start:
+            return 1
+        return 0  # np.where(self.z < pos_z_start, 0, 1)
+
+    def Mx(self):
+        Mx = -2000 * self.Z ** 2 + 400 * self.step(0.2) ** 2
+        return Mx
+
+    def stresses(self):
+        for boom in self.booms:
+            #print(self.neutral_y)
+            print(boom.stress_z(self.neutral_y(), self.Mx()))
 
 
 """
