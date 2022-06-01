@@ -6,7 +6,7 @@ clc
 
 inputs;
 MTOW = 700;  % kg
-V_cr = 180 / 3.6 ; % Cruise velocity [m/s]
+%V_cr = 180 / 3.6 ; % Cruise velocity [m/s]
 
 n_iter = 10;
 %for i=1:n_iter
@@ -36,20 +36,22 @@ for i=1:n_iter
     [PropWt, W_m, W_b, W_c] = propulsiongroup_mass(P_TOL);
     [FuseWt] = fuselagegroup_mass(MTOW, V_cr);
     [ContWt, W_cm, W_cb] = controlgroup_mass(P_cont_max);
-    W_beams = 100;  % TODO
+    W_p = W_m + W_b;
+    [W_beams] = StructureOptimization(MTOW, W_p);
     MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
+    disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
 end
 
 fprintf('MTOW: %f [kg]\n',MTOW)
 fprintf('Battery weight: %f [kg]\n',BatWt)
 fprintf('Required energy: %f [Wh]\n',E_total)
-fprintf('Battery volume: %f [L]\n', V_bat)
-fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
+%fprintf('Battery volume: %f [L]\n', V_bat)
+%fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
 
 %%%%%%%%% Angular acceleration calculation %%%%%%%%%%%
 Ang_acc_prop = angular_acc(W_m, W_b, B_prop, R_prop);
 Ang_acc_cont = angular_acc(W_cm, W_cb, B_cont, R_cont);
-fprintf('Angular acceleration for propellers: %f [rad/s^-2]\nAngular acceleration for control props: %f [rad/s^-2]\n', Ang_acc_prop, Ang_acc_cont)
+%fprintf('Angular acceleration for propellers: %f [rad/s^-2]\nAngular acceleration for control props: %f [rad/s^-2]\n', Ang_acc_prop, Ang_acc_cont)
 
 %%%%%%%%% Reynold's number calculation %%%%%%%%%%%%%
 omega_list = 500:100:1000;

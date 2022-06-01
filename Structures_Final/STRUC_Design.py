@@ -30,7 +30,7 @@ class Beam(Part):
 
 
 class Fuselage(Part):
-    pass
+    name = "fuselage"
 
 
 class Gear(Part):
@@ -38,7 +38,7 @@ class Gear(Part):
     def __init__(self, material, length, radius, thickness):
         super().__init__(material, length)
         self.area = 2 * pi * thickness * radius
-        self.length = 0.2
+        self.length = length
         self.radius = radius
         self.thickness = thickness
         self.weight_engine = 0

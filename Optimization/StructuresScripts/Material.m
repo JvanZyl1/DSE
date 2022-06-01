@@ -13,8 +13,7 @@ classdef Material
     end
     
     methods
-        function obj = Material(density, cost, tensile_strength, ...
-                yield_strength, E_modulus, shear_strength, G_modulus)
+        function obj = Material(tensile_strength, yield_strength, E_modulus, shear_strength, density, G_modulus, cost)
             obj.density = density;
             obj.cost = cost;
             obj.sigma_t = tensile_strength;

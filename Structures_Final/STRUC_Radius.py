@@ -88,7 +88,7 @@ def radii(part, load, material):
         return r1(), r2(), r3(), r4(), r5(), r6()
 
     def deflection_y(pos_z, radius, Mx, Ly):
-        v = 1 / (E * part.thickness * radius **3) * (Mx / -2 * pos_z ** 2 + Ly / 6 * pos_z ** 3 - W / (24 * L) * pos_z ** 4)
+        v = 1 / (E * part.thickness * radius ** 3) * (Mx / -2 * pos_z ** 2 + Ly / 6 * pos_z ** 3 - W / (24 * L) * pos_z ** 4)
         return v
 
     r = np.zeros((6, np.size(z)))
@@ -117,8 +117,11 @@ plt.title("Radius required")
 plt.xlabel("z [m]")
 plt.ylabel("r [m]")
 plt.show()
-print(r)
-print(defl, use_beam.weight)
+print("Radius", r_design)
+
+print("Ixx", r_design ** 3 * use_beam.thickness)
+print(use_beam.n)
+print(use_beam.weight)
 
 
 
