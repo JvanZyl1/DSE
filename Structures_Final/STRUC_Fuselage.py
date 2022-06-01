@@ -1,5 +1,5 @@
 
-from STRUC_Classes import Boom
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -8,26 +8,27 @@ class FuselageLoads:
         self.z = pos_z
 
     def step(self, pos_z_start):
-        return np.where(self.z < pos_z_start, 0, 1)
+        if self.z >= pos_z_start:
+            return 1
+        return 0  # np.where(self.z < pos_z_start, 0, 1)
 
     def Vx(self):
-        Vx = np.add(-200 * self.z, 500 * self.step(0.2))
+        Vx = -200 * self.z + 500 * self.step(0.2)
         return Vx
 
     def Vy(self):
-        pass
+        Vy = -100 * self.z + 500 * self.step(0.3)
+        return Vy
 
     def Mx(self):
-        pass
+        Mx = -2000 * self.z ** 2 + 400 * self.step(0.2) ** 2
+        return Mx
 
     def My(self):
-        My = np.add(-2000 * self.z **2, 400 * self.step(0.2) ** 2)
+        My = -2000 * self.z ** 2 + 400 * self.step(0.2) ** 2
         return My
 
 
-z_range = np.arange(0, 1, 0.01)
-Fuselage = FuselageLoads(z_range)
+z_val = 0.3
+Fuselage = FuselageLoads(z_val)
 y = Fuselage.Vx()
-
-plt.plot(z_range, y)
-plt.show()

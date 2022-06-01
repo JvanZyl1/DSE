@@ -1,0 +1,11 @@
+OVERVIEW FUSELAGE DESIGN
+
+Define booms([z-position], stringer area,
+Define cross-section with booms belonging to that
+
+
+Implement load
+Implement moment
+
+Make an equation for load
+Make an equation for moment
