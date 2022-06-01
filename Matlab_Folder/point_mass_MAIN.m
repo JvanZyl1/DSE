@@ -41,12 +41,11 @@ for S = 3:4
 end
 %}
 
-%{
 rlist1 = [];
 F_control_minus_tau1 = [];
 g_force1 = [];
 t_delay = [];
-for time_delay = 10:5:50
+for time_delay = 10:5:15
     S = 4;
     C_D = 0.2;
     time_delay = time_delay/100;
@@ -56,7 +55,6 @@ for time_delay = 10:5:50
     F_control_minus_tau1 = [F_control_minus_tau1, ans.F_control_minustau];
     g_force1 = [g_force1, ans.g_force];
 end
-%}
 
 %{
 S = 2;

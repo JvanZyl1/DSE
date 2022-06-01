@@ -93,12 +93,12 @@ v_vehicle = [20; 20; 10];
 theta_vehicle = [0;0; 0];
 x_cp = [0.3; 0.2; 0.1];
 
-K_gain = 750; %10000
+K_gain = 10000; %10000
 a_MF = 2.5; %2.5
-c_MF = 0.75; %1.75
+c_MF = 1.5; %1.75
 
 load('MPCDesignerSession.mat');
-
+%{
 a_list = [];
 K_list = [];
 c_list = [];
@@ -136,6 +136,6 @@ for i = 0:1 %c_MF
         end
     end
 end
-
+%}
             
 
