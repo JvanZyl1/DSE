@@ -14,3 +14,4 @@ W_cg = (W_cb + W_cm) * N_cont;
 fprintf('Per control motor: %f [kg] \n Control blades per prop: %f [kg] \n', W_cm, W_cb);
 
 end
+
