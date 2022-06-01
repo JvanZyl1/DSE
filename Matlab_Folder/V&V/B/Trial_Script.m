@@ -93,8 +93,8 @@ v_vehicle = [20; 20; 10];
 theta_vehicle = [0;0; 0];
 x_cp = [0.3; 0.2; 0.1];
 
-K_gain = 10000; %10000
-a_MF = 2.5; %2.5
+K_gain = 300; %10000
+a_MF = 0.6; %2.5
 c_MF = 1.5; %1.75
 
 load('MPCDesignerSession.mat');
@@ -113,10 +113,10 @@ ze_list = [];
 for i = 0:1 %c_MF
     i = i/10;
     c_MF = i;
-    for j = 1:2 %a_MF
-        j = j;
+    for j = 5:5:40 %a_MF
+        j = j/10;
         a_MF = j;
-        for k = 10 %K_gain
+        for k = 3 %K_gain
             i
             k = k*100;
             K_gain = k;
@@ -129,13 +129,12 @@ for i = 0:1 %c_MF
             radx_list = [radx_list, ans.radx];
             rady_list = [rady_list, ans.rady];
             radz_list = [radz_list, ans.radz];
-            length(ans.errorx)
-            xe_list = [xe_list, ans.errorx];
-            ye_list = [ye_list, ans.errory];
-            ze_list = [ze_list, ans.errorz];
+            length(ans.errorx);
+            %xe_list = [xe_list, ans.errorx];
+            %ye_list = [ye_list, ans.errory];
+            %ze_list = [ze_list, ans.errorz];
         end
     end
 end
-%}
-            
+%}      
 

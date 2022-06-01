@@ -76,7 +76,7 @@ A_2 = zeros(3);
 B_2 = I_inv;
 C_2 = eye(3);
 D_2 = zeros(3);
-sys2 = ss(A_2, B_2, C_2, D_2)
+sys2 = ss(A_2, B_2, C_2, D_2);
 
 trans_func = tf(sys2)
 
@@ -93,9 +93,9 @@ v_vehicle = [20; 20; 10];
 theta_vehicle = [0;0; 0];
 x_cp = [0.3; 0.2; 0.1];
 
-K_gain = 750; %10000
+K_gain = 10000; %10000
 a_MF = 2.5; %2.5
-c_MF = 0.75; %1.75
+c_MF = 1.5; %1.75
 
 load('MPCDesignerSession.mat');
 
@@ -107,12 +107,19 @@ Mc_list =[];
 radx_list = [];
 rady_list = [];
 radz_list = [];
-for i = 0:1
-    i = i/10
-    for j = 0:1
+xe_list =[];
+ye_list = [];
+ze_list = [];
+for i = 0:1 %c_MF
+    i = i/10;
+    c_MF = i;
+    for j = 1:2 %a_MF
         j = j;
-        for k = 5:6
+        a_MF = j;
+        for k = 1: %K_gain
+            i
             k = k*100;
+            K_gain = k;
             sim('simgoid_terry.slx', 60);
             c_list = [c_list; i];
             a_list = [a_list; j];
@@ -122,12 +129,12 @@ for i = 0:1
             radx_list = [radx_list, ans.radx];
             rady_list = [rady_list, ans.rady];
             radz_list = [radz_list, ans.radz];
-            xe_list = [xe_list, ans.errorx];
-            ye_list = [ye_list, ans.errory];
-            ze_list = [ze_list, ans.err
+            length(ans.errorx)
+            %xe_list = [xe_list, ans.errorx];
+            %ye_list = [ye_list, ans.errory];
+            %ze_list = [ze_list, ans.errorz];
         end
     end
 end
-
             
 
