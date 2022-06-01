@@ -89,7 +89,7 @@ pid_My = [pid_My.Kp, pid_My.Ki, pid_My.Kd];
 pid_Mz = pidtune(trans_func(3,3), 'PID');
 pid_Mz = [pid_Mz.Kp, pid_Mz.Ki, pid_Mz.Kd];
 
-v_vehicle = [20; 20; 10];
+v_vehicle = [20; 0; 0];
 theta_vehicle = [0;0; 0];
 x_cp = [0.3; 0.2; 0.1];
 

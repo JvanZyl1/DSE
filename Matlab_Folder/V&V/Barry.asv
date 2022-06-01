@@ -1,0 +1,18 @@
+clear all
+close all
+clc
+
+A = 0.2
+B = -1.5
+C = 1.2
+
+F = 100
+
+x = 0:1:100
+y = 0:1:100
+z = 0:1:100
+
+[X,Y] = meshgrid(x,y);
+Z = 100 - A*X - B*Y;
+figure
+surf(X,Y,Z)
