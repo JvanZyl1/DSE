@@ -42,7 +42,7 @@ for i=1:n_iter
     %disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
 end
 
-[C_unit, ~, ~] = CostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
+[C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
 
 %fprintf('MTOW: %f [kg]\n',MTOW)
 %fprintf('Battery weight: %f [kg]\n',BatWt)
@@ -52,8 +52,8 @@ end
 %fprintf('The total cost per vehicle: = %f [€]', C_unit)
 
 %%%%%%%%% RPM Calculation %%%%%%%%%%%%%%
-RPM_list = 500:100:1500;
-LiftPowerRPM(MTOW, RPM_list);
+RPM_list = 100:100:2000;
+RPM_opt_list = LiftPowerRPM(MTOW, RPM_list);
 
 
 
