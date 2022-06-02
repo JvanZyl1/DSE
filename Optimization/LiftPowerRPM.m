@@ -1,7 +1,8 @@
 function [] = LiftPowerRPM(MTOW, RPM_list)
-    inputs; 
+    inputs;
     %define the airfoil polars:
-    
+    addpath("Excel");
+
     fileName = 'xf-naca23012-il-1000000.csv';
     [alpha, Cl_polar, Cd_polar] = ReadPolar(fileName);
     plot(alpha,polyval(Cl_polar,alpha))
@@ -26,13 +27,17 @@ function [] = LiftPowerRPM(MTOW, RPM_list)
     T_cr = T_TO * (2/3); %%%%%%%%%%%%% TBD
     T_em = 1.5 * T_TO; %%%%%%%%%%%%% TBD
     i=1;
+    j = 1;
     T_list = [T_TO, T_cr, T_em];
     L_list = zeros(1, numel(RPM_list));
+    RPM_opt_list = zeros(1, numel(T_list));
     for T=T_list
         for RPM=RPM_list
             omega = RPM * 2 * pi / 60;
-            C_T_sigma = T / (rho * sigma * A_disk * (omega * R_prop)^2);
-            theta_tip = 57.3 * (4/Cl_slope*C_T_sigma + sqrt(sigma * C_T_sigma / 2)) * (2*pi/180);
+            fprintf('Inputs: T = %f, rho = %f, sigma = %f, R = %f, omega = %f\n', T, rho, sigma, R_prop, omega)
+            C_T_sigma = T / (rho * sigma * pi*R_prop^2 * (omega * R_prop)^2);
+            theta_tip = 57.3 * (4/Cl_slope*C_T_sigma + sqrt(sigma * C_T_sigma / 2));% * (pi/180);
+            fprintf('C_T_sigma = %f, theta_tip = %f\n', C_T_sigma, theta_tip)
             r = 0;
             for station=1:nr_stations-1
                 r = r + dr;
@@ -48,7 +53,7 @@ function [] = LiftPowerRPM(MTOW, RPM_list)
                 dL = 0.5 * Cl * rho * V * V * C_prop * dr;
                 L_blade = L_blade + dL;
     
-                fprintf('Local velocity = %f [m/s] \n Local Mach number = %f []\n', V_blade, M_blade)
+                %fprintf('Local velocity = %f [m/s] \n Local Mach number = %f []\n', V_blade, M_blade)
             end
             L = L_blade * B_prop;
             L_list(i) = L;
@@ -58,7 +63,9 @@ function [] = LiftPowerRPM(MTOW, RPM_list)
             end
             i = i + 1;
         end
+        RPM_opt_list(j) = RPM_opt;
+        j = j + 1;
     end
-    fprintf('RPM required for take-off = %f \n RPM required for cruise = %f \n RPM required for emergency = %f \n', RPM_TO, RPM_cr, RPM_em)
+    fprintf('RPM required for take-off = %f \n RPM required for cruise = %f \n RPM required for emergency = %f \n', RPM_opt_list(1), RPM_opt_list(2), RPM_opt_list(3))
 end
 

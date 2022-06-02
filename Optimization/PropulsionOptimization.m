@@ -52,7 +52,7 @@ end
 %fprintf('The total cost per vehicle: = %f [€]', C_unit)
 
 %%%%%%%%% RPM Calculation %%%%%%%%%%%%%%
-RPM_list = 500:100:1500;
+RPM_list = 100:100:1500;
 LiftPowerRPM(MTOW, RPM_list);
 
 
