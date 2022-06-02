@@ -5,7 +5,7 @@ from matplotlib import cm
 from inputs import *
 from PowerEstimation import *
 from MassEstimation import *
-from CostEstimation import *
+from ParametricCostEstimation import *
 
 # Weight Estimation routine for KittyHawk
 

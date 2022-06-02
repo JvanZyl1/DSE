@@ -1,4 +1,4 @@
-function [C_unit, C_overhead, C_list] = CostEstimation(W_struct, E_total, P_TOL)
+function [C_unit, C_overhead, C_list] = ParametricCostEstimation(W_struct, E_total, P_TOL)
     inputs;
 
     V_H = (1/0.51)*V_cr;

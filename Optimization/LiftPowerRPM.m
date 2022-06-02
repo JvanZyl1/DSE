@@ -12,7 +12,7 @@ function [RPM_opt_list] = LiftPowerRPM(MTOW, RPM_list)
     C_emp = 3.2808399 * C_prop;  % ft
     rho_emp = 0.002377;  % slug/ft^3
 
-    nr_stations = 10;
+    nr_stations = 100;
     V_i = 0.5;
     %Cl_root_tip = [1.5, 0.5];
     

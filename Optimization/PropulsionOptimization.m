@@ -42,7 +42,7 @@ for i=1:n_iter
     %disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
 end
 
-[C_unit, ~, ~] = CostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
+[C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
 
 %fprintf('MTOW: %f [kg]\n',MTOW)
 %fprintf('Battery weight: %f [kg]\n',BatWt)
