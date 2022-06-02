@@ -78,10 +78,10 @@ end
 %for i=1:n_iter
 %    % Thrust power estimation
 %    [P_cruise, P_TOL, P_cont_avg] = PowerReq(MTOW, V_cr);
-%    
+%
 %    % Control power estimation: separate power required on a continuous basis during TOL and maximum power required during strongest gust loads
 %    P_cont_max = (((dist_force * V_wind_avg) / 2) * (sqrt(1 + (2 * dist_force) / (rho * V_wind_avg^2 * A_disk_cont)))) / eta_final;
-%    
+%
 %    % Weight estimation
 %    [BatWt, E_total] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
 %    [PropWt] = propulsiongroup_mass(P_TOL);
