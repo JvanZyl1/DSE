@@ -1,5 +1,5 @@
 import unittest
-from old_scripts.Structures_Radius import *
+from unused_files.old_scripts.Structures_Radius import *
 
 class TestNoInput(unittest.TestCase):
     def test_v_beam_NoInput(self):

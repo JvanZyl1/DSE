@@ -22,7 +22,7 @@ carbon = Material(4274e6, 4274e6, 234e9, 55e6, 691.7, 0)
 
 # Beams (Material,
 beam1 = Beam(aluminium, 1.2, 0.08, 52, 0.0030)
-beam2 = Beam(aluminium, 1.4, 0.08, 52, 0.0030)
+beam2 = Beam(aluminium, 1.4, 0.08, 52, 0.0050)
 beam3 = Beam(aluminium, 1.6, 0.20, 52, 0.0050)
 beam4 = Beam(aluminium, 5, 0.19, 52, 0.0030)
 beam5 = Beam(aluminium, 2.4, 0.08, 52, 0.0050)
@@ -31,7 +31,7 @@ beam7 = Beam(aluminium, 2.0, 0.20, 52, 0.0050)
 beam8 = Beam(aluminium, 2.0, 0.20, 52, 0.0050)
 
 # Gear
-gear1 = Gear(aluminium, 0.1, 0.05, 0.01)
+gear1 = Gear(aluminium, 0.4, 0.03, 0.01)
 
 # Input  beam
 use_material = aluminium

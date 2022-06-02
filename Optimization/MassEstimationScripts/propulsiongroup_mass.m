@@ -19,6 +19,6 @@ W_c = ( rho_c * (l_cab * 2) );
 
 W_pg = (W_m + W_b + W_c) * N_prop;
 
-fprintf('Per motor: %f [kg] \n Blades per prop: %f [kg] \n Cables per prop: %f [kg] \n', W_m, W_b, W_c);
+%fprintf('Per motor: %f [kg] \n Blades per prop: %f [kg] \n Cables per prop: %f [kg] \n', W_m, W_b, W_c);
 
 end
