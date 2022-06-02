@@ -2,6 +2,9 @@
 Classes
 """
 from matplotlib import pyplot as plt
+from math import *
+import numpy as np
+from STRUC_Fuselage import FuselageLoads
 
 class Load:
     C_D = 1.
@@ -9,7 +12,7 @@ class Load:
 
     def __init__(self, L, gustspeed, P, torque):
         self.L = L
-        self.D = 0.5*self.C_D*self.rho*gustspeed**2
+        self.D = 0.5 * self.C_D * self.rho * gustspeed ** 2
         self.P = P
         self.T = torque
 
@@ -24,17 +27,32 @@ class Material:
         self.density = density  # kg/m**3
         self.G_modulus = G_modulus
 
+
 class Boom:
-    def __init__(self, pos_x, pos_y):
+    def __init__(self, pos_x, pos_y, A, skin):
         self.X = pos_x
         self.Y = pos_y
+        self.A = A
+        self.B = np.array([A, A])
+        self.skin = skin
 
+    def area(self, new_val):
+        self.B = new_val
+
+    def plot(self):
+        plt.plot(self.X, self.Y, '--')
+        plt.scatter(self.X, self.Y)
+
+    def stress_z(self, n_y, Mx, n_x=None, My=None):
+        sigma_z = Mx / (self.B * (self.Y - n_y))
+        print(sigma_z)
+        return sigma_z
 
 class CrossSection(Boom):
-    def __init__(self, pos_x, pos_y, pos_z, radius, booms = None):
+    def __init__(self, pos_z, radius, pos_x=None, pos_y=None, A=None, booms=None, skin=None):
         self.Z = pos_z
         self.radius = radius
-        super().__init__(pos_x, pos_y)
+        super().__init__(pos_x, pos_y, A, skin)
         if booms is None:
             self.booms = []
         else:
@@ -46,18 +64,94 @@ class CrossSection(Boom):
                 self.booms.append(boom)
 
     def remove_boom(self, boom):
-        for boom in self.booms:
-            self.booms.remove(boom)
+        self.booms.remove(boom)
 
     def print_booms(self):
         for boom in self.booms:
             print('-->', boom.X)
+
+    def neutral_x(self):
+        tAx = 0
+        tA = 0
+        for boom in self.booms:
+            tAx += boom.A * boom.X
+            tA += boom.A
+        return tAx / tA
+
+    def neutral_y(self):
+        tAy = 0
+        tA = 0
+        for boom in self.booms:
+            tAy += boom.A * boom.Y
+            tA += boom.A
+        return tAy / tA
+
     def plot_booms(self):
         for boom in self.booms:
-            plt.plot(boom.X, boom.Y, '--')
-            plt.scatter(boom.X, boom.Y)
-            plt.title('Booms')
-        plt.xlabel('y [m]')
-        plt.ylabel('x [m]')
+            boom.plot()
+        plt.plot(self.neutral_x(), self.neutral_y(), '+k')
+        plt.title('Booms')
+        plt.xlabel('x [m]')
+        plt.ylabel('y [m]')
         plt.axis('equal')
-        plt.show()
+
+    def plot_skin(self):
+        self.booms.append(self.booms[0])
+        for n in range(len(self.booms) - 1):
+            if self.booms[n].skin != 0:
+                plt.plot([self.booms[n].X[0], self.booms[n + 1].X[0]], [self.booms[n].Y[0], self.booms[n + 1].Y[0]],
+                         linewidth=1000 * self.booms[n].skin)
+                plt.plot([self.booms[n].X[1], self.booms[n + 1].X[1]], [self.booms[n].Y[1], self.booms[n + 1].Y[1]],
+                         linewidth=1000 * self.booms[n].skin)
+        plt.title('Skin panels')
+        plt.xlabel('x [m]')
+        plt.ylabel('y [m]')
+        plt.axis('equal')
+        self.booms.remove(self.booms[-1])
+
+    def boom_area(self):
+        nodes = self.booms
+        nodes.insert(0, nodes[-1])
+        nodes.append(nodes[1])
+        skin_b1 = []
+        skin_b2 = []
+
+        for n in range(len(nodes)-1):
+            b1 = sqrt((nodes[n].X[0] - nodes[n + 1].X[0]) ** 2 +
+                      (nodes[n].Y[0] - nodes[n + 1].Y[0]) ** 2)
+            b2 = sqrt((nodes[n].X[1] - nodes[n + 1].X[1]) ** 2 +
+                      (nodes[n].Y[1] - nodes[n + 1].Y[1]) ** 2)
+            skin_b1.append(b1)
+            skin_b2.append(b2)
+
+        for n in range(len(nodes) - 2):
+            self.booms[n].area(np.array([self.booms[n].B[0] + skin_b1[n] * self.booms[n].skin / 6 * 2 +
+                                        skin_b1[n + 1] * self.booms[n+1].skin / 6 * (2),
+                                        self.booms[n].B[1] + skin_b2[n] * self.booms[n].skin / 6 * 2 +
+                                        skin_b2[n + 1] * self.booms[n+1].skin / 6 * (2)]))
+        for boom in self.booms:
+            print(boom.B)
+        nodes.remove(nodes[0])
+        nodes.remove(nodes[-1])
+
+    def step(self, pos_z_start):
+        if self.Z >= pos_z_start:
+            return 1
+        return 0  # np.where(self.z < pos_z_start, 0, 1)
+
+    def Mx(self):
+        Mx = -2000 * self.Z ** 2 + 400 * self.step(0.2) ** 2
+        return Mx
+
+    def stresses(self):
+        for boom in self.booms:
+            #print(self.neutral_y)
+            print(boom.stress_z(self.neutral_y(), self.Mx()))
+
+
+"""
+    def stress_z(self):
+        for boom in self.booms:
+            sigma_z = self.Mx / (boom.B * (boom.Y - self.neutral_y()))
+            print('$\sigma_z$ = ', sigma_z)
+            """

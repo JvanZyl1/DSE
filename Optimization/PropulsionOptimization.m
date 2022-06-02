@@ -39,15 +39,23 @@ for i=1:n_iter
     W_p = W_m + W_b;
     [W_beams] = StructureOptimization(MTOW, W_p);
     MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
-    disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
+    %disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
 end
 
-fprintf('MTOW: %f [kg]\n',MTOW)
-fprintf('Battery weight: %f [kg]\n',BatWt)
-fprintf('Required energy: %f [Wh]\n',E_total)
-fprintf('takeoff power: %f [kW]\n', P_TOL/1000)
+[C_unit, ~, ~] = CostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
+
+%fprintf('MTOW: %f [kg]\n',MTOW)
+%fprintf('Battery weight: %f [kg]\n',BatWt)
+%fprintf('Required energy: %f [Wh]\n',E_total)
 %fprintf('Battery volume: %f [L]\n', V_bat)
 %fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
+%fprintf('The total cost per vehicle: = %f [€]', C_unit)
+
+%%%%%%%%% RPM Calculation %%%%%%%%%%%%%%
+RPM_list = 500:100:1500;
+LiftPowerRPM(MTOW, RPM_list);
+
+
 
 %%%%%%%%% Angular acceleration calculation %%%%%%%%%%%
 Ang_acc_prop = angular_acc(W_m, W_b, B_prop, R_prop);

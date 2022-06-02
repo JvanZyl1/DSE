@@ -117,7 +117,10 @@ plt.title("Radius required")
 plt.xlabel("z [m]")
 plt.ylabel("r [m]")
 plt.show()
+print("Radius", r_design)
 
+print("Ixx", r_design ** 3 * use_beam.thickness)
+print(use_beam.n)
 print(use_beam.weight)
 
 

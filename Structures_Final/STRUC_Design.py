@@ -12,10 +12,8 @@ class Part:
         self.weight = material.density * length * self.area
 
 
-
 class Beam(Part):
     name = "beam"
-    K = 8
     n = 0
     def __init__(self, material, length, radius, weight_engine, thickness):
         super().__init__(material, length)
