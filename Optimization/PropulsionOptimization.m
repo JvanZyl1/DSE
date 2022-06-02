@@ -2,31 +2,10 @@ clear all
 close all
 clc
 
-% global l_pyl R_pyl 
-
 inputs;
-MTOW = 700;  % kg
-%V_cr = 180 / 3.6 ; % Cruise velocity [m/s]
 
-n_iter = 10;
-%for i=1:n_iter
-%    % Thrust power estimation
-%    [P_cruise, P_TOL, P_cont_avg] = PowerReq(MTOW, V_cr);
-%    
-%    % Control power estimation: separate power required on a continuous basis during TOL and maximum power required during strongest gust loads
-%    P_cont_max = (((dist_force * V_wind_avg) / 2) * (sqrt(1 + (2 * dist_force) / (rho * V_wind_avg^2 * A_disk_cont)))) / eta_final;
-%    
-%    % Weight estimation
-%    [BatWt, E_total] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
-%    [PropWt] = propulsiongroup_mass(P_TOL);
-%    [FuseWt] = fuselagegroup_mass(MTOW, V_cr);
-%    [ContWt, ~, ~] = controlgroup_mass(P_cont_max);
-%    W_beams = 60;  % TODO
-%    MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
-%end
-
-%%%%%%%%%%%% MTOW ESTIMATION with new power estimation method %%%%%%%%%%%
-% for V_cr in V_cr_list
+MTOW = 700;  % kg, initial MTOW estimation
+n_iter = 1;
 for i=1:n_iter
     % Thrust power estimation
     [P_cruise, P_TOL,P_cont_avg, P_cont_max, ~, ~, ~] = PowerReq(MTOW, V_cr);
@@ -40,9 +19,12 @@ for i=1:n_iter
     [W_beams] = StructureOptimization(MTOW, W_p);
     MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
     %disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
+
+
+    RPM_opt_list = LiftPowerRPM(MTOW);
 end
 
-[C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
+%[C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
 
 %fprintf('MTOW: %f [kg]\n',MTOW)
 %fprintf('Battery weight: %f [kg]\n',BatWt)
@@ -51,11 +33,11 @@ end
 %fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
 %fprintf('The total cost per vehicle: = %f [€]', C_unit)
 
-%%%%%%%%% RPM Calculation %%%%%%%%%%%%%%
-RPM_list = 100:100:2000;
-RPM_opt_list = LiftPowerRPM(MTOW, RPM_list);
+%%%%%%%%% RPM Calculation &  %%%%%%%%%%%%%%
 
 
+%%%%%%%%% Max power calculation for emergency conditions %%%%%%%%
+%MotorSelection(MTOW)
 
 %%%%%%%%% Angular acceleration calculation %%%%%%%%%%%
 Ang_acc_prop = angular_acc(W_m, W_b, B_prop, R_prop);
@@ -83,4 +65,29 @@ for omega_prop=omega_list
 end
 
 
+
+
+
+
+
+
+
+
+
+
+%for i=1:n_iter
+%    % Thrust power estimation
+%    [P_cruise, P_TOL, P_cont_avg] = PowerReq(MTOW, V_cr);
+%    
+%    % Control power estimation: separate power required on a continuous basis during TOL and maximum power required during strongest gust loads
+%    P_cont_max = (((dist_force * V_wind_avg) / 2) * (sqrt(1 + (2 * dist_force) / (rho * V_wind_avg^2 * A_disk_cont)))) / eta_final;
+%    
+%    % Weight estimation
+%    [BatWt, E_total] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
+%    [PropWt] = propulsiongroup_mass(P_TOL);
+%    [FuseWt] = fuselagegroup_mass(MTOW, V_cr);
+%    [ContWt, ~, ~] = controlgroup_mass(P_cont_max);
+%    W_beams = 60;  % TODO
+%    MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
+%end
 

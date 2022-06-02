@@ -42,7 +42,7 @@ P_cruise = (P0 + Pi + Pp)/(eta_final * redundancy_factor)   ; %Total power from 
 %%%%%%%%%%% Power required for takeoff and landing %%%%%%%%%%%%
 T = (MTOW * g) * 1.1   ;
 K_TO = 1.5  ;   %safety factor takeoff
-T_TOL = K_TO * T  ;    
+T_TOL = K_TO * T  ;   
 P_TOL = (((T_TOL * V_TO)/2) * (sqrt(1+(2 * T_TOL)/(rho * V_TO^2 * A_disk))))/(eta_final * redundancy_factor) ; %takeoff power
 
 %%%%%%%%%%% Power required for the control propellers %%%%%%%%%%%%
