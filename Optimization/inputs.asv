@@ -69,13 +69,13 @@ V_wind_avg = 21  ; %[m/s], average wind speed at 8 beaufort
 dist_force = 500   ; %[N], force expected to be experienced by side gusts
 
 %battery stuff
-Voltage = 723;   %[V]
-Cell_amp = 20;   %[A]
-Cell_volt = 3.6;    %[V]
+Voltage = 723;
+Cell_amp = 20;
+Cell_volt = 3.6;
 CellToPack = 1.42;
-En_Dens_vol = 450;   %[Wh/L]
-Cell_mass = 0.0455;  %[kg]
-Cell_capa = 10.8;    %[Wh]
+En_Dens_vol = 450;
+Cell_mass = 0.0455;
+Cell_capa = 
 
 
 
