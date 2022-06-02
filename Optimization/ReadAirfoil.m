@@ -10,9 +10,9 @@ function [airfoil] = ReadAirfoil(fileName)
 
     thicks = top(:,2) - bottom(:,2);
     A = trapz(top(:,1),thicks);
-    airf = [top(:,1) bottom(:,2) top(:,2)]
+    airf = [top(:,1) bottom(:,2) top(:,2)];
 
-    airfoil = struct('Area',A,'Airfoil',airf)
+    airfoil = struct('Area',A,'Airfoil',airf);
 
     % plot the geometry
     %plot(top(:,1),top(:,2));
