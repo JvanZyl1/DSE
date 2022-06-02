@@ -1,5 +1,5 @@
 function [alpha, Cl_polar, Cd_polar] = ReadPolar(fileName)
-    data = readmatrix(['../Excel/' fileName]);
+    data = readmatrix(['Excel/' fileName]);
     alpha = data(:,1);
     Cl = data(:,2);
     Cd = data(:,3);

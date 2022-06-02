@@ -44,16 +44,16 @@ end
 
 [C_unit, ~, ~] = CostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
 
-%fprintf('MTOW: %f [kg]\n',MTOW)
-%fprintf('Battery weight: %f [kg]\n',BatWt)
-%fprintf('Required energy: %f [Wh]\n',E_total)
-%fprintf('Battery volume: %f [L]\n', V_bat)
-%fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
+fprintf('MTOW: %f [kg]\n',MTOW)
+fprintf('Battery weight: %f [kg]\n',BatWt)
+fprintf('Required energy: %f [Wh]\n',E_total)
+fprintf('Battery volume: %f [L]\n', V_bat)
+fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
 %fprintf('The total cost per vehicle: = %f [€]', C_unit)
 
 %%%%%%%%% RPM Calculation %%%%%%%%%%%%%%
-RPM_list = 100:100:2000;
-RPM_opt_list = LiftPowerRPM(MTOW, RPM_list);
+RPM_list = 500:100:1500;
+%LiftPowerRPM(MTOW, RPM_list);
 
 
 
