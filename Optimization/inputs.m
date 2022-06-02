@@ -67,3 +67,9 @@ n_ult = 2           ;% ultimate load factor
 % Wind speed
 V_wind_avg = 21  ; %[m/s], average wind speed at 8 beaufort
 dist_force = 500   ; %[N], force expected to be experienced by side gusts
+
+%battery stuff
+Voltage = 800;
+Cell_amp = 20;
+Cell_volt = 3.6;
+

@@ -5,7 +5,7 @@ clc
 %global l_pyl R_pyl N_prop D
 
 inputs;
-MTOW = 800;
+
 
 parasite_drag();
 
@@ -15,6 +15,7 @@ parasite_drag();
 %P_to = P_takeoff/1000
 %P_cr = P_CR/1000
 %[W_bat, ~] = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, nu_discharge)
+%{
 x = [];
 y = [];     %battery weight midterm method (not necessarily wrong)
 y2 = [];    %Power required for cruise midterm method
@@ -47,3 +48,50 @@ plot(x,p0s/1000)
 plot(x,pis/1000,'--')
 plot(x,pps/1000,':')
 hold off
+%}
+
+MTOW = 700;  % kg
+%V_cr = 180 / 3.6 ; % Cruise velocity [m/s]
+
+n_iter = 10;
+%for i=1:n_iter
+%    % Thrust power estimation
+%    [P_cruise, P_TOL, P_cont_avg] = PowerReq(MTOW, V_cr);
+%    
+%    % Control power estimation: separate power required on a continuous basis during TOL and maximum power required during strongest gust loads
+%    P_cont_max = (((dist_force * V_wind_avg) / 2) * (sqrt(1 + (2 * dist_force) / (rho * V_wind_avg^2 * A_disk_cont)))) / eta_final;
+%    
+%    % Weight estimation
+%    [BatWt, E_total] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
+%    [PropWt] = propulsiongroup_mass(P_TOL);
+%    [FuseWt] = fuselagegroup_mass(MTOW, V_cr);
+%    [ContWt, ~, ~] = controlgroup_mass(P_cont_max);
+%    W_beams = 60;  % TODO
+%    MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
+%end
+
+%%%%%%%%%%%% MTOW ESTIMATION with new power estimation method %%%%%%%%%%%
+% for V_cr in V_cr_list
+for i=1:n_iter
+    % Thrust power estimation
+    [P_cruise, P_TOL,P_cont_avg, P_cont_max, ~, ~, ~] = PowerReq(MTOW, V_cr);
+    
+    % Weight estimation
+    [BatWt, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
+    [PropWt, W_m, W_b, W_c] = propulsiongroup_mass(P_TOL);
+    [FuseWt] = fuselagegroup_mass(MTOW, V_cr);
+    [ContWt, W_cm, W_cb] = controlgroup_mass(P_cont_max);
+    W_p = W_m + W_b;
+    [W_beams] = StructureOptimization(MTOW, W_p);
+    MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
+    %disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
+end
+
+[C_unit, ~, ~] = CostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
+
+%Battery programme
+
+
+
+
+
