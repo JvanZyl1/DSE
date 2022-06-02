@@ -45,6 +45,7 @@ end
 fprintf('MTOW: %f [kg]\n',MTOW)
 fprintf('Battery weight: %f [kg]\n',BatWt)
 fprintf('Required energy: %f [Wh]\n',E_total)
+fprintf('takeoff power: %f [kW]\n', P_TOL/1000)
 %fprintf('Battery volume: %f [L]\n', V_bat)
 %fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
 
