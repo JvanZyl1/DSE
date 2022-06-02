@@ -1,5 +1,10 @@
 function [] = LiftPowerRPM(MTOW, RPM_list)
-    inputs;
+    inputs; 
+    %define the airfoil polars:
+    
+    fileName = 'xf-naca23012-il-1000000.csv';
+    [alpha, Cl_polar, Cd_polar] = ReadPolar(fileName);
+    plot(alpha,polyval(Cl_polar,alpha))
 
     nr_stations = 10;
     V_i = 0.5;
@@ -18,8 +23,8 @@ function [] = LiftPowerRPM(MTOW, RPM_list)
     
     L_blade = 0;
     T_TO = 1.1 * 1.5 * MTOW * g / N_prop;
-    T_cr = L_TO * (2/3); %%%%%%%%%%%%% TBD
-    T_em = 1.5 * L_TO; %%%%%%%%%%%%% TBD
+    T_cr = T_TO * (2/3); %%%%%%%%%%%%% TBD
+    T_em = 1.5 * T_TO; %%%%%%%%%%%%% TBD
     i=1;
     T_list = [T_TO, T_cr, T_em];
     L_list = zeros(1, numel(RPM_list));
@@ -38,7 +43,7 @@ function [] = LiftPowerRPM(MTOW, RPM_list)
     
                 theta_local = theta_tip / (r / R);
                 alpha = theta_local - atan(V_TO/V_blade);
-                Cl = Cl_slope * alpha;
+                Cl = polyval(Cl_polar,alpha);
     
                 dL = 0.5 * Cl * rho * V * V * C_prop * dr;
                 L_blade = L_blade + dL;

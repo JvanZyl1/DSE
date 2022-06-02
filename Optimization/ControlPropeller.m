@@ -19,13 +19,9 @@ M_tip = 0.8;    % maximum tip Mach number
 V_a = 343 %speed of sound at sea level
 
 %define the airfoil polars:
-
-alpha = deg2rad(-12:2:12) ;  %NACA 0012 data below 
-Cl = [-0.7967 -0.9268 -0.8043 -0.6567 -0.5073 -0.3402 0 0.3402 0.5073 0.6566 0.8043 0.9268 0.7967];
-Cd = [0.08718 0.04819 0.03353 0.02488 0.02048 0.01942 0.02068 0.01942 0.02048 0.02488 0.03353 0.04819 0.08718]
-Cl_polar = polyfit(alpha,Cl,3);
-Cd_polar = polyfit(alpha,Cd,3);
-
+fileName = 'xf-n0012-il-50000-n5.csv';
+[alpha, Cl_polar, Cd_polar] = ReadPolar(fileName);
+plot(alpha,polyval(Cl_polar,alpha))
 
 
 V_tip = 0.8 * V_a;
