@@ -1,3 +1,4 @@
+%% C_X
 P = [0, 0, -1.32;
     0, 90, 0.29;
     0, 45, -1.15;
@@ -22,7 +23,7 @@ model = scatteredInterpolant(x, y, z, 'linear', 'linear');
 ZI = model(XI, YI);
 fig1 = figure(1)
 surf(XI,YI,ZI); shading interp; hold on
-plot3(x,y,z,'ro'); hold on
+plot3(x1,y1,z1,'ro'); hold on
 % plot3(-x, y, z, 'ro') 
 % plot3(x, -y, z, 'ro')
 % plot3(-x, -y, z, 'ro')
