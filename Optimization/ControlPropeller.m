@@ -84,6 +84,7 @@ for j=1:length(omega_list)
     Q = b * trapz(rs,dQdr);
     P = Q*omega; 
     %disp(P);
+    Q_list(j) = Q;
     V_i_list(j) = V_i;
     T_list(j) = T;
     P_list(j) = P;
@@ -123,7 +124,7 @@ fig1 = figure(1)
 plot(rs,dldr);
 xlabel('R [m]');
 ylabel('$\Delta L / \Delta R$','Interpreter','latex');
-title(['$\theta$' '=' num2str(theta) '$\deg$'],'Interpreter','latex')
+title(['$\theta$' '=' num2str(theta) '$\deg$' ';' '$\Omega$' '=' num2str(omega) '$rad/s$' ],'Interpreter','latex')
 savefig(fig1,'Figures/ControlPropellerFig1')
 
 fig2 = figure(2)
@@ -148,6 +149,12 @@ ylabel('$P$ [W]','Interpreter','latex')
 title(['$\theta$' '=' num2str(theta) '$\deg$'],'Interpreter','latex')
 savefig(fig4,'Figures/ControlPropellerFig4')
 
+fig5 = figure(5)
+plot(omega_list,Q_list);
+xlabel('$\Omega$ [rad/s]','Interpreter','latex');
+ylabel('$Q$ [Nm]','Interpreter','latex')
+title(['$\theta$' '=' num2str(theta) '$\deg$'],'Interpreter','latex')
+savefig(fig5,'Figures/ControlPropellerFig5')
 
 %% make a nice plot of airfoil
 dim = length(Airfoil(:,3));
