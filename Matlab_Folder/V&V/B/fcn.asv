@@ -1,0 +1,101 @@
+function [Fx_acc,Fy_acc, Fz_acc, Mx_acc, My_acc, Mz_acc] = fcn(Fc, Ft, Fb)
+
+%% Load propeller arms data
+xc_1 = 0.1;
+yc_1 = 0;
+zc_1 = 0.3;
+xc_2 = 0.1;
+yc_2 = 0;
+zc_2 = 0.32;
+xc_3 = 0.11;
+yc_3 = 0;
+zc_3 = 0.31;
+
+xt_1 = 0.2;
+yt_1 = 0.2;
+zt_1 = 1;
+xt_2 = 0.2;
+yt_2 = 0.2;
+zt_2 = 1;
+xt_3 = 0.2;
+yt_3 = 0.2;
+zt_3 = 1;
+xt_4 = 0.2;
+yt_4 = 0.2;
+zt_4 = 1;
+
+xb_1 = 0.4;
+yb_1 = 0.3;
+zb_1 = 1.2;
+xb_2 = 0.4;
+yb_2 = 0.3;
+zb_2 = 1.2;
+xb_3 = 0.4;
+yb_3 = 0.3;
+zb_3 = 1.2;
+xb_4 = 0.4;
+yb_4 = 0.3;
+zb_4 = 1.2;
+
+
+%% Split vectors
+A_control = [1 1 1;
+    zc_1 -zc_2 -zc_3;
+    -xc_1 -xc_2 xc_3];
+ab_control = A_control*Fc;
+Fy_acc = ab_control(1
+%{
+Fc_1 = [0; Fc(1); 0];
+Fc_2 = [0; Fc(2); 0];
+Fc_3 = [0; Fc(3); 0];
+
+Ft_1 = [0; 0; -Ft(1)];
+Ft_2 = [0; 0; -Ft(2)];
+Ft_3 = [0; 0; -Ft(3)];
+Ft_4 = [0; 0; -Ft(4)];
+
+Fb_1 = [0; 0; -Fb(1)];
+Fb_2 = [0; 0; -Fb(2)];
+Fb_3 = [0; 0; -Fb(3)];
+Fb_4 = [0; 0; -Fb(4)];
+
+%% Calculate forces
+Fx_acc = 0;
+Fy_acc = sum(Fc);
+Fz_acc = - sum(Ft) - sum(Fb);
+
+%% Propeller arm vectors
+
+c_1 = [-xc_1; 0; -zc_1];
+c_2 = [-xc_2; 0; zc_2];
+c_3 = [xc_3; 0; zc_3];
+t_1 = [xt_1; -yt_1; -zt_1];
+t_2 = [xt_2; yt_2; -zt_2];
+t_3 = [-xt_3; -yt_3; -zt_3];
+t_4 = [-xt_4; yt_4; -zt_4];
+b_1 = [xb_1; -yb_1; zb_1];
+b_2 = [xb_2; yb_2; zb_2];
+b_3 = [-xb_3; -yb_3; zb_3];
+b_4 = [-xb_4; yb_4; zb_4];
+
+%% Propeller moment contributions
+
+Mc1 = cross(c_1, Fc_1)
+Mc2 = cross(c_2, Fc_2)
+Mc3 = cross(c_3, Fc_3)
+Mt1 = cross(t_1, Ft_1)
+Mt2 = cross(t_2, Ft_2)
+Mt3 = cross(t_3, Ft_3)
+Mt4 = cross(t_4, Ft_4)
+Mb1 = cross(b_1, Fb_1)
+Mb2 = cross(b_2, Fb_2)
+Mb3 = cross(b_3, Fb_3)
+Mb4 = cross(b_4, Fb_4)
+
+M = Mc1 + Mc2 + Mc3 + Mt1 + Mt2 + Mt3 + Mt4 + Mb1 + Mb2 + Mb3 + Mb4;
+
+Mx_acc = M(1);
+My_acc = M(2);
+Mz_acc = M(3);
+%}
+end
