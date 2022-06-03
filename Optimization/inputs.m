@@ -30,6 +30,7 @@ R_pyl = 0.05 ;  % Pylon radius (assumed circular) [m]
 l_pyl = 0.2  ;% Pylon length [m]
 CY = 0.6 ; % Assumed fuselage side drag coefficient
 S_side = 19.24 ; % Side fuselage area (ellipse) [m^2]
+Side_CD_times_S = 2.67;
 % Parameters for in-plane control propellers
 R_cont = 0.2 ;
 N_cont = 3 ;
@@ -72,7 +73,7 @@ n_ult = 2           ;% ultimate load factor
 
 % Wind speed
 V_wind_avg = 21  ; %[m/s], average wind speed at 8 beaufort
-dist_force = 500   ; %[N], force expected to be experienced by side gusts
+dist_force = 1200   ; %[N], force expected to be experienced by side gusts
 
 %battery stuff
 Voltage = 723;   %[V]

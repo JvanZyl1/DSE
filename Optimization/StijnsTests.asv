@@ -6,16 +6,15 @@ clc
 
 inputs;
 
+
+parasite_drag();
+RC_AoAandThrust(V_cr, MTOW);
 MTOW = 850;
 V_cr = 180/3.6;
 RPM = 800;
-parasite_drag();
-RC_AoAandThrust(V_cr, MTOW);
 
-[P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp] = PowerReq(MTOW, V_cr, RPM);
-fprintf('P_cruise = %f [kW], and P_TOL = %f [kW]\n',P_cruise/1000,P_TOL/1000)
-fprintf('P_cont_avg = %f [kW], and P_cont_max = %f [kW]\n',P_cont_avg/1000,P_cont_max/1000)
-
+[~,P_takeoff,~] = PowerReq(MTOW,V_cr,RPM);
+[P_CR,~,~] = PowerReq(MTOW,V_cr,RPM);
 %P_to = P_takeoff/1000
 %P_cr = P_CR/1000
 %[W_bat, ~] = BatteryMassFun(R, R_div, V_cr, V_TO, h_TO, eta_E, nu_discharge)
@@ -52,7 +51,7 @@ plot(x,p0s/1000)
 plot(x,pis/1000,'--')
 plot(x,pps/1000,':')
 hold off
-
+%}
 
 MTOW = 700;  % kg
 %V_cr = 180 / 3.6 ; % Cruise velocity [m/s]
@@ -96,6 +95,8 @@ end
 %Battery program
 
 
+
+%{
 N_cells_series = ceil(Voltage/Cell_volt);
 Amp_req = P_TOL/Voltage;
 N_cells_para = ceil(Amp_req/Cell_amp);
@@ -105,8 +106,7 @@ Capacity = N_cells * Cell_capa;
 Batvol = Capacity / En_Dens_vol;
 fprintf('cells in series:%f ,cells in parallel:%f , total nr of cells:%f \n',N_cells_series,N_cells_para,N_cells)
 fprintf('Battery weight: %f [kg]\n',Batweight_cells)
-fprintf('Battery volume: %f [L]\n',Batvol)
-%}
+fprintf('Battery volume: %f [L]\n',Batvol)%}
 
 
 
