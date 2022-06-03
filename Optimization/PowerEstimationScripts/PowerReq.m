@@ -1,4 +1,4 @@
-function [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp] = PowerReq(MTOW, V_cr)
+function [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp] = PowerReq(MTOW, V_cr, RPM)
 
 inputs;
 
@@ -13,6 +13,7 @@ inputs;
 %%%%%%%%%% Power required for cruise %%%%%%%%%%%
 parasite_drag();
 RC_AoAandThrust(V_cr, MTOW);
+omega_prop = RPM * 2 * pi / 60;
 K = 4.65  ;         % 4.5 in hover to 5 at mu = .5
 sigma = (R_prop * C_prop * B_prop)/(pi*R_prop^2);   % solidity for the main rotor
 kappa = 1.2    ;                               % induced power factor

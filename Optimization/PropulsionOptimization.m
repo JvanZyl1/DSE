@@ -5,10 +5,12 @@ clc
 inputs;
 
 MTOW = 700;  % kg, initial MTOW estimation
-n_iter = 1;
+RPM_cr = 1000; % initial RPM estimation
+%RPM_list = 100:100:2000;  % RPM range to iterate on
+n_iter = 10;
 for i=1:n_iter
     % Thrust power estimation
-    [P_cruise, P_TOL,P_cont_avg, P_cont_max, ~, ~, ~] = PowerReq(MTOW, V_cr);
+    [P_cruise, P_TOL,P_cont_avg, P_cont_max, ~, ~, ~] = PowerReq(MTOW, V_cr, RPM_cr);
     
     % Weight estimation
     [BatWt, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
@@ -19,6 +21,10 @@ for i=1:n_iter
     [W_beams] = StructureOptimization(MTOW, W_p);
     MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
     %disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
+
+    %%%%%%%%% RPM Calculation %%%%%%%%%%%%%%
+    [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW);
+    RPM_cr = RPM_opt_list(1);
 end
 
 %[C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
@@ -30,9 +36,7 @@ fprintf('Battery volume: %f [L]\n', V_bat)
 fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
 %fprintf('The total cost per vehicle: = %f [€]', C_unit)
 
-%%%%%%%%% RPM Calculation %%%%%%%%%%%%%%
-RPM_list = 500:100:1500;
-%LiftPowerRPM(MTOW, RPM_list);
+
 
 
 %%%%%%%%% Max power calculation for emergency conditions %%%%%%%%

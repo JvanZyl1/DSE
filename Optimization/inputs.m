@@ -59,13 +59,13 @@ N_proto = 5       ;      % Estimation of number of prototypes created for testin
 % Motor inputs
 %av_power = 20000 ;
 %max_power = 60000 ; % W
-omega_prop = 1000 * 2 * pi / 60 ; % Rotational velocity of propeller [rad/s]
+%omega_prop = 1000 * 2 * pi / 60 ; % Rotational velocity of propeller [rad/s]
 %omega_max = 6500 * 2 * pi / 60  ;
 
 % Mission profile characteristics
 R = 20000      ;     % mission range in meters [m]
 R_div = 4000    ;    % additional diversion range in meters [m]
-V_TO = 3         ;   % assumed take-off and descent velocity [m/s !]
+V_TO = 5         ;   % assumed take-off and descent velocity [m/s !]
 h_TO = 450        ;  % assumed vertical travel distance in [m]
 rho = 1.225        ; % air density in [kg/m3]
 n_ult = 2           ;% ultimate load factor
