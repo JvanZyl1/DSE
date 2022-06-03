@@ -31,6 +31,7 @@ l_pyl = 0.2  ;% Pylon length [m]
 CY = 0.6 ; % Assumed fuselage side drag coefficient
 S_side = 19.24 ; % Side fuselage area (ellipse) [m^2]
 Side_CD_times_S = 2.67;
+Front_CD_times_S = 1.16;
 % Parameters for in-plane control propellers
 R_cont = 0.2 ;
 N_cont = 3 ;
@@ -64,7 +65,7 @@ N_proto = 5       ;      % Estimation of number of prototypes created for testin
 %omega_max = 6500 * 2 * pi / 60  ;
 
 % Mission profile characteristics
-R = 20000      ;     % mission range in meters [m]
+R = 200000000000000000000000000000000000      ;     % mission range in meters [m]
 R_div = 4000    ;    % additional diversion range in meters [m]
 V_TO = 5         ;   % assumed take-off and descent velocity [m/s !]
 h_TO = 450        ;  % assumed vertical travel distance in [m]

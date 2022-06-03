@@ -17,7 +17,7 @@ D = 1.0 ;
 V_cr =  180 / 3.6 ; % Cruise velocity [m/s]
 N_prop = 8 ; % Number of propellers [-]
 R_prop = 1.2 ; % Propeller radius [m]
-A_disk = R_prop^2 * pi * N_prop;
+A_disk = R_prop^2 * pi * N_prop ;
 B_prop = 3 ; % Number of blades per propeller [-]
 C_prop = 0.2;
 R_hub = 0.15;
@@ -64,7 +64,7 @@ N_proto = 5       ;      % Estimation of number of prototypes created for testin
 %omega_max = 6500 * 2 * pi / 60  ;
 
 % Mission profile characteristics
-R = 20000      ;     % mission range in meters [m]
+R = 200000000000000000000      ;     % mission range in meters [m]
 R_div = 4000    ;    % additional diversion range in meters [m]
 V_TO = 5         ;   % assumed take-off and descent velocity [m/s !]
 h_TO = 450        ;  % assumed vertical travel distance in [m]

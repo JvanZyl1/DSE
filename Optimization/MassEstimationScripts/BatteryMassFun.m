@@ -30,7 +30,8 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
         fprintf('The required divergence range is not compatible with the redundant energy at a DoD of %f.\nIf we scale the required energy up to make this happen, we have %f [Wh] of unnecessary energy.\n', nu_discharge, (E_total-E_total_old))
     end
     if Capacity < E_total
-        disp('YOU DONT HAVE THE CAPACITY REQUIRED')
+        disp('INSUFFICIENT BATTERY CAPACITY')
     end
     fprintf('cells in series:%f ,cells in parallel:%f , total nr of cells:%f \n',N_cells_series,N_cells_para,N_cells)
+    fprintf('energy required is %f [Wh]',E_total)
 end

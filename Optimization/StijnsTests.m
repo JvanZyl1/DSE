@@ -7,13 +7,13 @@ clc
 inputs;
 
 MTOW = 850;
-RPM = 1000;
+RPM = 800;
 parasite_drag();
 %RC_AoAandThrust(V_cr, MTOW);
 
 [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp] = PowerReq(MTOW, V_cr, RPM);
-fprintf('P_cruise = %f [kW], and P_TOL = %f [kW]\n',P_cruise/1000,P_TOL/1000)
-fprintf('P_cont_avg = %f [kW], and P_cont_max = %f [kW]\n',P_cont_avg/1000,P_cont_max/1000)
+[W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
+fprintf('battery weight is %f [kg]',W_bat)
 
 %P_to = P_takeoff/1000
 %P_cr = P_CR/1000
