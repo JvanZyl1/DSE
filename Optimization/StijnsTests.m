@@ -13,7 +13,7 @@ parasite_drag();
 
 [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp] = PowerReq(MTOW, V_cr, RPM);
 [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
-fprintf('battery weight is %f [kg]',W_bat)
+fprintf('battery weight is %f [kg]\n',W_bat)
 
 %P_to = P_takeoff/1000
 %P_cr = P_CR/1000

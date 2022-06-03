@@ -65,7 +65,7 @@ N_proto = 5       ;      % Estimation of number of prototypes created for testin
 %omega_max = 6500 * 2 * pi / 60  ;
 
 % Mission profile characteristics
-R = 200000000000000000000000000000000000      ;     % mission range in meters [m]
+R = 20000      ;     % mission range in meters [m]
 R_div = 4000    ;    % additional diversion range in meters [m]
 V_TO = 5         ;   % assumed take-off and descent velocity [m/s !]
 h_TO = 450        ;  % assumed vertical travel distance in [m]
