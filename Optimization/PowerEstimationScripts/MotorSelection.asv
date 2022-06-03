@@ -3,7 +3,7 @@ function [max_powers, W_motors] = MotorSelection(MTOW)
     % conditions, thus for the critical cases where 2 propellers fail.
     
     inputs;
-    
+
     % Distances from centers of propellers to c.g. on x-axis
     x_b = x_cg - R_prop;  % Distance for back propellers
     x_tf = (R_prop * 3 - prop_clearance) - x_cg;  % Distance for top front propeller
@@ -39,8 +39,9 @@ function [max_powers, W_motors] = MotorSelection(MTOW)
 
     %fprintf('Max power required for each engine: Front bottom = %f \n Front top = %f\n Back motors = %f \n', P_bf, P_tf, P_b)
     max_powers = [P_tf, P_bf, P_b];
+
     emrax_weight = [0, 7.2, 9.3, 12.3, 20.3, 40];
-    emrax_power = [0, (32+60)/2, (40+75)/2, (55+100)/2, (85+160)/2, (100+190)/2] * 1000;
+    emrax_power = [0, 32, 40, 55, 85, 100] * 1000;
     W_motors = zeros(1, N_prop);
     for i=1:numel(max_powers)
         max_power = max_powers(i);
@@ -64,6 +65,5 @@ function [max_powers, W_motors] = MotorSelection(MTOW)
             W_motors(8) = W_m;
         end            
     end
-    %fprintf('W_motors = %f %f %f %f %f %f %f %f\n', W_motors(1), W_motors(2), W_motors(3), W_motors(4), W_motors(5), W_motors(6), W_motors(7), W_motors(8))
 end
 

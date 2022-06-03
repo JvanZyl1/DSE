@@ -5,7 +5,7 @@ inputs;
 parasite_drag();
 [CD0, D_q_tot_x] = parasite_drag();
 %global V_cr D_q_tot_x rho MTOW g 
-'Rotor craft angle of attack estimator';
+%'Rotor craft angle of attack estimator';
 %Nominal drag force on fuselage during cruise
 D = 0.5 * rho * V_cr_man^2* Front_CD_times_S  ;
 %Equilibrium AoA ;

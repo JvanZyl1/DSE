@@ -9,42 +9,44 @@ RPM_cr = 1000; % initial RPM estimation
 %RPM_list = 100:100:2000;  % RPM range to iterate on
 n_iter = 10;
 for i=1:n_iter
-    % Thrust power estimation
+
+    % Power calculation
     [P_cruise, P_TOL,P_cont_avg, P_cont_max, ~, ~, ~] = PowerReq(MTOW, V_cr, RPM_cr);
     
     % Weight estimation
     [BatWt, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
-    [PropWt, W_m, W_b, W_c] = propulsiongroup_mass(P_TOL);
+    [PropWt, W_m_avg, W_b, W_c] = propulsiongroup_mass(P_TOL, MTOW);
     [FuseWt] = fuselagegroup_mass(MTOW, V_cr);
     [ContWt, W_cm, W_cb] = controlgroup_mass(P_cont_max);
-    W_p = W_m + W_b;
+    W_p = W_m_avg + W_b;
     [W_beams] = StructureOptimization(MTOW, W_p);
     MTOW = W_PL + BatWt + PropWt + FuseWt + ContWt + W_beams;
+    disp(MTOW)
     %disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
 
-    %%%%%%%%% RPM Calculation %%%%%%%%%%%%%%
+    % RPM and blade twist approximation
     [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW);
     RPM_cr = RPM_opt_list(1);
+
 end
 
-%[C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
+[C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
 
 fprintf('MTOW: %f [kg]\n',MTOW)
 fprintf('Battery weight: %f [kg]\n',BatWt)
 fprintf('Required energy: %f [Wh]\n',E_total)
 fprintf('Battery volume: %f [L]\n', V_bat)
 fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
-%fprintf('The total cost per vehicle: = %f [€]', C_unit)
+fprintf('The total cost per vehicle: = %f [€]\n', C_unit)
 
 
 
 
-%%%%%%%%% Max power calculation for emergency conditions %%%%%%%%
-%MotorSelection(MTOW)
+
 
 %%%%%%%%% Angular acceleration calculation %%%%%%%%%%%
-Ang_acc_prop = angular_acc(W_m, W_b, B_prop, R_prop);
-Ang_acc_cont = angular_acc(W_cm, W_cb, B_cont, R_cont);
+%Ang_acc_prop = angular_acc(W_m, W_b, B_prop, R_prop);
+%Ang_acc_cont = angular_acc(W_cm, W_cb, B_cont, R_cont);
 %fprintf('Angular acceleration for propellers: %f [rad/s^-2]\nAngular acceleration for control props: %f [rad/s^-2]\n', Ang_acc_prop, Ang_acc_cont)
 
 %%%%%%%%% Reynold's number calculation %%%%%%%%%%%%%

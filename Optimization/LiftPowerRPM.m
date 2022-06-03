@@ -1,4 +1,4 @@
-function [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, RPM_list)
+function [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW)
     inputs;
 
 
@@ -13,33 +13,42 @@ function [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, RPM_list)
     fileName = 'xf-naca23012-il-1000000.csv';
     [alpha, Cl_polar, ~] = ReadPolar(fileName);
     plot(alpha,polyval(Cl_polar,alpha))
-
     
     % For parametric calculations with emperical units
     R_emp = 3.2808399 * R_prop;  % ft
     C_emp = 3.2808399 * C_prop;  % ft
-    R_hub_emp = 3.2808399 * R_hub;  % ft
+    R_hub_emp = 3.2808399 * (R_hub + 0.0875);  % ft, hub radius + transition to actual airfoil part
     rho_emp = 0.002377;  % slug/ft^3
-    nr_stations = 10;
+
+    nr_stations = 20;
     dr = (R_emp-R_hub_emp) / nr_stations;  % ft
     sos_emp = 1125.32808; % ft/s
+
+    [tilt_cr, ~] = RC_AoAandThrust(V_cr, MTOW);
+    V_z_cr = V_cr * sin(tilt_cr) * 3.2808399;
+    fprintf('tilt angle = %f, V_z = %f \n', tilt_cr, V_z_cr)
     V_TO_emp = V_TO * 3.2808399;  % ft/s
+    %V_z_list = [V_z_cr, V_TO_emp, 0];
+    V_z_list = [V_TO_emp, V_z_cr, 0];
     
     % Thrusts required for flight modes
     T_TO = 1.1 * 1.5 * MTOW * g / N_prop * 0.2248089431;  % lb
     T_cr = T_TO * (2/3); %%%%%%%%%%%%% TBD  % lb
     T_em = 1.5 * T_TO; %%%%%%%%%%%%% TBD  % lb
-    T_list = [T_cr, T_TO, T_em];  % lb
 
+    %T_list = [T_cr, T_TO, T_em];  % lb
+    T_list = [T_TO, T_cr, T_em];  % lb
     %sigma = (R_emp * C_emp * B_prop) / (pi * R_emp^2);  % solidity ratio
 
     % Setting variables for iteration loops
     j = 1;
-    RPM_list = 500:100:2000;
-    L_list = [];
+    RPM_list = 500:100:5000;
+    %L_list = [];
     RPM_opt_list = zeros(1, numel(T_list));
-    lin_twist_list = -10:-1:-30;  % deg
-    disp(lin_twist_list)
+    M_tip_opt_list = zeros(1, numel(T_list));
+    theta_tip_opt_list = zeros(1, numel(T_list));
+    lin_twist_list = -5:-1:-45;  % deg
+    alpha_deg_list = zeros(1, nr_stations);
     for T=T_list
         i=1;
         V_i_emp = sqrt(T/(2*rho_emp*pi*R_emp^2)); %induced velocity at the rotor
@@ -47,74 +56,78 @@ function [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, RPM_list)
         %fprintf('T = %f', T)
         if j>1
             lin_twist_list = lin_twist_opt;  % Taking optimum twist for cruise
+            theta_start = theta_start_opt;
         end
+
         for lin_twist=lin_twist_list
-            fprintf('lin_twist = %f, T = %f\n', lin_twist, T)
-            
+            %fprintf('lin_twist = %f, T = %f\n', lin_twist, T)
             %col_twist = 1.5 * theta_tip - 0.75 * lin_twist;  % deg
-            %fprintf('Tip pitch angle = %f and col_twist = %f \n',theta_tip, col_twist)
 
             for RPM=RPM_list
                 r = R_hub_emp;
                 omega = RPM * 2 * pi / 60;
                 %C_T_sigma = T_cr / (rho_emp * sigma * pi*R_emp^2 * (omega * R_emp)^2);  % Blade pitch optimized for cruise
                 %theta_tip = 57.3 * (4/Cl_slope*C_T_sigma + sqrt(sigma * C_T_sigma / 2));  % deg
-                col_twist = -1.2 + atan((V_TO_emp+V_i_emp)/(omega * r))*180/pi;  % deg
-                %fprintf('coltwist = %f \n', col_twist)
+                V_z = V_z_list(j);
+                if j == 1
+                    theta_start = -1.2 + atan((V_z+V_i_emp)/(omega * r))*180/pi;  % deg
+                end
                 L_blade = 0;
-                %Cl_list = [];
-                %k = 1;
-                for station=1:nr_stations-1                
+                k = 1;
+                for station=1:nr_stations                
                     r = r + dr;
-                    V_blade = omega * station * dr;
-                    V = sqrt((V_TO_emp+V_i_emp)^2 + V_blade^2);
+                    V_blade = omega * r;
+                    V = sqrt((V_z+V_i_emp)^2 + V_blade^2);
                     M_tip = V / sos_emp;
     
                     % Ideal twist
                     % theta_local = theta_tip / (r / R_emp) * pi/180;  
     
                     % Linear twist
-                    theta_local_deg = col_twist + r/R_emp * lin_twist;  % deg
+                    theta_local_deg = theta_start + (r-R_hub_emp)/(R_emp-R_hub_emp) * lin_twist;  % deg
                     theta_local = theta_local_deg * pi / 180;
+
                     %fprintf('incoming airflow = %f \n', atan((V_TO_emp+V_i_emp)/V_blade)*180/pi)
-                    alpha = theta_local - atan((V_TO_emp+V_i_emp)/V_blade);
+                    alpha = theta_local - atan((V_z+V_i_emp)/V_blade);
                     alpha_deg = alpha * 180 / pi;
                     Cl = polyval(Cl_polar,alpha_deg);
                     if alpha_deg < alpha_min || alpha_deg>alpha_stall
                         Cl = 0;
                     end
-                    %fprintf('RPM = %f, AoA = %f, Cl = %f\n V_blade = %f and V_z = %f with local pitch = %f \n', RPM, alpha_deg, Cl, V_blade, V_TO_emp+V_i_emp, theta_local*180/pi)
-                    %fprintf('At alpha = %f [deg] (pitch = %f, Cl = %f\n', alpha_deg, theta_local*180/pi, Cl)
-                    %Cl_list(k) = Cl;
-                    %disp(Cl_list)
                     dL = 0.5 * Cl * rho_emp * V * V * C_emp * dr;
                     dL_z = dL * cos(alpha);
-                    %fprintf('dL = %f, dL_z = %f, alpha_deg = %f \n', dL, dL_z, alpha_deg)
                     L_blade = L_blade + dL_z;
-                    %k = k + 1;
+                    %fprintf('r = %f \n', r)
+                    if j>1
+                        %fprintf('theta = %f at r = %f \n', theta_local_deg, r)
+                    end
+                    alpha_deg_list(k) = alpha_deg;
+                    k = k + 1;
                 end
-                %fprintf('V_i = %f \n, L = %f', V_i_emp, L)
                 L = L_blade * B_prop;
-                %L_list(i) = L;
-                %disp(L_list)
                 i = i + 1;
-                %fprintf(['L = %f [N], T = %f, rho = %f, sigma = %f, R = %f, omega = %f\n' ...
-                %    'C_T_sigma = %f, V_tip = %f, alpha = %f \n'], L, T, rho_emp, sigma, R_emp, omega, C_T_sigma, V, alpha)
-                %fprintf('For RPM = %f, the lift produced per propeller is %f \n', RPM, L)
-                %fprintf('WHATS WROOONGG, alpha_deg = %f, V = %f\n', alpha_deg, V)
                 if L>T && RPM < RPM_opt_twist
                     RPM_opt_twist = RPM;
+                    M_tip_opt = M_tip;
                     lin_twist_opt = lin_twist;
-                    fprintf('RPM_opt = %f for twist = %f. Local Mach number at tip = %f\n', RPM, lin_twist,M_tip)
+                    theta_start_opt=theta_start;
+                    %fprintf('RPM_opt = %f for twist = %f. Local Mach number at tip = %f\n', RPM, lin_twist,M_tip)
+                    theta_tip_opt = theta_local_deg;
+                    if j == 1
+                        disp(alpha_deg_list)
+                    end
                 end
+
             end
         end
         RPM_opt_list(j) = RPM_opt_twist;
-        %lin_twist_opt_list(j) = lin_twist_opt;
+        M_tip_opt_list(j) = M_tip_opt;
+        theta_tip_opt_list(j) = theta_tip_opt;
         j = j + 1;
+        fprintf('theta_tip = %f \n', theta_tip_opt)
     end
-    fprintf('RPM required for take-off = %f \n RPM required for cruise = %f \n RPM required for emergency = %f \n', RPM_opt_list(1), RPM_opt_list(2), RPM_opt_list(3))
-    %disp(lin_twist_opt_list)
+    fprintf(['Optimal linear twist for cruise conditions = %f with pitch at hub = %f\n' ...
+        'RPM required for cruise = %f \n RPM required for take-off = %f \n RPM required for emergency = %f \n'], lin_twist_opt, theta_start, RPM_opt_list(1), RPM_opt_list(2), RPM_opt_list(3))
 end
 
 
