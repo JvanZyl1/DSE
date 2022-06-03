@@ -20,7 +20,7 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     N_cells = N_cells_para*N_cells_series;       
     W_bat = N_cells * CellToPack * Cell_mass;
     Capacity = N_cells * Cell_capa;
-    V_bat = (E_total / nu_discharge) / vol_dens;  % https://insideevs.com/news/581729/volumetric-energy-density-ev-batteries-growth/
+    V_bat = Capacity / vol_dens;  % https://insideevs.com/news/581729/volumetric-energy-density-ev-batteries-growth/
     
     E_div = R_div / V_cr;
     E_red = E_total * (1/nu_discharge - 1);
