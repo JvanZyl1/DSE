@@ -7,10 +7,9 @@ clc
 inputs;
 
 MTOW = 850;
-V_cr = 180/3.6;
-RPM = 800;
+RPM = 1000;
 parasite_drag();
-RC_AoAandThrust(V_cr, MTOW);
+%RC_AoAandThrust(V_cr, MTOW);
 
 [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp] = PowerReq(MTOW, V_cr, RPM);
 fprintf('P_cruise = %f [kW], and P_TOL = %f [kW]\n',P_cruise/1000,P_TOL/1000)
