@@ -11,7 +11,7 @@ n_iter = 10;
 for i=1:n_iter
 
     % Power calculation
-    [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp, T_TOL, T_cr] = PowerReq(MTOW, V_cr, RPM_cr);
+    [P_cruise, P_TOL,P_cont_avg, P_cont_max, ~, ~, ~, T_TOL, T_cr] = PowerReq(MTOW, V_cr, RPM_cr);
     
     % Weight estimation
     [BatWt, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
@@ -25,8 +25,7 @@ for i=1:n_iter
     %disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
 
     % RPM and blade twist approximation
-    %[RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, T_cr);
-    [RPM_opt_list, lin_twist] = TipAngleOpt(MTOW, T_cr);
+    [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW);
     RPM_cr = RPM_opt_list(1); %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% fix
 
 end

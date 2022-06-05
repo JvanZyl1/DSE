@@ -1,4 +1,4 @@
-function [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp] = PowerReq(MTOW, V_cr, RPM)
+function [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp, T_TOL, T_cr] = PowerReq(MTOW, V_cr, RPM)
 
 inputs;
 
@@ -28,7 +28,8 @@ mu = (V_cr * cos((alpha_TPP))) / (omega_prop * R_prop)   ; % advance ratio [~]
 % Calculate the dimensionalizing factor
 P_fact =  rho * A_rotor * (R_prop*omega_prop)^3   ;
 %    % Caculate the thrust coefficient
-C_T = (MTOW * g / cos(deg2rad(alpha_TPP)) ) / (rho * (R_prop * omega_prop)^2 * A_rotor)   ;
+T_cr = MTOW * g / cos(deg2rad(alpha_TPP));
+C_T = T_cr / (rho * (R_prop * omega_prop)^2 * A_rotor)   ;
 
 C_P0 = sigma * C_d0 * (1 + (K * mu^2)) / 8     ;
 P0 = C_P0 * P_fact       ;
