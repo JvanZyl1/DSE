@@ -27,6 +27,7 @@ T = 10.5;
 C_D = 0.6;
 time_delay = 0.1;
 S = 1*1.8;
+f_prop = 100;
 
 %% Linear Dynamics Inputs
 %F_aero = [1;2;3];
