@@ -1,3 +1,6 @@
+clear all
+close all
+clc
 %% C_X
 P = [0, 0, -1.32;
     0, 90, 0.29;
