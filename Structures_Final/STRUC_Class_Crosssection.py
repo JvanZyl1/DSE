@@ -77,26 +77,6 @@ class CrossSection(Boom):
         self.booms.remove(self.booms[-1])
         if show:
             plt.show()
-    """
-    def step(self, z_start):
-        if self.Z[0] >= z_start and self.Z[1] >= z_start:
-            return 1, 1
-        elif self.Z[0] < z_start and self.Z[1] >= z_start:
-            return 0, 1
-        elif self.Z[0] >= z_start and self.Z[1] < z_start:
-            return 1, 0
-        return 0, 0  # np.where(self.z < z_start, 0, 1)
-
-    def Mx(self):
-        Mx = [-2000 * self.Z[0] ** 2 + 400 * self.step(0.2)[0] ** 2,
-              -2000 * self.Z[1] ** 2 + 400 * self.step(0.2)[1] ** 2]
-        return Mx
-
-    def My(self):
-        My = [-200 * self.Z[0] ** 2 + 400 * self.step(0.2)[0] ** 2,
-              -200 * self.Z[1] ** 2 + 400 * self.step(0.2)[1] ** 2]
-        return My
-    """
 
     def Ixx_cs(self):
         for boom in self.booms:
@@ -110,94 +90,59 @@ class CrossSection(Boom):
             self.Iyy_CS[1] += boom.Iyy(self.neutral_y())[1]
         return self.Iyy_CS
 
-    def stresses_z(self, yield_strength, M_x, M_y):
-        print(M_x, M_y)
-        Ixx, Iyy = self.Ixx_cs(), self.Iyy_cs()
-
-
-        """
-        stress_cs0, stress_cs1 = [], []
-
-        for boom in self.booms:
-            stress_cs0.append(boom.stress_z(self.nx, self.ny, Mx, My, Ixx, Iyy)[0])
-            stress_cs1.append(boom.stress_z(self.nx, self.ny, Mx, My, Ixx, Iyy)[1])
-
-        return stress_cs0, stress_cs1
-        """
-    def skin_length(self):
+    def boom_area(self, sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n):
         nodes = self.booms
         nodes.insert(0, nodes[-1])
         nodes.append(nodes[1])
-        t_b1 = []
-        t_b2 = []
+        t_b = self.skin_length(n)
 
-        for n in range(len(nodes) - 1):
-            node, node1 = nodes[n], nodes[n + 1]
-            b1 = sqrt((node.X[0] - node1.X[0]) ** 2 + (node.Y[0] - node1.Y[0]) ** 2)
-            b2 = sqrt((node.X[1] - node1.X[1]) ** 2 + (node.Y[1] - node1.Y[1]) ** 2)
-            t_b1.append(b1), t_b2.append(b2)
+        for i in range(len(nodes) - 2):
+            b_i0, b_i1, b_i2 = self.booms[i], self.booms[i + 1], self.booms[i + 2]
+            s_i0 = b_i0.stress_max(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
+            s_i1 = b_i1.stress_max(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
+            s_i2 = b_i2.stress_max(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
+            if self.Z[n] == 0:
+                b_i1.area(n, b_i1.A[0])
+            else:
 
-        return t_b1, t_b2
-
-
-"""
-    def boom_area(self):
-        nodes = self.booms
-        nodes.insert(0, nodes[-1])
-        nodes.append(nodes[1])
-        t_b1 = []
-        t_b2 = []
-
-        for n in range(len(nodes) - 1):
-            b1 = sqrt((nodes[n].X[0] - nodes[n + 1].X[0]) ** 2 +
-                      (nodes[n].Y[0] - nodes[n + 1].Y[0]) ** 2)
-            b2 = sqrt((nodes[n].X[1] - nodes[n + 1].X[1]) ** 2 +
-                      (nodes[n].Y[1] - nodes[n + 1].Y[1]) ** 2)
-            t_b1.append(b1)
-            t_b2.append(b2)
-        x_i = []
-        ny = []
-        boom1 = []
-        boom2 = []
-        boom3 = []
-        boom4 = []
-        for i in range(200):
-            x_i.append(i)
-            ny.append(self.neutral_y())
-            self.stresses_z()
-            for n in range(len(nodes) - 2):
-                b_n0, b_n1, b_n2 = self.booms[n], self.booms[n + 1], self.booms[n + 2]
-                if self.Z[0] == 0:
-                    b_n1.area(np.array([b_n1.A[0],
-                                        b_n1.A[1] +
-                                        t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n0.sigma_z[1]) +
-                                        t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n2.sigma_z[1])]))
-                else:
-                    b_n1.area(np.array([b_n1.A[0] +
-                                        t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[0] / b_n0.sigma_z[0]) +
-                                        t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[0] / b_n2.sigma_z[0]),
-                                        b_n1.A[1] +
-                                        t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n0.sigma_z[1]) +
-                                        t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n2.sigma_z[1])]))
-                if n == 1:
-                    print('Previous node', t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n0.sigma_z[1]), '   Next node', t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n2.sigma_z[1]))
-
-            boom1.append(self.booms[1].B[1])
-            boom2.append(self.booms[2].B[1])
-            boom3.append(self.booms[3].B[1])
-            boom4.append(self.booms[4].B[1])
-        plt.plot(x_i, boom1)
-        plt.plot(x_i, boom2)
-        plt.plot(x_i, boom3)
-        plt.plot(x_i, boom4)
-
-        plt.plot(x_i, ny)
-        plt.show()
-        for boom in self.booms:
-            print(boom.B)
+                b_i1.area(n, b_i1.A[0] +
+                          t_b[n + 1] * b_i1.t / 6 * (2 + s_i1 / s_i0) +
+                          t_b[n + 1] * b_i1.t / 6 * (2 + s_i1 / s_i2))
+        self.Ixx_cs(), self.Iyy_cs()
         nodes.remove(nodes[0])
         nodes.remove(nodes[-1])
 
+    def stress_CS(self, sigma_y, E, M_x, M_y, n):
+        n_x, n_y = self.neutral_x()[n], self.neutral_y()[n]
+        Ixx, Iyy = self.Ixx_cs()[n], self.Iyy_cs()[n]
+        for boom in self.booms:
+            boom.stress_boom(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
+            boom.stress_max(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
+
+        self.boom_area(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
+        for boom in self.booms:
+            boom.stress_boom(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
+
+    def skin_length(self, n):
+        nodes = self.booms
+        nodes.insert(0, nodes[-1])
+        nodes.append(nodes[1])
+        t_b = []
+
+        for i in range(len(nodes) - 1):
+            node, node1 = nodes[i], nodes[i + 1]
+            b = sqrt((node.X[n] - node1.X[n]) ** 2 + (node.Y[n] - node1.Y[n]) ** 2)
+            t_b.append(b)
+
+        nodes.remove(nodes[0])
+        nodes.remove(nodes[-1])
+
+        return t_b
+
+
+
+
+"""
     def boom_area_updated(self):
         nodes = self.booms
         nodes.insert(0, nodes[-1])

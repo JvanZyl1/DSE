@@ -47,7 +47,7 @@ cs_2.add_boom([boom_2_01, boom_2_02, boom_2_03, boom_2_04, boom_2_05, boom_2_06,
 
 # Assign cross-sections to fuselage
 fuselage.add_cs([cs_1, cs_2])
-fuselage.stress(1)
+fuselage.stress_FL()
 
 
 

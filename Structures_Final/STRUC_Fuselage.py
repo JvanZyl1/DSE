@@ -41,6 +41,7 @@ class Fuselage(CrossSection):
             plt.plot(cs.Z, cs.R, 'b')
             plt.plot(cs.Z, -cs.R, 'b')
         plt.show()
+
     # Loading diagrams: step function
     def step(self, z, z_start):
         if z >= z_start:
@@ -64,10 +65,16 @@ class Fuselage(CrossSection):
         My = -2000 * z ** 2 + 4000 * self.step(z, 0.2) ** 2
         return My
 
-    def stress(self, z):
+    def update_boom(self):
         for cs in self.cross_sections:
-            if cs.Z[0] <= z <= cs.Z[1]:
-                cs.stresses_z(Fuselage.sigma_y, self.Mx(z), self.My(z))
+            cs.boom_area(0)
+            cs.boom_area(1)
+
+
+    def stress_FL(self):
+        for cs in self.cross_sections:
+            cs.stress_CS(Fuselage.sigma_y, Fuselage.E, self.Mx(cs.Z[0]), self.My(cs.Z[0]), 0)
+            cs.stress_CS(Fuselage.sigma_y, Fuselage.E, self.Mx(cs.Z[1]), self.My(cs.Z[1]), 1)
 
     def plot(self, equation, show=False):
         print(equation.__name__)
