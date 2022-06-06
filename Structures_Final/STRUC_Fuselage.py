@@ -1,34 +1,97 @@
 
 
 import numpy as np
+from STRUC_CrossSection import CrossSection
 from matplotlib import pyplot as plt
 
-class FuselageLoads:
-    def __init__(self, pos_z):
-        self.z = pos_z
+if __name__ == '__main__':
+    print('RUN Fuselage\n\n')
+else:
+    print('class Fuselage imported\n\n')
 
-    def step(self, pos_z_start):
-        if self.z >= pos_z_start:
+class Fuselage(CrossSection):
+    sigma_y = 400e6
+    E = 70e9
+    dz = 0.01
+
+    def __init__(self, length, pos_z=None, radius=None, cross_sections=None):
+        self.L = length
+        self.cross_sections = []
+        CrossSection.__init__(pos_z, radius)
+        if cross_sections is None:
+            self.cross_sections = []
+        else:
+            self.cross_sections = cross_sections
+
+    #Cross-Sections Management
+    def add_cs(self, cs_lst):
+        for cs in cs_lst:
+            if cs not in self.cross_sections:
+                self.cross_sections.append(cs)
+
+    def remove_cs(self, cs):
+        self.booms.remove(cs)
+
+    def print_cs(self):
+        for cs in self.cross_sections:
+            print('-->', cs.Z)
+
+    def plot_cs(self):
+        for cs in self.cross_sections:
+            plt.plot(cs.Z, cs.R, 'b')
+            plt.plot(cs.Z, -cs.R, 'b')
+        plt.show()
+    # Loading diagrams: step function
+    def step(self, z, z_start):
+        if z >= z_start:
             return 1
         return 0  # np.where(self.z < pos_z_start, 0, 1)
 
-    def Vx(self):
-        Vx = -200 * self.z + 500 * self.step(0.2)
+    # Loading diagrams functions
+    def Vx(self, z):
+        Vx = -200 * z + 500 * self.step(z, 0.2)
         return Vx
 
-    def Vy(self):
-        Vy = -100 * self.z + 500 * self.step(0.3)
+    def Vy(self, z):
+        Vy = -100 * z + 500 * self.step(z, 0.3)
         return Vy
 
-    def Mx(self):
-        Mx = -2000 * self.z ** 2 + 400 * self.step(0.2) ** 2
+    def Mx(self, z):
+        Mx = -2000 * z ** 2 + 400 * self.step(z, 0.2) ** 2
         return Mx
 
-    def My(self):
-        My = -2000 * self.z ** 2 + 400 * self.step(0.2) ** 2
+    def My(self, z):
+        My = -2000 * z ** 2 + 4000 * self.step(z, 0.2) ** 2
         return My
 
+    def plot(self, equation, show=False):
+        print(equation.__name__)
 
-z_val = 0.3
-Fuselage = FuselageLoads(z_val)
-y = Fuselage.Mx()
+        z_range = np.arange(0, self.L + Fuselage.dz, Fuselage.dz)
+        result = []
+        for z_val in z_range:
+            result.append(equation(z_val))
+        plt.plot(z_range, result)
+
+        if equation.__name__ == "Mx":
+            plt.title("Moment diagram")
+            plt.xlabel('$z$ [m]'), plt.ylabel('$M_x$ [N m]')
+        elif equation.__name__ == "My":
+            plt.title("Moment diagram")
+            plt.xlabel('$z$ [m]'), plt.ylabel('$M_y$ [N m]')
+        elif equation.__name__ == "Vx":
+            plt.title("Internal load diagram")
+            plt.xlabel('$z$ [m]'), plt.ylabel('$V_x$ [N]')
+        elif equation.__name__ == "Vy":
+            plt.title("Internal load diagram")
+            plt.xlabel('$z$ [m]'), plt.ylabel('$V_y$ [N]')
+        else:
+            raise NameError
+
+        if show:
+            plt.show()
+
+
+
+
+

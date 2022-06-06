@@ -8,12 +8,13 @@ from STRUC_Inputs import *
 # Define Cross-Section
 class CrossSection(Boom):
     def __init__(self, pos_z, radius, pos_x=None, pos_y=None, A=None, booms=None, t=None):
+        self.nx = None
         self.Z = pos_z  # np.array([z1, z2]) [m]
-        self.R = radius  # np.array([r1, r2]) [m]
-        self.L = float(pos_z[1]) - float(pos_z[0])
+        self.radius = radius  # np.array([r1, r2]) [m]
+        self.length = float(pos_z[1]) - float(pos_z[0])
         self.Ixx_CS = [0, 0]
         self.Iyy_CS = [0, 0]
-        super().__init__(pos_x, pos_y, A, t)
+        super().__init__(pos_x, pos_y, A, t, self.radius, self.length)
         if booms is None:
             self.booms = []
         else:
@@ -22,7 +23,6 @@ class CrossSection(Boom):
     def add_boom(self, boom_lst):
         for boom in boom_lst:
             if boom not in self.booms:
-                boom.properties_cs(self.R, self.L)
                 self.booms.append(boom)
 
     def remove_boom(self, boom):
@@ -33,22 +33,23 @@ class CrossSection(Boom):
             print('-->', boom.X)
 
     def neutral_x(self):
-        tBx, tB = 0, 0
+        tAx = 0
+        tA = 0
         for boom in self.booms:
-            tBx += boom.B * boom.X
-            tB += boom.B
-        self.nx = tBx / tB
+            tAx += boom.B * boom.X
+            tA += boom.B
+        self.nx = tAx / tA
         return self.nx
 
     def neutral_y(self):
-        tBy, tB = 0, 0
+        tAy = 0
+        tA = 0
         for boom in self.booms:
-            tBy += boom.B * boom.Y
-            tB += boom.B
-        self.ny = tBy / tB
-        return self.ny
+            tAy += boom.B * boom.Y
+            tA += boom.B
+        return tAy / tA
 
-    def plot_booms(self, show=False):
+    def plot_booms(self):
         for boom in self.booms:
             boom.plot()
         plt.plot(self.neutral_x(), self.neutral_y(), '+k')
@@ -56,28 +57,21 @@ class CrossSection(Boom):
         plt.xlabel('x [m]')
         plt.ylabel('y [m]')
         plt.axis('equal')
-        if show:
-            plt.show()
 
-    def plot_skin(self, show=False):
+    def plot_t(self):
         self.booms.append(self.booms[0])
         for n in range(len(self.booms) - 1):
-            boom_n = self.booms[n]
-            boom_n1 = self.booms[n + 1]
-            if boom_n.t != 0:
-                print(boom_n.t, boom_n.X, boom_n.Y)
-                plt.plot([boom_n.X[0], boom_n1.X[0]], [boom_n.Y[0], boom_n1.Y[0]], c='y',
-                         linewidth=1000 * boom_n.t, zorder=0)
-                plt.plot([boom_n.X[1], boom_n1.X[1]], [boom_n.Y[1], boom_n1.Y[1]], c='y',
-                         linewidth=1000 * boom_n.t, zorder=0)
+            if self.booms[n].t != 0:
+                plt.plot([self.booms[n].X[0], self.booms[n + 1].X[0]], [self.booms[n].Y[0], self.booms[n + 1].Y[0]],
+                         linewidth=1000 * self.booms[n].t)
+                plt.plot([self.booms[n].X[1], self.booms[n + 1].X[1]], [self.booms[n].Y[1], self.booms[n + 1].Y[1]],
+                         linewidth=1000 * self.booms[n].t)
         plt.title('Skin panels')
         plt.xlabel('x [m]')
         plt.ylabel('y [m]')
         plt.axis('equal')
         self.booms.remove(self.booms[-1])
-        if show:
-            plt.show()
-    """
+
     def step(self, z_start):
         if self.Z[0] >= z_start and self.Z[1] >= z_start:
             return 1, 1
@@ -96,7 +90,6 @@ class CrossSection(Boom):
         My = [-200 * self.Z[0] ** 2 + 400 * self.step(0.2)[0] ** 2,
               -200 * self.Z[1] ** 2 + 400 * self.step(0.2)[1] ** 2]
         return My
-    """
 
     def Ixx_cs(self):
         for boom in self.booms:
@@ -110,14 +103,15 @@ class CrossSection(Boom):
             self.Iyy_CS[1] += boom.Iyy(self.neutral_y())[1]
         return self.Iyy_CS
 
-    def stresses_z(self, M_x, M_y):
-        M_x, M_y = self.Mx(self.Z[0]), np.array(self.My())
+    def stresses_z(self):
+        nx, ny = np.array(self.neutral_x()), np.array(self.neutral_y())
+        Mx, My = np.array(self.Mx()), np.array(self.My())
         Ixx, Iyy = self.Ixx_cs(), self.Iyy_cs()
         stress_cs0, stress_cs1 = [], []
 
         for boom in self.booms:
-            stress_cs0.append(boom.stress_z(self.nx, self.ny, Mx, My, Ixx, Iyy)[0])
-            stress_cs1.append(boom.stress_z(self.nx, self.ny, Mx, My, Ixx, Iyy)[1])
+            stress_cs0.append(boom.stress_z(nx, ny, Mx, My, Ixx, Iyy)[0])
+            stress_cs1.append(boom.stress_z(nx, ny, Mx, My, Ixx, Iyy)[1])
 
         return stress_cs0, stress_cs1
 
