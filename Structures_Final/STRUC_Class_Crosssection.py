@@ -110,9 +110,12 @@ class CrossSection(Boom):
             self.Iyy_CS[1] += boom.Iyy(self.neutral_y())[1]
         return self.Iyy_CS
 
-    def stresses_z(self, M_x, M_y):
-        M_x, M_y = self.Mx(self.Z[0]), np.array(self.My())
+    def stresses_z(self, yield_strength, M_x, M_y):
+        print(M_x, M_y)
         Ixx, Iyy = self.Ixx_cs(), self.Iyy_cs()
+
+
+        """
         stress_cs0, stress_cs1 = [], []
 
         for boom in self.booms:
@@ -120,7 +123,7 @@ class CrossSection(Boom):
             stress_cs1.append(boom.stress_z(self.nx, self.ny, Mx, My, Ixx, Iyy)[1])
 
         return stress_cs0, stress_cs1
-
+        """
     def skin_length(self):
         nodes = self.booms
         nodes.insert(0, nodes[-1])

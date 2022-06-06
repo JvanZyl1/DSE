@@ -64,6 +64,11 @@ class Fuselage(CrossSection):
         My = -2000 * z ** 2 + 4000 * self.step(z, 0.2) ** 2
         return My
 
+    def stress(self, z):
+        for cs in self.cross_sections:
+            if cs.Z[0] <= z <= cs.Z[1]:
+                cs.stresses_z(Fuselage.sigma_y, self.Mx(z), self.My(z))
+
     def plot(self, equation, show=False):
         print(equation.__name__)
 
