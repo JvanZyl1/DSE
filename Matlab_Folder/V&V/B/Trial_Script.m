@@ -166,6 +166,12 @@ for i = 0:1 %c_MF
 end
 %}
 
+%% Aero transformation matrix
+
+Tx_aero = [1 0 0;
+    0 cos(pi) -sin(pi);
+    0 sin(pi) cos(pi)];
+
 %% Generate C_X lookup table
 
 P = [0, 0, -1.32;

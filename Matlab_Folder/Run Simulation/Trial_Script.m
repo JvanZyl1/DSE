@@ -16,7 +16,7 @@ I_inv = Inertia_inv;
 m = 645;
 rho = 1.225;
 g = 9.81;
-%T = 10.5;
+T = 10.5;
 %C_D = 0.6;
 time_delay = 0.1;
 %S = 1*1.8;
@@ -40,7 +40,7 @@ Tzy_Shard_inv = inv(Tzy_Shard);
 r_0 = Tzy_Shard*[90; -125; 160];
 theta_0 = [0; 10*pi/180; 0];
 
-v_0 = [0;0;0];
+%v_0 = [0;0;0]; Is now filled in later
 w_0 = [0;0;0];
 
 a_0 = [0;0;0];
@@ -191,6 +191,14 @@ u_2 = a(1:d_shard,3);
 xdata = a(1:d_shard,4);
 ydata = a(1:d_shard,5);
 zdata = a(1:d_shard,6);
+
+m_shard = (abs(max(zdata)) + abs(min(zdata)))/(abs(max(ydata)) + abs(min(ydata))); %Gradient of shard in shard frame
+angle_shard = atan(m_shard); %a - y, o  - z
+V0_shard = 100* 100/(60*60);
+Vz0_shard = V0_shard*cos(angle_shard);
+Vy0_shard = V0_shard*sin(angle_shard);
+V0_shard = [0; Vz0_shard; Vy0_shard];
+v_0 = Tzy_Shard*V0_shard;
 
 %% Generate C_X lookup table
 
