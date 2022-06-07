@@ -131,6 +131,16 @@ class CrossSection(Boom):
         for boom in self.booms:
             boom.stress_boom(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
 
+    def shear_CS(self, V_x, V_y, n):
+        n_x, n_y = self.neutral_x()[n], self.neutral_y()[n]
+        Ixx, Iyy = self.Ixx_cs()[n], self.Iyy_cs()[n]
+        for boom in self.booms:
+            boom.shear_boom(n_x, n_y, V_x, V_y, Ixx, Iyy, n)
+            #print(boom.dq_x, boom.dq_y)
+
+
+
+
     def skin_length(self, n):
         nodes = self.booms
         nodes.insert(0, nodes[-1])

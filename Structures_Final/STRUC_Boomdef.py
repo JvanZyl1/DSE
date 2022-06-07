@@ -49,7 +49,7 @@ cs_2.add_boom([boom_2_01, boom_2_02, boom_2_03, boom_2_04, boom_2_05, boom_2_06,
 fuselage.add_cs([cs_1, cs_2])
 
 fuselage.weight_FL()
-fuselage.stress_FL()
+fuselage.shear_FL()
 
 
 

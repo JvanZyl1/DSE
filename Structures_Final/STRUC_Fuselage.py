@@ -77,11 +77,17 @@ class Fuselage(CrossSection):
             cs.boom_area(0)
             cs.boom_area(1)
 
-
     def stress_FL(self):
         for cs in self.cross_sections:
             cs.stress_CS(Fuselage.sigma_y, Fuselage.E, self.Mx(cs.Z[0]), self.My(cs.Z[0]), 0)
             cs.stress_CS(Fuselage.sigma_y, Fuselage.E, self.Mx(cs.Z[1]), self.My(cs.Z[1]), 1)
+
+    def shear_FL(self):
+        self.stress_FL()
+        for cs in self.cross_sections:
+            cs.shear_CS(self.Vx(cs.Z[0]), self.Vy(cs.Z[1]), 0)
+            cs.shear_CS(self.Vx(cs.Z[1]), self.Vy(cs.Z[1]), 1)
+
 
     def plot_loads(self, equation, show=False):
         print(equation.__name__)
