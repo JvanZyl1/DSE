@@ -1,5 +1,12 @@
-function [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, T_cr)
+function [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW)
     inputs;
+    
+
+    % SENSITIVITY ANALYSIS: change the following parameters
+    % Thrust
+    % Velocity
+    % 
+
 
     %define the airfoil polars:
     addpath("Excel\");
@@ -24,7 +31,7 @@ function [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, T_cr)
     fprintf('tilt angle = %f, V_z = %f \n', tilt_cr, V_z_cr)
     V_TO_emp = V_TO * 3.2808399;  % ft/s
     V_L_emp = -3 * 3.2808399;  % ft/s
-    V_z_list = [V_z_cr, V_TO_emp, V_L_emp, 0];
+    V_z_list = 0.5 * [V_z_cr, V_TO_emp, V_L_emp, 0];
     %V_z_list = [V_TO_emp, V_L_emp, V_z_cr, 0];
     
     % Thrusts required for flight modes
@@ -128,7 +135,7 @@ function [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, T_cr)
         theta_tip_opt = theta_tip;
         j = j + 1;
 
-        fprintf('optimal lin twist = %f , theta_tip = %f, giving RPM = %f \n', lin_twist_opt, theta_tip, RPM_opt)
+        %fprintf('optimal lin twist = %f , theta_tip = %f, giving RPM = %f \n', lin_twist_opt, theta_tip, RPM_opt)
         
         %fprintf('optimal lin twist = %f with theta_start = %f, giving RPM = %f \n', lin_twist_opt, theta_start_opt, RPM_opt)
 
@@ -144,6 +151,11 @@ function [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, T_cr)
     end
     %fprintf(['Optimal linear twist for cruise conditions = %f with pitch at start = %f\n' ...
     %    'RPM required for cruise = %f \n RPM required for take-off = %f \n RPM required for emergency = %f \n'], lin_twist_opt(end), theta_start, RPM_opt_list(1), RPM_opt_list(2), RPM_opt_list(3))
+
+
+    
+
+
 end
 
 

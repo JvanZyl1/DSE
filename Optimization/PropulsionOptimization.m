@@ -4,10 +4,10 @@ clc
 
 inputs;
 
-MTOW = 700;  % kg, initial MTOW estimation
+MTOW = 900;  % kg, initial MTOW estimation
 RPM_cr = 1000; % initial RPM estimation
 %RPM_list = 100:100:2000;  % RPM range to iterate on
-n_iter = 10;
+n_iter = 1;
 for i=1:n_iter
 
     % Power calculation
@@ -26,20 +26,22 @@ for i=1:n_iter
 
     % RPM and blade twist approximation
     %[RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, T_cr);
-    [RPM_opt_list, lin_twist] = TipAngleOpt(MTOW, T_cr);
-    RPM_cr = RPM_opt_list(1); %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% fix
+    [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW);
+    RPM_cr = RPM_opt_list(1);
 
 end
+
+[SPL_list] = NoiseCalculation(MTOW, RPM_opt_list);
 
 [C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
 
 fprintf('MTOW: %f [kg]\n',MTOW)
-fprintf('Battery weight: %f [kg]\n',BatWt)
+%fprintf('Battery weight: %f [kg]\n',BatWt)
 fprintf('Required energy: %f [Wh]\n',E_total)
-fprintf('Battery volume: %f [L]\n', V_bat)
-fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
-fprintf('The total cost per vehicle: = %f [€]\n', C_unit)
-
+%fprintf('Battery volume: %f [L]\n', V_bat)
+%fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise,P_TOL)
+%fprintf('The total cost per vehicle: = %f [€]\n', C_unit)
+fprintf('Linear twist = %f, RPM = %f, %f, %f, %f \n', lin_twist, RPM_opt_list)
 
 
 

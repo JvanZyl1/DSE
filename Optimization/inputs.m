@@ -20,6 +20,7 @@ R_prop = 1.2 ; % Propeller radius [m]
 A_disk = R_prop^2 * pi * N_prop ;
 B_prop = 3 ; % Number of blades per propeller [-]
 C_prop = 0.2;
+t_prop = 0.12 * C_prop;
 R_hub = 0.10;
 S_body = 19.24 ; % Assume fuselage to be an ellipse of revolution and calculate its wetted area
 l_t = l ;
@@ -37,6 +38,7 @@ R_cont = 0.2 ;
 N_cont = 3 ;
 B_cont = 5 ;
 A_disk_cont = R_cont^2 * pi * N_cont;
+Q = 60;
 
 % Airfoil NACA 23012
 Cl_slope = 6; % rad^-1, for NACA 23012 airfoil
