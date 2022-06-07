@@ -23,6 +23,7 @@ class CrossSection(Boom):
         for boom in boom_lst:
             if boom not in self.booms:
                 boom.properties_cs(self.R, self.L)
+                boom.beam_volume()
                 self.booms.append(boom)
 
     def remove_boom(self, boom):
@@ -139,57 +140,10 @@ class CrossSection(Boom):
 
         return t_b
 
+def skin_volume(self):
+    t_b1 = self.skin_length(0)
+    t_b2 = self.skin_length(1)
+    for i in range(len(t_b1)):
+        print((t_b1 + t_b2) / 2)
 
 
-
-"""
-    def boom_area_updated(self):
-        nodes = self.booms
-        nodes.insert(0, nodes[-1])
-        nodes.append(nodes[1])
-        t_b1 = []
-        t_b2 = []
-
-        for n in range(len(nodes) - 1):
-            b1 = sqrt((nodes[n].X[0] - nodes[n + 1].X[0]) ** 2 +
-                      (nodes[n].Y[0] - nodes[n + 1].Y[0]) ** 2)
-            b2 = sqrt((nodes[n].X[1] - nodes[n + 1].X[1]) ** 2 +
-                      (nodes[n].Y[1] - nodes[n + 1].Y[1]) ** 2)
-            t_b1.append(b1)
-            t_b2.append(b2)
-
-        for n in range(len(nodes) - 2):
-            nx, ny = self.neutral_x(), self.neutral_y()
-            b_n0, b_n1, b_n2 = self.booms[n], self.booms[n + 1], self.booms[n + 2]
-            if (b_n1.Y[0]-self.nx[0]) / (b_n0.Y[0]-self.ny[0]) >= 0:
-                ratio_1_2 = 1
-            elif:
-                pass
-            if (b_n1.Y[0]-self.nx[0]) / (b_n2.Y[0]-self.ny[0]) >= 0:
-                ratio_1_0 = 1
-
-
-
-
-
-
-
-
-            if self.Z[0] == 0:
-                b_n1.area(np.array([b_n1.A[0],
-                                    b_n1.A[1] +
-                                    t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n0.sigma_z[1]) +
-                                    t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n2.sigma_z[1])]))
-            else:
-                b_n1.area(np.array([b_n1.A[0] +
-                                    t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[0] / b_n0.sigma_z[0]) +
-                                    t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[0] / b_n2.sigma_z[0]),
-                                    b_n1.A[1] +
-                                    t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n0.sigma_z[1]) +
-                                    t_b1[n + 1] * b_n1.t / 6 * (2 + b_n1.sigma_z[1] / b_n2.sigma_z[1])]))
-
-        for boom in self.booms:
-            print(boom.B)
-        nodes.remove(nodes[0])
-        nodes.remove(nodes[-1])
-"""

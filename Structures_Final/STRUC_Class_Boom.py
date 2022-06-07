@@ -26,6 +26,10 @@ class Boom:
         self.X = self.x * radius
         self.Y = self.y * radius
 
+    def beam_volume(self):
+        self.beam_length = sqrt((self.X[1]-self.X[0])**2 + (self.Y[1]-self.Y[0])**2 + self.L**2)
+        self.beam_volume = self.A * self.beam_length
+
     def plot(self):
         plt.plot(self.X, self.Y, '--')
         plt.scatter(self.X, self.Y)

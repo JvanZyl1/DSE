@@ -55,6 +55,7 @@ def radii(part, load, material):
         # Bending in lift-direction for TENSION
         def r1():
             r1 = (P + sqrt(abs(((P / n) ** 2) + 4 * 2 * pi * t * sigma_y * 2 * pi * Mx))) / (4 * pi * t * sigma_y)
+            #print('r1', r1)
             return r1
 
         # Bending in lift-direction for COMPRESSION
@@ -63,27 +64,33 @@ def radii(part, load, material):
                 r2 = (abs(Mx * (l*2) ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
             elif part.name == "gear":
                 r2 = (P / n * (l*2) ** 2 / (2 * pi ** 3 * t*E)) ** (1/3)
+                #print('r2', r2)
             return r2
 
         # Bending in axial-direction for TENSION
         def r3():
             r3 = (abs(My) + sqrt((My) ** 2 + 4 * 2 * pi * t * sigma_y * 2 * pi * P / n)) / (4 * pi * t * sigma_y)
+            #print('r3', r3)
             return r3
 
         # Bending in axial-direction for COMPRESSION
         def r4():
             r4 = (abs(My * (l*2) ** 2) / (t * pi ** 2 * E)) ** (1 / 4)
+            #print('r4', r4)
             return r4
 
         # Shear in lift-direction
         def r5():
-            r5 = (abs(Vx / (-pi * t * tau))) ** (1 / 3)
+            r5 = (abs(Vx / (-pi * t * tau)))
+            #print('r5', r5)
             return r5
 
         # Shear in axial-direction
         def r6():
-            r6 = (abs(Vy / (-pi * t * tau))) ** (1 / 3)
+            r6 = 2*(abs(Vy / (-pi * t * tau)))
+            ##print('r6', r6)
             return r6
+
 
         return r1(), r2(), r3(), r4(), r5(), r6()
 
@@ -110,18 +117,22 @@ for iteration in range(10):
     z_axis, r, r_design, defl, W = radii(use_beam, use_loadcase, use_material)
     use_beam.weight = W
 
+    print('W -->', r_design, use_beam.weight)
+
 for i in range(6):
     plt.plot(z_axis, r[i])
 plt.plot(z_axis, r_design, '-.b')
+plt.axvline(use_beam.length - 0.25/2, color='b')
+plt.axvline(use_beam.length + 0.25/2, color='b')
 plt.title("Radius required")
 plt.xlabel("z [m]")
 plt.ylabel("r [m]")
 plt.show()
-print("Radius", r_design)
+#print("Radius", r_design)
 
-print("Ixx", r_design ** 3 * use_beam.thickness)
-print(use_beam.n)
-print(use_beam.weight)
+
+#print(use_beam.n)
+print('W -->', use_beam.weight)
 
 
 
