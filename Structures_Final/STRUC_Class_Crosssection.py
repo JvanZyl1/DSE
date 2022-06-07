@@ -134,12 +134,52 @@ class CrossSection(Boom):
     def shear_CS(self, V_x, V_y, n):
         n_x, n_y = self.neutral_x()[n], self.neutral_y()[n]
         Ixx, Iyy = self.Ixx_cs()[n], self.Iyy_cs()[n]
+        X_tab, Y_tab = [], []
         for boom in self.booms:
             boom.shear_boom(n_x, n_y, V_x, V_y, Ixx, Iyy, n)
-            #print(boom.dq_x, boom.dq_y)
+            X_tab.append(boom.X[0])
+            Y_tab.append(boom.Y[0])
+        X_max, Y_max = max(X_tab), max(Y_tab)
+
+        q_x, q_y = None, None
+        index_x, index_y = None, None
+        for boom in self.booms:
+            if round(boom.Y[0], 4) == 0 and round(boom.X[0], 4) > 0:
+                boom.q_x = boom.dq_x / 2
+                q_x = boom.q_x
+                index_x = self.booms.index(boom)
+                print('x, y=0', index_x)
+            elif round(boom.Y[0], 4) > 0 and round(boom.X[0], 4) == 0:
+                boom.q_y = boom.dq_y / 2
+                q_y = boom.q_y
+                index_y = self.booms.index(boom)
+                print('y, x=0', index_y)
+            elif round(boom.Y[0], 4) == round(Y_max, 4) and round(boom.X[0], 4) > 0:
+                boom.q_y = boom.dq_y
+                q_y = boom.q_y
+                index_y = self.booms.index(boom)
+                print('y', index_y)
+            elif round(boom.X[0], 4) == round(X_max, 4) and round(boom.Y[0], 4) > 0:
+                boom.q_x = boom.dq_x
+                q_x = boom.q_x
+                index_x = self.booms.index(boom)
+                print('x', index_x)
 
 
+        for boom in (self.booms[index_x+1:] + self.booms[:index_x]):
+            q_x += boom.dq_x
+            boom.q_x = q_x
 
+        for boom in (self.booms[index_y+1:] + self.booms[:index_y]):
+            q_y += boom.dq_y
+            boom.q_y = q_y
+
+        for boom in self.booms:
+            boom.q = boom.q_x + boom.q_y
+            if boom.t != 0:
+                boom.tau = boom.q / boom.t
+            else:
+                boom.tau = 0
 
     def skin_length(self, n):
         nodes = self.booms

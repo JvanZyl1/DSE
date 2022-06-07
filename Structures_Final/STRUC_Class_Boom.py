@@ -5,7 +5,6 @@ from STRUC_Inputs import *
 import numpy as np
 
 
-
 class Boom:
     K = 2
     density = 2.8e3
@@ -54,17 +53,12 @@ class Boom:
         return self.sigma_max[n]
 
     def stress_boom(self, sigma_y, E, n_x, n_y, M_x, M_y, I_xx_cs, I_yy_cs, n):
-
         self.sigma_z[n] = M_x * (self.Y[n]-n_y) / I_xx_cs + M_y * (self.X[n]-n_x) / I_yy_cs
         return self.sigma_z[n]
 
     def shear_boom(self, n_x, n_y, V_x, V_y, Ixx, Iyy, n):
         self.dq_x = -V_x / Iyy * self.B * (self.X-n_x)
         self.dq_y = -V_y / Ixx * self.B * (self.Y-n_y)
-        if round(self.X[0], 4) == 0 and round(self.Y[0], 4) > 0:
-            pass
-        if round(self.X[0], 4) > 0 and round(self.Y[0], 4) == 0:
-            print(self)
         return self.dq_x, self.dq_y
 
 
