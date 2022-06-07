@@ -31,7 +31,7 @@ function [max_powers, W_motors] = MotorSelection(MTOW)
         T_b = T_side;
     end
 
-    %disp([T_tf, T_bf, T_b])
+    disp([T_tf, T_bf, T_b])
 
     P_tf = (((T_tf * V_TO)/2) * (sqrt(1+(2 * T_tf)/(rho * V_TO^2 * A_disk))))/eta_final ; 
     P_bf = (((T_bf * V_TO)/2) * (sqrt(1+(2 * T_bf)/(rho * V_TO^2 * A_disk))))/eta_final ; 

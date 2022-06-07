@@ -7,7 +7,7 @@ inputs;
 MTOW = 900;  % kg, initial MTOW estimation
 RPM_cr = 1000; % initial RPM estimation
 %RPM_list = 100:100:2000;  % RPM range to iterate on
-n_iter = 1;
+n_iter = 10;
 for i=1:n_iter
 
     % Power calculation

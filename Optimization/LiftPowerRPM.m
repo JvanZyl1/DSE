@@ -144,6 +144,20 @@ function [RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, T_cr)
 end
 
 
+        % Vortex noise
+        % dB to dBA correction factor (A-weighting)
+        f = 2 * pi * 1 * omega_opt * B_prop;
+        A_f = 12194^2 * f.^4 ./ ((f.^2 + 20.6^2) .* ...
+            sqrt((f.^2 + 107.7^2).*(f.^2 + 737.9^2)) .* (f.^2 + 12194^2));
+        SPL_vortex = 20 * log10(K2 * (omega_opt*R_prop)./(rho*dist_vec).*sqrt(N_prop * T / sigma * T / (pi * R_prop^2)) + A_f);
+        disp(SPL_vortex)
+    end
+
+    
+
+
+    SPL = 10 * log10(10.^(SPL_rot/10) + 10.^(SPL_vortex/10));
+
 
 %V_blade_arr = omega * r_arr;
 %             %disp(V_blade_arr)
