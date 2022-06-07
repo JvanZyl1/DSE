@@ -69,7 +69,7 @@ N_proto = 5       ;      % Estimation of number of prototypes created for testin
 % Mission profile characteristics
 R = 20000      ;     % mission range in meters [m]
 R_div = 4000    ;    % additional diversion range in meters [m]
-V_TO = 5         ;   % assumed take-off and descent velocity [m/s !]
+V_TO = 6         ;   % assumed take-off and descent velocity [m/s !]
 h_TO = 450        ;  % assumed vertical travel distance in [m]
 rho = 1.225       ; % air density in [kg/m3]
 n_ult = 2           ;% ultimate load factor
@@ -86,6 +86,6 @@ CellToPack = 1.42;
 En_Dens_vol = 450;   %[Wh/L]
 Cell_mass = 0.0455;  %[kg]
 Cell_capa = 10.8;    %[Wh]
-
+Cell_price = 7.21;   %[$] max price
 
 

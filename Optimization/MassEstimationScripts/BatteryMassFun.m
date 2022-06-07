@@ -21,6 +21,7 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     W_bat = N_cells * CellToPack * Cell_mass;
     Capacity = N_cells * Cell_capa;
     V_bat = Capacity / vol_dens;  % https://insideevs.com/news/581729/volumetric-energy-density-ev-batteries-growth/
+    Cell_costs = N_cells * Cell_price;
 
     E_div = R_div / V_cr;
     E_red = E_total * (1/nu_discharge - 1);
@@ -37,5 +38,6 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     fprintf('energy required is %f [Wh] \n',E_total)
     fprintf('Battery capacity: %f [Wh] \n',Capacity)
     fprintf('Required DoD is: %f \n',DoD_req)
+    fprintf('Battery cost: %f [$] \n',round(Cell_costs,1))
 
 end
