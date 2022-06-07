@@ -14,7 +14,7 @@ redundancy_factor = 0.75   ; %here because of shitty requirement
 
 l = 2.1 ;
 D = 1.0 ;
-V_cr =  180 / 3.6 ; % Cruise velocity [m/s]
+V_cr = 180/3.6 ; % Cruise velocity [m/s]
 N_prop = 8 ; % Number of propellers [-]
 R_prop = 1.2 ; % Propeller radius [m]
 A_disk = R_prop^2 * pi * N_prop ;
@@ -71,7 +71,7 @@ R = 20000      ;     % mission range in meters [m]
 R_div = 4000    ;    % additional diversion range in meters [m]
 V_TO = 5         ;   % assumed take-off and descent velocity [m/s !]
 h_TO = 450        ;  % assumed vertical travel distance in [m]
-rho = 1.225        ; % air density in [kg/m3]
+rho = 1.225       ; % air density in [kg/m3]
 n_ult = 2           ;% ultimate load factor
 
 % Wind speed
