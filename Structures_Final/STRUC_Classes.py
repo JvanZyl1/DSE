@@ -2,10 +2,6 @@
 Classes
 """
 
-from matplotlib import pyplot as plt
-from math import *
-import numpy as np
-
 
 class Load:
     C_D = 1.

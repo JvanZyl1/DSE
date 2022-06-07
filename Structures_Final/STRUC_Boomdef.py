@@ -17,8 +17,8 @@ fuselage = Fuselage(3)
 
 
 # Define CrossSection(z-range, radius-range)
-cs_1 = CrossSection(np.array([0, 0.5]), np.array([0.2, 0.8]))
-cs_2 = CrossSection(np.array([0.5, 1.1]), np.array([0.8, 1.1]))
+cs_1 = CrossSection([0, 0.5], [0.2, 0.8])
+cs_2 = CrossSection([0.5, 1.1], [0.8, 1.1])
 
 # Define booms
 boom_1_01 = Boom(cs_1.R * np.cos(2 * pi * 0.1), cs_1.R * np.sin(2 * pi * 0.1), 0.0003, 0.001)
@@ -47,8 +47,9 @@ cs_2.add_boom([boom_2_01, boom_2_02, boom_2_03, boom_2_04, boom_2_05, boom_2_06,
 
 # Assign cross-sections to fuselage
 fuselage.add_cs([cs_1, cs_2])
-fuselage.stress_FL()
 
+fuselage.weight_FL()
+fuselage.stress_FL()
 
 
 

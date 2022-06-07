@@ -7,10 +7,11 @@ from STRUC_Inputs import *
 
 # Define Cross-Section
 class CrossSection(Boom):
+
+
     def __init__(self, pos_z, radius, pos_x=None, pos_y=None, A=None, booms=None, t=None):
         self.Z = pos_z  # np.array([z1, z2]) [m]
-        self.R = radius  # np.array([r1, r2]) [m]
-        self.L = float(pos_z[1]) - float(pos_z[0])
+        self.R = np.array(radius)  # np.array([r1, r2]) [m]
         self.Ixx_CS = [0, 0]
         self.Iyy_CS = [0, 0]
         super().__init__(pos_x, pos_y, A, t)
@@ -22,9 +23,15 @@ class CrossSection(Boom):
     def add_boom(self, boom_lst):
         for boom in boom_lst:
             if boom not in self.booms:
-                boom.properties_cs(self.R, self.L)
-                boom.beam_volume()
                 self.booms.append(boom)
+                self.L = self.Z[1]-self.Z[0]
+                boom.properties_cs(self.R, self.L)
+
+    def weight_booms(self):
+        self.W_cs_booms = 0
+        for boom in self.booms:
+            self.W_cs_booms += boom.weight()
+        return self.W_cs_booms
 
     def remove_boom(self, boom):
         self.booms.remove(boom)
@@ -140,10 +147,13 @@ class CrossSection(Boom):
 
         return t_b
 
-def skin_volume(self):
-    t_b1 = self.skin_length(0)
-    t_b2 = self.skin_length(1)
-    for i in range(len(t_b1)):
-        print((t_b1 + t_b2) / 2)
+    def weight_skins(self):
+        t_b1 = self.skin_length(0)
+        t_b2 = self.skin_length(1)
+
+        self.W_cs_skins = 0
+        for i in range(len(t_b1)-1):
+            self.W_cs_skins += (t_b1[i] + t_b2[i] / 2 * self.booms[i].t * self.L) * Boom.density
+        return self.W_cs_skins
 
 

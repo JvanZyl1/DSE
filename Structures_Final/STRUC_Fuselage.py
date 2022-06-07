@@ -1,7 +1,7 @@
 
 
 import numpy as np
-from STRUC_CrossSection import CrossSection
+from STRUC_Class_Crosssection import CrossSection
 from matplotlib import pyplot as plt
 
 if __name__ == '__main__':
@@ -17,7 +17,7 @@ class Fuselage(CrossSection):
     def __init__(self, length, pos_z=None, radius=None, cross_sections=None):
         self.L = length
         self.cross_sections = []
-        CrossSection.__init__(pos_z, radius)
+        CrossSection.__init__(self, pos_z, radius)
         if cross_sections is None:
             self.cross_sections = []
         else:
@@ -31,6 +31,13 @@ class Fuselage(CrossSection):
 
     def remove_cs(self, cs):
         self.booms.remove(cs)
+
+    def weight_FL(self):
+        self.weight = 0
+        for cs in self.cross_sections:
+            self.weight += cs.weight_booms()
+            self.weight += cs.weight_skins()
+
 
     def print_cs(self):
         for cs in self.cross_sections:
@@ -76,7 +83,7 @@ class Fuselage(CrossSection):
             cs.stress_CS(Fuselage.sigma_y, Fuselage.E, self.Mx(cs.Z[0]), self.My(cs.Z[0]), 0)
             cs.stress_CS(Fuselage.sigma_y, Fuselage.E, self.Mx(cs.Z[1]), self.My(cs.Z[1]), 1)
 
-    def plot(self, equation, show=False):
+    def plot_loads(self, equation, show=False):
         print(equation.__name__)
 
         z_range = np.arange(0, self.L + Fuselage.dz, Fuselage.dz)

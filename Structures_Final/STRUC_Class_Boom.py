@@ -5,11 +5,10 @@ from STRUC_Inputs import *
 import numpy as np
 
 
-class Boom:
-    sigma_y = 400e6
-    E = 70e9
-    K = 2
 
+class Boom:
+    K = 2
+    density = 2.8e3
     def __init__(self, pos_x, pos_y, A, t):
         self.x = pos_x
         self.y = pos_y
@@ -26,11 +25,13 @@ class Boom:
         self.X = self.x * radius
         self.Y = self.y * radius
 
-    def beam_volume(self):
-        self.beam_length = sqrt((self.X[1]-self.X[0])**2 + (self.Y[1]-self.Y[0])**2 + self.L**2)
-        self.beam_volume = self.A * self.beam_length
+    def weight(self):
+        self.L_boom = sqrt((self.X[1]-self.X[0])**2 + (self.Y[1]-self.Y[0])**2 + self.L**2)
+        self.V_boom = (self.A[1]+self.A[0]) / 2 * self.L_boom
+        self.W_boom = self.V_boom * Boom.density
+        return self.W_boom
 
-    def plot(self):
+    def plot_b(self):
         plt.plot(self.X, self.Y, '--')
         plt.scatter(self.X, self.Y)
 
@@ -55,9 +56,6 @@ class Boom:
     def stress_boom(self, sigma_y, E, n_x, n_y, M_x, M_y, I_xx_cs, I_yy_cs, n):
         self.sigma_z[n] = M_x * (self.Y[n]-n_y) / I_xx_cs + M_y * (self.X[n]-n_x) / I_yy_cs
         return self.sigma_z[n]
-
-
-
 
     def shear(self, Ixxcs, Iyycs):
 
