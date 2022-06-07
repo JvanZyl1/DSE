@@ -28,13 +28,29 @@ def radii(part, load, material):
     sigma_y = material.sigma_y
 
     # z-axis
-    dz = 0.01
+    dz = 0.1
     z = np.arange(0, part.length + dz, dz)
+
+    def step(pos_z, start):
+        if pos_z>=start:
+            return 1
+        return 0
+
 
     def v_x(pos_z):
         Vx = -load.D
         return Vx
+    '''
+    def v_x_prop(pos_z):
+        V_x_prop = 100-100 * (pos_z-100)*(step(pos_z, 100))
+        return V_x_prop
 
+    v_prop = []
+    for z_i in z:
+        v_prop.append(v_x_prop(z_i))
+    plt.plot(z, v_prop)
+    plt.show()
+    '''
     def v_y(pos_z):
         Vy = W + We / n - L / n - W * pos_z / l
         return Vy
@@ -116,8 +132,8 @@ def radii(part, load, material):
 for iteration in range(10):
     z_axis, r, r_design, defl, W = radii(use_beam, use_loadcase, use_material)
     use_beam.weight = W
-
-    print('W -->', r_design, use_beam.weight)
+print(r_design)
+print('W -->', use_beam.weight)
 
 for i in range(6):
     plt.plot(z_axis, r[i])

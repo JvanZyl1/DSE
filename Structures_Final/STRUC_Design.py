@@ -42,3 +42,5 @@ class Gear(Part):
         self.weight_engine = 0
         self.n = 4
 
+class Propeller(Beam):
+    name = 'Propeller'

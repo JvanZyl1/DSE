@@ -1,6 +1,6 @@
 # Imports
 from STRUC_Classes import Load, Material
-from STRUC_Design import Beam, Gear
+from STRUC_Design import Beam, Gear, Propeller
 import numpy as np
 
 # Values
@@ -22,8 +22,8 @@ titanium = Material(620e6, 880e6, 113e9, 550e6, 4.43e3, 0)
 carbon = Material(4274e6, 4274e6, 234e9, 55e6, 691.7, 0)
 
 # Beams (Material,
-beam1 = Beam(aluminium, 1.2, 0.08, 52, 0.002)
-beam2 = Beam(aluminium, 1.4, 0.08, 52, 0.0020)
+beam1 = Beam(aluminium, 1.836, 0.08, 52, 0.0025)
+beam2 = Beam(aluminium, 1.486, 0.08, 52, 0.0025)
 beam3 = Beam(aluminium, 1.6, 0.20, 52, 0.0020)
 beam4 = Beam(aluminium, 5.0, 0.08, 52, 0.0050)
 beam5 = Beam(aluminium, 2.4, 0.08, 52, 0.0020)
@@ -33,6 +33,8 @@ beam8 = Beam(aluminium, 2.0, 0.20, 52, 0.0050)
 
 # Gear
 gear1 = Gear(aluminium, 0.4, 0.06, 0.003)
+
+propeller1 = Propeller(aluminium, 0.2, 0, 0, 0.001)
 
 # Input  beam
 use_material = aluminium
