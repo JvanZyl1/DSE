@@ -58,7 +58,7 @@ class CrossSection(Boom):
 
     def plot_booms(self, show=False):
         for boom in self.booms:
-            boom.plot()
+            boom.plot_b()
         plt.plot(self.neutral_x(), self.neutral_y(), '+k')
         plt.title('Booms')
         plt.xlabel('x [m]')
@@ -119,6 +119,7 @@ class CrossSection(Boom):
         self.Ixx_cs(), self.Iyy_cs()
         nodes.remove(nodes[0])
         nodes.remove(nodes[-1])
+
 
     def stress_CS(self, sigma_y, E, M_x, M_y, n):
         n_x, n_y = self.neutral_x()[n], self.neutral_y()[n]
