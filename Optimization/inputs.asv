@@ -90,7 +90,7 @@ Cell_price = 7.21;   %[$] max price
 TOCell_amp = 35;
 TOCell_mass = 0.0486 ;
 TOCell_capa = 9.36;
-TOCell_price = 6.79;
+TOCell_price = 1.5*Cell_price;
 
 
 

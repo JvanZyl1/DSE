@@ -6,16 +6,15 @@ clc
 
 inputs;
 
-MTOW = 850;
+MTOW = 900;
 RPM = 800;
 parasite_drag();
 %RC_AoAandThrust(V_cr, MTOW);
 
 [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp] = PowerReq(MTOW, V_cr, RPM);
-[W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
+[W_bat, E_total, V_bat,t_cr, t_TO, Capacity] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);
 fprintf('Power for cruise is %f [kW], power for takeoff is %f [kW] \n', P_cruise/1000,P_TOL/1000)
 fprintf('battery weight is %f [kg]\n',W_bat)
-%{
 p1 = Capacity;
 p2 = Capacity - ((0.5* t_TO/3600) * P_TOL)*redundancy_factor;
 p3 = p2 - ((t_cr/3600) * P_cruise)*redundancy_factor;
@@ -27,8 +26,7 @@ x4 = x3 + t_TO/2;
 
 Xs = [x1,x2/60,x3/60,x4/60];
 Ys = [p1/1000,p2/1000,p3/1000,p4/1000];
-plot(Xs,Ys)
-%}
+%plot(Xs,Ys)
 
 
 
