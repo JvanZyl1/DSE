@@ -54,6 +54,6 @@ P_TOL = (((T_TOL * V_TO)/2) * (sqrt(1+(2 * T_TOL)/(rho * V_TO^2 * A_disk))))/(et
 T_cont_avg = 0.5 * Side_CD_times_S * rho * V_wind_avg^2;
 P_cont_avg = (((T_cont_avg * V_wind_avg)/2) * (sqrt(1+(2 * T_cont_avg)/(rho * V_wind_avg^2 * A_disk_cont))))/eta_final; %power req  control
 
-P_cont_max = (((dist_force * V_wind_avg) / 2) * (sqrt(1 + (2 * dist_force) / (rho * V_wind_avg^2 * A_disk_cont)))) / eta_final;
+P_cont_max = (((dist_force * V_wind_avg) / 2) * (sqrt(1 + (2 * dist_force) / (rho * V_wind_avg^2 * A_disk_cont))))/eta_final;
 
 end

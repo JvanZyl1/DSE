@@ -34,10 +34,11 @@ function [W_bat, E_total, V_bat] = OldBatteryMassFun(V_cr, P_cruise, P_TOL, P_co
         disp('INSUFFICIENT BATTERY CAPACITY \n')
     end
     DoD_req = E_total/Capacity;
-    fprintf('cells in series:%f ,cells in parallel:%f , total nr of cells:%f \n',N_cells_series,N_cells_para,N_cells)
-    fprintf('energy required is %f [Wh] \n',E_total)
-    fprintf('Battery capacity: %f [Wh] \n',Capacity)
+    %fprintf('cells in series:%f ,cells in parallel:%f , total nr of cells:%f \n',N_cells_series,N_cells_para,N_cells)
+    %fprintf('energy required is %f [Wh] \n',E_total)
+    %fprintf('Battery capacity: %f [Wh] \n',Capacity)
     fprintf('Required DoD is: %f \n',DoD_req)
-    fprintf('Battery cost: %f [$] \n',round(Cell_costs,1))
+    %fprintf('Battery cost: %f [$] \n',round(Cell_costs,1))
+    fprintf('Total battery weight is %f [kg] \n',W_bat)
 
 end

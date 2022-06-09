@@ -24,13 +24,13 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     
     %W_bat = N_cells * CellToPack * Cell_mass;
     %V_bat = Capacity_cruise / vol_dens;  % https://insideevs.com/news/581729/volumetric-energy-density-ev-batteries-growth/
-    %Cell_costs = N_cells * Cell_price;
-
+    
     Amp_req_TO = P_TOL/Voltage;                     
     N_cells_para_TO = ceil(Amp_req_TO/TOCell_amp);   %%%%
     N_cells_TO = N_cells_para_TO*N_cells_series;
     Capacity_TO = N_cells_TO * TOCell_capa;      %%%%
-
+    
+    Cell_costs = N_cells_cruise * Cell_price + N_cells_TO*TOCell_price;
     
     W_bat = (N_cells_TO*TOCell_mass + N_cells_cruise*Cell_mass)*CellToPack;
     Capacity_total = Capacity_cruise+Capacity_TO;
@@ -43,22 +43,23 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     end
 
     if Capacity_cruise < (E_cr + E_cont)/3600
-        disp('INSUFFICIENT BATTERY CAPACITY CRUISE \n')
+        disp('INSUFFICIENT BATTERY CAPACITY CRUISE ')
     end
     
     if Capacity_TO < (E_TO + E_cont)/3600
-        disp('INSUFFICIENT BATTERY CAPACITY TAKEOFF \n')
+        disp('INSUFFICIENT BATTERY CAPACITY TAKEOFF')
     end
-    DoD_req = E_total/Capacity_cruise;
+    DoD_req = E_total/Capacity_total;
     fprintf('Capa cruise: %f [Wh], E_cruise %f [Wh], DoD cruise %f \n',Capacity_cruise,(E_cr/3600),(E_cr/3600)/Capacity_cruise)
     fprintf('cells in series:%f ,cells in parallel:%f , total nr of cells:%f \n',N_cells_series,N_cells_para_cruise,N_cells_cruise)
     fprintf('Capa takeoff %f [Wh], E_TO %f [Wh], DoD takeoff %f \n',Capacity_TO,(E_TO/3600),(E_TO/3600)/Capacity_TO)
     fprintf('cells in series:%f ,cells in parallel:%f , total nr of cells:%f \n',N_cells_series,N_cells_para_TO,N_cells_TO)
     fprintf('CruiseBatWeight: %f [kg], TOBatWeight: %f [kg] \n',(N_cells_cruise*Cell_mass*CellToPack),(N_cells_TO*TOCell_mass*CellToPack))
     fprintf('E_tot=%f, Capa=%f, DoD is %f \n',E_total,Capacity_total,(E_total/Capacity_total))
-    %fprintf('energy required is %f [Wh] \n',E_total)
-    %fprintf('Battery Capacity: %f [Wh] \n',Capacity_cruise)
-    %fprintf('Required DoD is: %f \n',DoD_req)
-    %fprintf('Battery cost: %f [$] \n',round(Cell_costs,1))
+    fprintf('energy required is %f [Wh] \n',E_total)
+    fprintf('Battery Capacity: %f [Wh] \n',Capacity_cruise)
+    fprintf('Required DoD is: %f \n',DoD_req)
+    fprintf('Battery cost: %f [$] \n',round(Cell_costs,1))
+    fprintf('Total battery weight is %f [kg] \n',W_bat)
 
 end
