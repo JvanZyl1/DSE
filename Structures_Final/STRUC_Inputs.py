@@ -38,5 +38,5 @@ propeller1 = Propeller(aluminium, 0.2, 0, 0, 0.001)
 
 # Input  beam
 use_material = aluminium
-use_beam = beam1
-use_loadcase = Vertical_max
+use_beam = gear1
+use_loadcase = Landing

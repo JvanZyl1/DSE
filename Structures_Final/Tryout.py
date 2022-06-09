@@ -10,7 +10,10 @@ class Employee:
         self.var = None
         self.i = i
 
-    def method(self, z):
-        self.var = 2 * z
+    @property
+    def method(self):
+        self.var = 2 * self.i
 
 emp = Employee(1)
+
+emp.i = 2
