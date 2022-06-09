@@ -5,6 +5,7 @@ inputs;
 
 % Motor mass per motor
 [~, W_motors] = MotorSelection(MTOW);
+fprintf('W_motors = %f %f %f %f %f %f %f %f \n', W_motors)
 W_m_avg = sum(W_motors) / N_prop;
 % Propeller blade mass per propeller
 k_p = 0.124;

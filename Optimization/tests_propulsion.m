@@ -5,4 +5,5 @@ clc
 inputs;
 
 % LiftPowerRPM
-[RPM_opt_list, lin_twist] = LiftPowerRPM(900);
+[RPM_opt_list, lin_twist] = TipAngleOpt(10000);
+%SPL_mat = NoiseCalculation(950);

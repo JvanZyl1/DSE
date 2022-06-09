@@ -10,18 +10,18 @@ function [max_powers, W_motors] = MotorSelection(MTOW)
     x_bf = (6 - R_prop) - x_cg;  % Distance for bottom front propeller
     
     % Emergency case 1: Failure front bottom propellers
-    T_tf = x_b/2 * 1.1 * 1.5 * MTOW * g / (x_tf + 2 * x_b / 3);
+    T_tf = x_b/2 * 1.1 * MTOW * g / (x_tf + 2 * x_b / 3);
 
     % Emergency case 2: Failure of top front propellers
-    T_bf = x_b/2 * 1.1 * 1.5 * MTOW * g / (x_bf + 2 * x_b / 3);
+    T_bf = x_b/2 * 1.1 * MTOW * g / (x_bf + 2 * x_b / 3);
 
     % Emergency case 3: Failure of two of the back propellers
-    T_b = (x_tf + x_bf)/4 * 1.1 * 1.5 * MTOW * g / (x_b + (x_tf + x_bf) / 3);
+    T_b = (x_tf + x_bf)/4 * 1.1 * MTOW * g / (x_b + (x_tf + x_bf) / 3);
 
     % Emergency case 4: Failure of 2 propellers on the same side of the x-axis
-    T_side = 0.25 * 1.1 * 1.5 * MTOW * g;
+    T_side = 0.25 * 1.1 * MTOW * g;
 
-    %disp([T_tf, T_bf, T_b])
+    disp([T_tf, T_bf, T_b])
 
     if T_tf<T_side
         T_tf = T_side;
@@ -39,7 +39,7 @@ function [max_powers, W_motors] = MotorSelection(MTOW)
 
     %fprintf('Max power required for each engine: Front bottom = %f \n Front top = %f\n Back motors = %f \n', P_bf, P_tf, P_b)
     max_powers = [P_tf, P_bf, P_b];
-    %fprintf('max powers = %f %f %f', max_powers)
+    fprintf('max powers = %f %f %f', max_powers)
     emrax_weight = [0, 7.2, 9.3, 12.3, 20.3, 40];
     emrax_power = [0, (32+60)/2, (40+75)/2, (55+100)/2, (85+160)/2, (100+190)/2] * 1000;
     W_motors = zeros(1, N_prop);

@@ -31,7 +31,7 @@ for i=1:n_iter
 
 end
 
-[SPL_list] = NoiseCalculation(MTOW, RPM_opt_list);
+%[SPL_list] = NoiseCalculation(MTOW);
 
 [C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
 
