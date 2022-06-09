@@ -51,15 +51,14 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     end
     DoD_req = E_total/Capacity_total;
     fprintf('Capa cruise: %f [Wh], E_cruise %f [Wh], DoD cruise %f \n',Capacity_cruise,(E_cr/3600),(E_cr/3600)/Capacity_cruise)
-    fprintf('cells in series:%f ,cells in parallel:%f , total nr of cells:%f \n',N_cells_series,N_cells_para_cruise,N_cells_cruise)
+    fprintf('cells in parallel:%f , total nr of cells:%f, current: %f [A] \n \n',N_cells_para_cruise,N_cells_cruise,Amp_req_cruise)
     fprintf('Capa takeoff %f [Wh], E_TO %f [Wh], DoD takeoff %f \n',Capacity_TO,(E_TO/3600),(E_TO/3600)/Capacity_TO)
-    fprintf('cells in series:%f ,cells in parallel:%f , total nr of cells:%f \n',N_cells_series,N_cells_para_TO,N_cells_TO)
-    fprintf('CruiseBatWeight: %f [kg], TOBatWeight: %f [kg] \n',(N_cells_cruise*Cell_mass*CellToPack),(N_cells_TO*TOCell_mass*CellToPack))
-    fprintf('E_tot=%f, Capa=%f, DoD is %f \n',E_total,Capacity_total,(E_total/Capacity_total))
+    fprintf('cells in parallel:%f , total nr of cells:%f, current(TO): %f [A] \n \n',N_cells_para_TO,N_cells_TO,Amp_req_TO)
+    fprintf('CruiseBatWeight: %f [kg], TOBatWeight: %f [kg] \n \n',(N_cells_cruise*Cell_mass*CellToPack),(N_cells_TO*TOCell_mass*CellToPack))
     fprintf('energy required is %f [Wh] \n',E_total)
-    fprintf('Battery Capacity: %f [Wh] \n',Capacity_cruise)
+    fprintf('Battery Capacity: %f [Wh] \n',Capacity_total)
     fprintf('Required DoD is: %f \n',DoD_req)
     fprintf('Battery cost: %f [$] \n',round(Cell_costs,1))
-    fprintf('Total battery weight is %f [kg] \n',W_bat)
+    fprintf('Total battery weight is %f [kg], volume is %f [L] \n',W_bat,V_bat)
 
 end
