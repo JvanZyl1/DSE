@@ -1,4 +1,4 @@
-function [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW)
+function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     inputs;
     
 
@@ -16,7 +16,7 @@ function [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW)
 
     fileName = 'xf-naca23012-il-1000000.csv';
     [alpha, Cl_polar, ~] = ReadPolar(fileName);
-    plot(alpha,polyval(Cl_polar,alpha))
+    %plot(alpha,polyval(Cl_polar,alpha))
     
     % For parametric calculations with emperical units
     R_emp = 3.2808399 * R_prop;  % ft

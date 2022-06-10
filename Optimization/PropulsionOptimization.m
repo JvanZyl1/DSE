@@ -26,7 +26,7 @@ for i=1:n_iter
 
     % RPM and blade twist approximation
     %[RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, T_cr);
-    [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW);
+    [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW);
     RPM_cr = RPM_opt_list(1);
 
 end

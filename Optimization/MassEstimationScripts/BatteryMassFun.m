@@ -1,5 +1,6 @@
 function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     inputs;
+    MTOW = 900;
     % eta_E = eta_E * 1.08^(yop-2022);   % Fulvio recommended NOT to use this
     t_cr = R / V_cr  ;   % Calculate time in cruise + diversion
     t_TO = (h_TO / V_TO) * 2   ;   % Calculate the time spent in vertical flight
@@ -36,6 +37,14 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     Capacity_total = Capacity_cruise+Capacity_TO;
     V_bat = Capacity_total / vol_dens;  % https://insideevs.com/news/581729/volumetric-energy-density-ev-batteries-growth/
     
+
+    %heat
+    [~,~,~,V_i_emp] = TipAngleOpt(MTOW);
+    heat_power_cell = TOCell_amp^2 * Cell_R;
+    heat_power_battery = heat_power_cell * N_cells_TO;
+    heat_cooled = spec_heat * rho * A_vent * deltaT * (2 * V_i_emp + V_TO_max);
+
+    
     if E_div > E_red
         E_total_old = E_total;
         E_total = E_div/(1 - nu_discharge);
@@ -60,5 +69,6 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     fprintf('Required DoD is: %f \n',DoD_req)
     fprintf('Battery cost: %f [$] \n',round(Cell_costs,1))
     fprintf('Total battery weight is %f [kg], volume is %f [L] \n',W_bat,V_bat)
-
+    fprintf('heat power generated: %f [W], heat power taken by air: %f [W] \n',heat_power_battery,heat_cooled)
+    fprintf('excess heat power is %f [W] \n', heat_power_battery-heat_cooled)
 end

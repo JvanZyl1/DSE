@@ -69,10 +69,11 @@ N_proto = 5       ;      % Estimation of number of prototypes created for testin
 % Mission profile characteristics
 R = 20000      ;     % mission range in meters [m]
 R_div = 4000    ;    % additional diversion range in meters [m]
-V_TO = 6         ;   % assumed take-off and descent velocity [m/s !]
+V_TO = 6         ;   % assumed average take-off and descent velocity [m/s !]
 h_TO = 450        ;  % assumed vertical travel distance in [m]
 rho = 1.225       ; % air density in [kg/m3]
 n_ult = 2           ;% ultimate load factor
+V_TO_max = 7.5 ;    %max takeoff speed
 
 % Wind speed
 V_wind_avg = 21  ; %[m/s], average wind speed at 8 beaufort
@@ -91,6 +92,10 @@ TOCell_amp = 35;
 TOCell_mass = 0.0486 ;
 TOCell_capa = 9.36;
 TOCell_price = 6.79;
+Cell_R = Cell_volt/TOCell_amp;   %[Ohm]
+spec_heat = 1005;
+deltaT = 40;
+A_vent = 0.084;
 
 
 
