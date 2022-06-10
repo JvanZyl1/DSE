@@ -44,6 +44,7 @@ class Fuselage(CrossSection):
             cs.weight = cs.weight_booms() + cs.weight_skins()
             self.weight += cs.weight_booms()
             self.weight += cs.weight_skins()
+        return self.weight
 
     def print_cs(self):
         for cs in self.cross_sections:
@@ -63,50 +64,88 @@ class Fuselage(CrossSection):
 
     # Loading diagrams functions
     def Vx(self, z):
-        Vx = -200 * z + 500 * self.step(z, 0.2)
-        return Vx
+        V_x = 0
+        V_x += 450 + 450 * self.step(z, 2.92) + 450*self.step(z, 3.30)
+        V_x -= 1350/self.L * z
+        return V_x
 
     def Vy(self, z):
         MTOW = Fuselage.MTOW
         g = Fuselage.g
         n_ult = Fuselage.n_ult
         SF = Fuselage.SF
-        self.weight_FL()
         V_y = 0
-        c = []
+        # FUSELAGE
+        for cs in self.cross_sections:
+            V_y -= 9.81 * (cs.weight/(cs.Z[1]-cs.Z[0]) * ((z-cs.Z[0])*self.step(z, cs.Z[0])-(z-cs.Z[1])*self.step(z, cs.Z[1])))
+        # PASSENGERS
+        V_y -= 250* g* self.step(z, 1.57)
+
+        # LUGGAGE
+        V_y -= 100 * g * self.step(z, 3.30)
+
+        # BATTERIES
+        z_bat = [2.4, 3.2]
+        V_y -= 300 /(z_bat[1]-z_bat[0]) * g * ((z-z_bat[0])*self.step(z, z_bat[0])-(z-z_bat[1])*self.step(z, z_bat[1]))
+        #print((z - z_bat[0]) * self.step(z, z_bat[0]) - (z - z_bat[1]) * self.step(z, z_bat[1]))
+        # Rotors Weight
+        V_y -= 13 * g * self.step(z, 0.620) * 2
+        V_y -= 13 * g * self.step(z, 2.3) * 4
+        V_y -= 13 * g * self.step(z, 2.425) * 2
+        # MTOW split up
+        V_y -= ((MTOW - self.weight - 250 - 100 - 300 - 13*8) * g)/self.L * z
+
+        # Rotors Lift
+        V_y += MTOW * g * self.step(z, 0.620) * 2/8
+        V_y += MTOW * g * self.step(z, 2.3) * 4/8
+        V_y += MTOW * g * self.step(z, 2.425) * 2/8
+        return V_y * n_ult * SF
+
+    def Mx(self, z):
+        #self.weight_FL()
+        self.Vy(z)
+        MTOW = Fuselage.MTOW
+        g = Fuselage.g
+        n_ult = Fuselage.n_ult
+        SF = Fuselage.SF
+
+        M_x = 0
 
         # FUSELAGE
         for cs in self.cross_sections:
-            V_y -= cs.weight/(cs.Z[1]-cs.Z[0]) * ((z-cs.Z[0])*self.step(z, cs.Z[0])-(z-cs.Z[1])*self.step(z, cs.Z[1]))
-
-        # FRONTAL PROPULSION
-        V_y += MTOW * g * n_ult * SF / 4 * self.step(z, 0.25)
-
-        # LOWER AFT PROPULSION
-        V_y += MTOW * g * n_ult * SF / 4 * self.step(z, 1.35)
-
-        # UPPER AFT PROPULSION
-        V_y += MTOW * g * n_ult * SF / 2 * self.step(z, 1.25)
+            M_x += cs.weight / (2*(cs.Z[1] - cs.Z[0])) * (
+                        (z - cs.Z[0])**2 * self.step(z, cs.Z[0]) - (z - cs.Z[1])**2 * self.step(z, cs.Z[1]))
 
         # PASSENGERS
-        V_y -= 250 * g * n_ult * SF * self.step(z, 0.75)
+        M_x += 250 * g * (z - 1.57) * self.step(z, 1.57)
 
         # LUGGAGE
-        V_y -= 100 * g * n_ult * SF * self.step(z, 1.55)
+        M_x += 100 * g * (z - 3.30) * self.step(z, 3.30)
 
         # BATTERIES
-        z_bat = [1.4, 1.7]
-        V_y -= 300 /(z_bat[1]-z_bat[0]) * g * n_ult * SF * ((z-z_bat[0])*self.step(z, z_bat[0])-(z-z_bat[1])*self.step(z, z_bat[1]))
+        z_bat = [2.4, 3.2]
+        M_x += 300 / (2*(z_bat[1] - z_bat[0])) * g * (
+                    (z - z_bat[0])**2 * self.step(z, z_bat[0]) - (z - z_bat[1])**2 * self.step(z, z_bat[1]))
 
-        return V_y
+        # Rotors Weight
+        M_x += 13 * g * (z - 0.620) * self.step(z, 0.620) * 2
+        M_x += 13 * g * (z - 2.300) * self.step(z, 2.3) * 4
+        M_x += 13 * g * (z - 2.425) * self.step(z, 2.425) * 2
 
-    def Mx(self, z):
-        Mx = -2000 * z ** 2 + 400 * self.step(z, 0.2) ** 2
-        return Mx
+        # MTOW split up
+        M_x += ((MTOW-self.weight- 250-100-300-3*13) * g /2) / (2*self.L) * z**2
+
+        # Rotors Lift
+        M_x -= MTOW * g * (z - 0.620) * self.step(z, 0.620) * 2 / 8
+        M_x -= MTOW * g * (z - 2.300) * self.step(z, 2.300) * 4 / 8
+        M_x -= MTOW * g * (z - 2.425) * self.step(z, 2.425) * 2 / 8
+        return M_x
 
     def My(self, z):
-        My = -2000 * z ** 2 + 4000 * self.step(z, 0.2) ** 2
-        return My
+        M_y = 0
+        M_y += 450 * z + 450*(z-2.92) * self.step(z, 2.92) + 450*(z-3.3)*self.step(z, 3.30)
+        M_y -= 1350/(self.L*2) * z**2
+        return M_y
 
     def stress_FL(self):
         for cs in self.cross_sections:
@@ -143,7 +182,7 @@ class Fuselage(CrossSection):
             plt.xlabel('$z$ [m]'), plt.ylabel('$V_y$ [N]')
         else:
             raise NameError
-
+        plt.subplots_adjust(0.16)
         if show:
             plt.show()
 
