@@ -43,7 +43,7 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     heat_power_cell = TOCell_amp^2 * Cell_R;
     heat_power_battery = heat_power_cell * N_cells_TO;
     heat_cooled = spec_heat * rho * A_vent * deltaT * (2 * V_i_emp + V_TO_max);
-
+    V_i_emp
     
     if E_div > E_red
         E_total_old = E_total;
@@ -71,4 +71,5 @@ function [W_bat, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont)
     fprintf('Total battery weight is %f [kg], volume is %f [L] \n',W_bat,V_bat)
     fprintf('heat power generated: %f [W], heat power taken by air: %f [W] \n',heat_power_battery,heat_cooled)
     fprintf('excess heat power is %f [W] \n', heat_power_battery-heat_cooled)
+    fprintf('total time that flight takes: %f minutes \n',(t_TO+t_cr)/60)
 end

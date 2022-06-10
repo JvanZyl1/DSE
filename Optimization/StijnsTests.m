@@ -16,45 +16,6 @@ parasite_drag();
 fprintf('P_req takeoff: %f [kW], P_req cruise: %f [kW]',P_cruise/1000,P_TOL/1000)
 
 
-%{
-p1 = Capacity;
-p2 = Capacity - ((0.5* t_TO/3600) * P_TOL)*redundancy_factor;
-p3 = p2 - ((t_cr/3600) * P_cruise)*redundancy_factor;
-p4 = p3  - ((0.5* t_TO/3600) * P_TOL)*redundancy_factor;
-x1 = 0;
-x2 = t_TO/2;
-x3 = x2 + t_cr;
-x4 = x3 + t_TO/2;
-
-Xs = [x1,x2/60,x3/60,x4/60];
-Ys = [p1/1000,p2/1000,p3/1000,p4/1000];
-plot(Xs,Ys)
-%}
-
-
-%P_to = P_takeoff/1000
-%P_cr = P_CR/1000
-%{
-x = [];
-y = [];     %battery weight midterm method (not necessarily wrong)
- 
-for i = 1:200
-    V_cr_man = (i+50)/3.6;
-    RC_AoAandThrust(V_cr_man, MTOW);
-    [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp, T_TOL, T_cr] = PowerReq(MTOW, V_cr_man, RPM);
-    P_cont = P_cont_avg;
-    [y(i),~,~] = BatteryMassFun(V_cr_man, P_cruise, P_TOL, P_cont);
-    [x(i)] = V_cr_man*3.6;
-    disp(x(i))
-    
-    
-end
-figure(1)
-plot(x,y)
-xlabel('Cruise speed [km/hr]')
-ylabel('Battery weight [kg]')
-disp(min(y))
-
 
 
 %V_cr = 180 / 3.6 ; % Cruise velocity [m/s]
@@ -77,7 +38,18 @@ n_iter = 10;
 %end
 %}
 
-
+%point list
+%full charge 5am
+% 1 flight at 5am and charge (10 min flight, 10 min loading, 30 min charge) (23433.6 Wh used) 5:50 am !
+% 20 minutes of rest/maintenance 6:10
+% 1 flight back without payload (17329 Wh used, 10 min flight), then charge (25 min charge) 6:45 am ! 
+% 7 am one long flight (10 min flight, 10 loading then 30 min charge) (23433.6 Wh used) 7:50 am !
+% 10 minutes rest and maintenance
+% 8:00 another flight (10 min, 10 min loading) (23433.6 Wh used)   8:20am !
+% Battery swap 10 mins                             8:30 am
+% Short flight 15km (7.5 mins, 10 mins loading, 21097.67 Wh used) (30 min charging) 9:20 am !
+% 1.5 hrs rest/maintenance due to low traffic    10:50 am
+% 
 
 
 
