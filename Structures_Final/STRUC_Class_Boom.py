@@ -9,6 +9,14 @@ class Boom:
     K = 2
     g = 9.81
     density = 2.8e3*g
+    tau_max = [283e6, 283e6]
+    sigma_y = 400e6
+    E = 70e9
+    dz = 0.01
+    MTOW = 950
+    n_ult = 2
+    SF = 1.5
+
     def __init__(self, pos_x, pos_y, A, t):
         self.N_B = None
         self.X = pos_x
@@ -25,9 +33,10 @@ class Boom:
     def properties_cs(self, radius, length):
         self.R = radius
         self.L = length
+        self.X = self.X * 1.341/1.103
         #print('2 -->', self.__dict__)
 
-    def weight(self):  # Checked
+    def weight_boom(self):  # Checked
         self.L_boom = sqrt((self.X[1]-self.X[0])**2 + (self.Y[1]-self.Y[0])**2 + self.L**2)
         self.V_boom = (self.A[1]+self.A[0]) / 2 * self.L_boom
         self.W_boom = self.V_boom * Boom.density
@@ -64,5 +73,4 @@ class Boom:
         self.dq_x = -V_x / Iyy * self.B * (self.X-n_x)
         self.dq_y = -V_y / Ixx * self.B * (self.Y-n_y)
         return self.dq_x, self.dq_y
-
 

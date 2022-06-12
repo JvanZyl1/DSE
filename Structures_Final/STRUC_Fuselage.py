@@ -10,13 +10,7 @@ else:
     pass #print('class Fuselage imported\n\n')
 
 class Fuselage(CrossSection):
-    sigma_y = 400e6
-    E = 70e9
-    dz = 0.01
-    MTOW = 950
-    g = 9.81
-    n_ult = 2
-    SF = 1.5
+
 
     def __init__(self, length, pos_z=None, radius=None, cross_sections=None):
         self.L = length
@@ -41,10 +35,10 @@ class Fuselage(CrossSection):
     def weight_FL(self):  # Checked
         self.weight = 0
         for cs in self.cross_sections:
-            cs.weight = cs.weight_booms() + cs.weight_skins()
             self.weight += cs.weight_booms()
             self.weight += cs.weight_skins()
-        return self.weight
+            cs.weight_cs = cs.weight_booms() + cs.weight_skins()
+        return self.weight, cs.weight_cs
 
     def print_cs(self):
         for cs in self.cross_sections:
@@ -58,18 +52,22 @@ class Fuselage(CrossSection):
 
     # Loading diagrams: step function
     def step(self, z, z_start):
+
         if z >= z_start:
             return 1
         return 0  # np.where(self.z < pos_z_start, 0, 1)
 
     # Loading diagrams functions
     def Vx(self, z):
+        z = float(z)
         V_x = 0
         V_x += 450 + 450 * self.step(z, 2.92) + 450*self.step(z, 3.30)
         V_x -= 1350/self.L * z
         return V_x
 
     def Vy(self, z):
+        self.weight_FL()
+        z = float(z)
         MTOW = Fuselage.MTOW
         g = Fuselage.g
         n_ult = Fuselage.n_ult
@@ -77,7 +75,7 @@ class Fuselage(CrossSection):
         V_y = 0
         # FUSELAGE
         for cs in self.cross_sections:
-            V_y -= 9.81 * (cs.weight/(cs.Z[1]-cs.Z[0]) * ((z-cs.Z[0])*self.step(z, cs.Z[0])-(z-cs.Z[1])*self.step(z, cs.Z[1])))
+            V_y -= 9.81 * (cs.weight_cs /(cs.Z[1]-cs.Z[0]) * ((z-cs.Z[0])*self.step(z, cs.Z[0])-(z-cs.Z[1])*self.step(z, cs.Z[1])))
         # PASSENGERS
         V_y -= 250* g* self.step(z, 1.57)
 
@@ -102,6 +100,7 @@ class Fuselage(CrossSection):
         return V_y * n_ult * SF
 
     def Mx(self, z):
+
         #self.weight_FL()
         self.Vy(z)
         MTOW = Fuselage.MTOW
@@ -113,9 +112,8 @@ class Fuselage(CrossSection):
 
         # FUSELAGE
         for cs in self.cross_sections:
-            M_x += cs.weight / (2*(cs.Z[1] - cs.Z[0])) * (
+            M_x += cs.weight_cs / (2*(cs.Z[1] - cs.Z[0])) * (
                         (z - cs.Z[0])**2 * self.step(z, cs.Z[0]) - (z - cs.Z[1])**2 * self.step(z, cs.Z[1]))
-
         # PASSENGERS
         M_x += 250 * g * (z - 1.57) * self.step(z, 1.57)
 
@@ -133,19 +131,25 @@ class Fuselage(CrossSection):
         M_x += 13 * g * (z - 2.425) * self.step(z, 2.425) * 2
 
         # MTOW split up
-        M_x += ((MTOW-self.weight- 250-100-300-3*13) * g /2) / (2*self.L) * z**2
+        #M_x += ((MTOW-self.weight- 250-100-300-3*13) * g /2) / (2*self.L) * z**2
 
         # Rotors Lift
         M_x -= MTOW * g * (z - 0.620) * self.step(z, 0.620) * 2 / 8
         M_x -= MTOW * g * (z - 2.300) * self.step(z, 2.300) * 4 / 8
         M_x -= MTOW * g * (z - 2.425) * self.step(z, 2.425) * 2 / 8
-        return M_x
+        return M_x * n_ult * SF
 
     def My(self, z):
+        self.Vy(z)
+        MTOW = Fuselage.MTOW
+        g = Fuselage.g
+        n_ult = Fuselage.n_ult
+        SF = Fuselage.SF
+
         M_y = 0
         M_y += 450 * z + 450*(z-2.92) * self.step(z, 2.92) + 450*(z-3.3)*self.step(z, 3.30)
         M_y -= 1350/(self.L*2) * z**2
-        return M_y
+        return M_y * n_ult * SF
 
     def stress_FL(self):
         for cs in self.cross_sections:
@@ -169,16 +173,16 @@ class Fuselage(CrossSection):
         plt.plot(z_range, result)
 
         if equation.__name__ == "Mx":
-            plt.title("Moment diagram")
+            plt.title("Bending moment diagram ")
             plt.xlabel('$z$ [m]'), plt.ylabel('$M_x$ [N m]')
         elif equation.__name__ == "My":
-            plt.title("Moment diagram")
+            plt.title("Bending Moment diagram")
             plt.xlabel('$z$ [m]'), plt.ylabel('$M_y$ [N m]')
         elif equation.__name__ == "Vx":
-            plt.title("Internal load diagram")
+            plt.title("Shear Force diagram")
             plt.xlabel('$z$ [m]'), plt.ylabel('$V_x$ [N]')
         elif equation.__name__ == "Vy":
-            plt.title("Internal load diagram")
+            plt.title("Shear Force diagram")
             plt.xlabel('$z$ [m]'), plt.ylabel('$V_y$ [N]')
         else:
             raise NameError

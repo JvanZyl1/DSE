@@ -12,8 +12,10 @@ class CrossSection(Boom):
     def __init__(self, pos_z, radius, pos_x=None, pos_y=None, A=None, booms=None, t=None):
         self.Z = pos_z  # np.array([z1, z2]) [m]
         self.R = np.array(radius)  # np.array([r1, r2]) [m]
+
         self.Ixx_CS = [0, 0]
         self.Iyy_CS = [0, 0]
+        self.weight_cs = None
         super().__init__(pos_x, pos_y, A, t)
         if booms is None:
             self.booms = []
@@ -31,7 +33,7 @@ class CrossSection(Boom):
     def weight_booms(self):
         self.W_cs_booms = 0
         for boom in self.booms:
-            self.W_cs_booms += boom.weight()
+            self.W_cs_booms += boom.weight_boom()
         return self.W_cs_booms
 
     def remove_boom(self, boom):
@@ -42,12 +44,7 @@ class CrossSection(Boom):
             print('-->', boom.X)
 
     def neutral_x(self):  # Checked on value, calling needs to be checked
-        tBx, tB = 0, 0
-        for boom in self.booms:
-            tBx += boom.B * boom.X
-            tB += boom.B
-        self.nx = tBx / tB
-        #print('Called nx', self.nx)
+        self.nx = [0, 0]
         return self.nx
 
     def neutral_y(self):  # Checked on value, calling needs to be checked
@@ -177,7 +174,13 @@ class CrossSection(Boom):
                 q_x = boom.q_x
                 index_x = self.booms.index(boom)
                 #print('x', index_x)
-
+            elif round(boom.X[0], 4) == round(X_max, 4) and round(boom.Y[0], 4) < 0:
+                boom.q_x = boom.dq_x
+                q_x = boom.q_x
+                index_x = self.booms.index(boom) - np.size(X_max)+1
+                #print('x', index_x)
+            else:
+                pass
 
         for boom in (self.booms[index_x+1:] + self.booms[:index_x]):
             q_x += boom.dq_x
@@ -189,6 +192,16 @@ class CrossSection(Boom):
 
         for boom in self.booms:
             boom.q = boom.q_x + boom.q_y
+            self.cs_A = np.multiply(self.R, self.R)*pi* 1.341/1.103
+            Torque = 125 * g * n_ult * SF
+            if boom.q[0] >= 0:
+                boom.q[0] += Torque / (2 * self.cs_A[0])
+            else:
+                boom.q[0] -= Torque / (2 * self.cs_A[0])
+            if boom.q[1] >= 0:
+                boom.q[1] += Torque / (2 * self.cs_A[1])
+            else:
+                boom.q[1] -= Torque / (2 * self.cs_A[1])
             if boom.t != 0:
                 boom.tau = boom.q / boom.t
             else:
@@ -217,6 +230,6 @@ class CrossSection(Boom):
         self.W_cs_skins = 0
         for i in range(len(t_b1)-1):
             self.W_cs_skins += (abs(t_b1[i] + t_b2[i])) / 2 * self.booms[i].t * self.L * Boom.density
-            return self.W_cs_skins
+        return self.W_cs_skins
 
 
