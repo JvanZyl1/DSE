@@ -42,8 +42,8 @@ Q = 60;
 
 % Airfoil NACA 23012
 Cl_slope = 6; % rad^-1, for NACA 23012 airfoil
-alpha_min = -10;
-alpha_stall = 15;
+alpha_min = -15;
+alpha_stall = 17;
 
 % Configuration
 x_cg = 2.7;  % From back of design box (6x5x2 m)

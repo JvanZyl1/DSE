@@ -3,26 +3,31 @@ function [SPL_mat] = NoiseCalculation(MTOW)
     inputs;
 
     %N_prop = 0;
-    %R_prop = 0;
+    %R_prop = 0.4;
     %C_prop = 0;
     
-    
+    if MTOW <= 0
+        error('MTOW is not valid')
+    end
+
     % Noise estimation
 
     sos = 343;  % m/s, speed of sound
     R_eff = (R_prop-(R_hub+0.0875));
     p_ref = 2 * 10^(-5);  % Pa
     K2 = 0.01206 * 3.2808399^3;
-    sigma = (R_prop* C_prop * B_prop) / (pi * R_prop^2);  % solidity ratio
+    fprintf('K2 = %f \n', K2)
+    sigma = (R_prop * C_prop * B_prop) / (pi * R_prop^2);  % solidity ratio
 
     harmonics = [1, 2, 4];
     
     ang_min = 90;
     ang_max = 180;
-    dist_min = 20;
-    dist_max = 200;
     d_ang = 10;
-    d_dist = 20;
+
+    dist_min = 30;
+    dist_max = 300;
+    d_dist = 30;
 
     dim_ang = (ang_max - ang_min) / d_ang + 1;
     dim_dist = (dist_max - dist_min) / d_dist + 1;
@@ -61,37 +66,53 @@ function [SPL_mat] = NoiseCalculation(MTOW)
 
             % dB to dBA correction factor (A-weighting)
             f = 2 * pi * m * omega_opt * B_prop;
-            A_f = 12194^2 * f.^4 ./ ((f.^2 + 20.6^2) .* ...
+            R_A = 12194^2 * f.^4 ./ ((f.^2 + 20.6^2) .* ...
                 sqrt((f.^2 + 107.7^2).*(f.^2 + 737.9^2)) .* (f.^2 + 12194^2));
+            R_1000 = 12194^2 * 1000^4 / ((1000^2 + 20.6^2) * ...
+                sqrt((1000^2 + 107.7^2)*(1000^2 + 737.9^2)) * (1000^2 + 12194^2));
+            A_f = 20 * log10(R_A) - 20 * log10(R_1000);
 
-            p = (p_mL.^2 + p_mT.^2) ./ p_ref^2 + A_f^2;
+            p = (p_mL.^2 + p_mT.^2) ./ p_ref^2;
+
+            SPL_rot_new = 10 * log10(N_prop * p) + A_f;
+            SPL_rot = 10 * log10(10.^(SPL_rot_old/10) + 10.^(SPL_rot_new/10));
                     
 
         end        
         p_sum = p_sum + p;
         p_sum(p_sum<0) = 0;
 
-
-        % Vortex noise
-        % dB to dBA correction factor (A-weighting)
-        f = 2 * pi * 1 * omega_opt * B_prop;
-        A_f = 12194^2 * f.^4 ./ ((f.^2 + 20.6^2) .* ...
-            sqrt((f.^2 + 107.7^2).*(f.^2 + 737.9^2)) .* (f.^2 + 12194^2));
-
-        SPL_vortex = 20 * log10(K2 * (omega_opt*R_prop)./(rho*dist_vec).*sqrt(N_prop * T / sigma * T / (pi * R_prop^2)) + A_f);
+        SPL_vortex = 20 * log10(K2 * (omega_opt*R_prop)./(rho*dist_vec).*sqrt(N_prop * T / sigma * T / (pi * R_prop^2)));
         %fprintf('a-f = %f', A_f)
         %disp(SPL_vortex)
 
     end
 
-    SPL_rot = 10 * log10(N_prop * p_sum + SPL_vortex);
+    SPL_rot = 10 * log10(N_prop * p_sum);
 
-    SPL = 10 * log10(10.^(SPL_rot/10) + 10.^(SPL_vortex/10));
+
+    % Vortex noise
+    % dB to dBA correction factor (A-weighting)
+
+    R_1000 = 12194^2 * 1000^4 / ((1000^2 + 20.6^2) * ...
+        sqrt((1000^2 + 107.7^2)*(1000^2 + 737.9^2)) * (1000^2 + 12194^2));
+    
+    A_f = 0;
+    for m=1:1:3
+        f = 2 * pi * m * omega_opt * B_prop;
+        R_A = 12194^2 * f.^4 ./ ((f.^2 + 20.6^2) .* ...
+        sqrt((f.^2 + 107.7^2).*(f.^2 + 737.9^2)) .* (f.^2 + 12194^2));
+        A_fi = 20 * log10(R_A) - 20 * log10(R_1000);
+        A_f = A_f + A_fi;
+        fprintf('frequency  = %f, A_fi =  %f \n', f, A_fi)
+    end
+    
+
+    SPL = 10 * log10(10.^(SPL_rot/10) + 10.^(SPL_vortex/10) + A_f);
 
     SPL(end, :) = zeros(1, dim_dist);
     %disp(SPL_rot)
     disp(SPL)
-
 
 end
 

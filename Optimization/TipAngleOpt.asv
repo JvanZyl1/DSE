@@ -15,8 +15,8 @@ function [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW)
     addpath("Excel\");
 
     fileName = 'xf-naca23012-il-1000000.csv';
-    [alpha, Cl_polar, ~] = ReadPolar(fileName);
-    plot(alpha,polyval(Cl_polar,alpha))
+    [alpha, Cl_polar, Cd_polar] = ReadPolar(fileName);
+    %plot(alpha,polyval(Cl_polar,alpha))
     
     % For parametric calculations with emperical units
     R_emp = 3.2808399 * R_prop;  % ft
@@ -40,23 +40,24 @@ function [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW)
     % Thrusts required for flight modes
     T_TO = 1.1 * MTOW * g / N_prop * 0.2248089431;  % lb
     T_L = T_TO;
-    T_hov = T_TO;
     T_cr = T_TO * 0.8; %cos(tilt_cr); % T_cr * 0.2248089431; %%%%%%%%%%%%% TBD  % lb
-    T_em = 38500; %1.5 * T_TO; %%%%%%%%%%%%% TBD  % lb
+    T_em = 38500 * 0.2248089431; %1.5 * T_TO; %%%%%%%%%%%%% TBD  % lb
 
     T_list = [T_cr, T_TO, T_L, T_em];  % lb
-    %T_list = [T_hov, T_TO, T_L * 0.75, T_cr, T_em];  % lb
+    %T_list = T_em;  % lb
     sigma = (R_emp * C_emp * B_prop) / (pi * R_emp^2);  % solidity ratio
 
     % Setting variables for iteration loops
     j = 1;
-    RPM_list = 10:100:5000;
+    RPM_list = 100:100:6000;
     RPM_opt_list = [];
     %L_list = [];
     M_tip_opt_list = [];
+    dldr = zeros(numel(RPM_list), nr_stations);
+    %P_list = [];
     %theta_tip_opt_list = zeros(1, numel(T_list));
-    lin_twist_list = -10:-1:-90;  % deg
-    %lin_twist_list = -38;
+    %lin_twist_list = -10:-1:-90;  % deg
+    lin_twist_list = -38;
 
     alpha_deg_list = zeros(1, nr_stations);
     for T=T_list
@@ -82,6 +83,7 @@ function [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW)
                 %theta_tip = 10;
                 V_z = V_z_list(j);
                 L_blade = 0;
+                %P = 0;
                 k = 1;
                 for station=1:nr_stations                
                     r = r + dr;
@@ -111,16 +113,22 @@ function [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW)
                         %fprintf('theta = %f at r = %f \n', theta_local_deg, r)
                     end
                     alpha_deg_list(k) = alpha_deg;
+
+                    %Cd = polyval(Cd_polar,alpha_deg);
+                    %dP = 0.5 * Cd * rho_emp * V^3 * C_emp * dr;
+
+                    dldr(station) = dL_z * dr;
+                    
                     k = k + 1;
                     %fprintf('dL = %f \n', dL_z)
                 end
-                M_tip = V / sos_emp;
                 L = L_blade * B_prop;
+                %P = P + dP;
                 %fprintf('L = %f \n', L)
                 if L>T && RPM < RPM_opt
                     RPM_opt = RPM;
                     %RPM_opt_list(end+1) = RPM;
-                    M_tip_opt = M_tip;
+                    M_tip_opt =  V / sos_emp;
                     %theta_start_opt=theta_start;
                     lin_twist_opt = lin_twist;
                     %fprintf('For j = %i, RPM_opt = %f for twist = %f.\n', j, RPM, lin_twist)
@@ -140,10 +148,9 @@ function [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW)
         theta_tip_opt = theta_tip;
         M_tip_opt_list(end+1) = M_tip_opt;
         j = j + 1;
+        %P_list(end+1) = P * 1.35581795;
 
         %fprintf('optimal lin twist = %f , theta_tip = %f, giving RPM = %f \n', lin_twist_opt, theta_tip, RPM_opt)
-        
-        %fprintf('optimal lin twist = %f with theta_start = %f, giving RPM = %f \n', lin_twist_opt, theta_start_opt, RPM_opt)
 
         %RPM_opt_list(j) = RPM_opt;
         %M_tip_opt_list(j) = M_tip_opt;
@@ -158,7 +165,13 @@ function [RPM_opt_list, lin_twist, T_list] = TipAngleOpt(MTOW)
     fprintf(['Optimal linear twist for cruise conditions = %f with tip pitch angle = %f\n' ...
         'RPM required for cruise = %f \n RPM required for take-off = %f \n RPM required for landing = %f \n RPM required for emergency = %f \n'], lin_twist_opt(end), theta_tip, RPM_opt_list)
 
-
+    fig3 = figure(1);
+    surf(rs,omega_list,dldr_list)
+    xlabel('R [m]');
+    ylabel('$\Omega$ [rad/s]','Interpreter','latex');
+    zlabel('$\Delta L / \Delta R$','Interpreter','latex');
+    title(['$\theta$' '=' num2str(theta) '$\deg$'],'Interpreter','latex')
+    savefig(fig3,'Figures/ControlPropellerFig3')
 end
 
 

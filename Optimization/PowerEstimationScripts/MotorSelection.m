@@ -39,7 +39,7 @@ function [max_powers, W_motors] = MotorSelection(MTOW)
 
     %fprintf('Max power required for each engine: Front bottom = %f \n Front top = %f\n Back motors = %f \n', P_bf, P_tf, P_b)
     max_powers = [P_tf, P_bf, P_b];
-    fprintf('max powers = %f %f %f', max_powers)
+    fprintf('max powers = %f %f %f \n', max_powers)
     emrax_weight = [0, 7.2, 9.3, 12.3, 20.3, 40];
     emrax_power = [0, (32+60)/2, (40+75)/2, (55+100)/2, (85+160)/2, (100+190)/2] * 1000;
     W_motors = zeros(1, N_prop);

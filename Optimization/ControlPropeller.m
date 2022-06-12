@@ -134,6 +134,8 @@ ylabel('Total Thrust [N]')
 title(['$\theta$' '=' num2str(theta) '$\deg$'],'Interpreter','latex')
 savefig(fig2,'Figures/ControlPropellerFig2')
 
+fprintf('sizes: ')
+disp([size(rs), size(omega_list), size(dldr_list)])
 fig3 = figure(3)
 surf(rs,omega_list,dldr_list)
 xlabel('R [m]');
@@ -156,7 +158,7 @@ ylabel('$Q$ [Nm]','Interpreter','latex')
 title(['$\theta$' '=' num2str(theta) '$\deg$'],'Interpreter','latex')
 savefig(fig5,'Figures/ControlPropellerFig5')
 
-%% make a nice plot of airfoil
+% make a nice plot of airfoil
 dim = length(Airfoil(:,3));
 X = c*[Airfoil(:,1) Airfoil(:,1)];
 Y = repmat([R1 R],dim,1);
