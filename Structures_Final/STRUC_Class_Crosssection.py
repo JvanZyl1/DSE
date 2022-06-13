@@ -190,7 +190,7 @@ class CrossSection(Boom):
         for boom in self.booms:
             boom.q = boom.q_x + boom.q_y
             self.cs_A = np.multiply(self.R, self.R) * pi * 1.341 / 1.103
-            Torque = 125 * g * n_ult * SF
+            Torque = MTOW * g * n_ult * SF * 0.2
             if boom.q[0] >= 0:
                 boom.q[0] += Torque / (2 * self.cs_A[0])
             else:

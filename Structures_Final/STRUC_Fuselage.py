@@ -137,7 +137,7 @@ class Fuselage(CrossSection):
         M_x -= MTOW * g * (z - 0.620) * self.step(z, 0.620) * 2 / 8
         M_x -= MTOW * g * (z - 2.300) * self.step(z, 2.300) * 4 / 8
         M_x -= MTOW * g * (z - 2.425) * self.step(z, 2.425) * 2 / 8
-        M_x += 5990.985762974158 / self.L * z # ASSUMPTION HERE!!!!
+        M_x += 5990.985762974158 / (self.L + dz) * z # ASSUMPTION HERE!!!!
         return M_x * n_ult * SF
 
     def My(self, z):
@@ -149,7 +149,8 @@ class Fuselage(CrossSection):
 
         M_y = 0
         M_y += 450 * z + 450*(z-2.92) * self.step(z, 2.92) + 450*(z-3.3)*self.step(z, 3.30)
-        M_y -= 1350/(self.L*2) * z**2
+        M_y += 0
+        M_y -= 1939.50 / (self.L+dz) * z
         return M_y * n_ult * SF
 
     def stress_FL(self):

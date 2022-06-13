@@ -102,12 +102,15 @@ fuselage.add_cs([cs_1, cs_2, cs_3,
 """
 Run Following Functions
 """
+
 # fuselage.weight_FL()
 fuselage.shear_FL()
-fuselage.plot_loads(fuselage.Mx, True)
+fuselage.plot_loads(fuselage.My)
+plt.grid(True)
+plt.savefig('Load_Diagram_My.png')
 # print(fuselage.Vy(3.501))
 
-cs = cs_4
+cs = cs_2
 
 
 
@@ -134,6 +137,7 @@ for boom in cs.booms:
         print(boom.X, boom.Y, 'z0 =     OK', 'z1 = NOT OK', boom.sigma_z)
     else:
         print(boom.X, boom.Y, 'z0 = NOT OK', 'z1 = NOT OK', boom.sigma_z)
-
+"""
 cs.plot_booms()
 cs.plot_skin(True)
+"""""

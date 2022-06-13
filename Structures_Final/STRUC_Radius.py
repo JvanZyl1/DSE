@@ -59,10 +59,11 @@ def radii(part, load, material):
         M_ax = (W / 2 + We / n - L / n) * l
         Mx = (W + We / n - L / n) * pos_z - \
              W * pos_z ** 2 / (2 * l) - M_ax
+        print(n)
         return Mx
 
     def m_y(pos_z):
-        M_ay = l * load.D * part.radius * 2 * L #RADIUS IS HERE!!!!!! REITERATE
+        M_ay = l * load.D*l**2 * part.radius**2 * 2 * L #RADIUS IS HERE!!!!!! REITERATE
         My = M_ay - M_ay * pos_z / l + load.T
         return My
 
@@ -86,7 +87,7 @@ def radii(part, load, material):
         # Bending in axial-direction for TENSION
         def r3():
             r3 = (abs(My) + sqrt((My) ** 2 + 4 * 2 * pi * t * sigma_y * 2 * pi * P / n)) / (4 * pi * t * sigma_y)
-            #print('r3', r3)
+
             return r3
 
         # Bending in axial-direction for COMPRESSION
@@ -139,11 +140,13 @@ for i in range(6):
     plt.plot(z_axis, r[i])
 plt.plot(z_axis, r_design, '-.b')
 plt.axvline(use_beam.length - 0.25/2, color='b')
-plt.axvline(use_beam.length + 0.25/2, color='b')
-plt.title("Radius required")
-plt.xlabel("z [m]")
-plt.ylabel("r [m]")
-plt.show()
+#plt.axvline(use_beam.length + 0.25/2, color='b')
+plt.title('Length: ' + str(use_beam.length) + ' m, Thickness: ' + str(use_beam.thickness*1000) + ' mm')
+plt.xlabel("$z$ [m]")
+plt.ylabel("$r$ [m]")
+plt.savefig('Beamdesign_' + str(use_beam.length) + 'm.png')
+
+#plt.show()
 #print("Radius", r_design)
 
 
