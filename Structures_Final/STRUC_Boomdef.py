@@ -42,9 +42,9 @@ boom_2_07 = Boom(cs_1.R * np.cos(2 * pi * 0.904), cs_1.R * np.sin(2 * pi * 0.904
 boom_3_01 = Boom(cs_1.R * 1.1 * np.cos(2 * pi * 0.121), cs_1.R * 1.1 * np.sin(2 * pi * 0.121), 90e-6, 0.000)
 boom_3_02 = Boom(cs_1.R * 1.1 * np.cos(2 * pi * 0.379), cs_1.R * 1.1 * np.sin(2 * pi * 0.379), 90e-6, 0.000)
 boom_3_03 = Boom(cs_1.R * np.cos(2 * pi * 0.596), cs_1.R * np.sin(2 * pi * 0.596), 40e-6, 0.000)
-boom_3_04 = Boom(cs_1.R * np.cos(2 * pi * 0.641), cs_1.R * np.sin(2 * pi * 0.641), 40e-6, 0.0015)
-boom_3_05 = Boom(cs_1.R * np.cos(2 * pi * 0.710), cs_1.R * np.sin(2 * pi * 0.710), 50e-6, 0.0015)
-boom_3_06 = Boom(cs_1.R * np.cos(2 * pi * 0.790), cs_1.R * np.sin(2 * pi * 0.790), 50e-6, 0.0015)
+boom_3_04 = Boom(cs_1.R * np.cos(2 * pi * 0.641), cs_1.R * np.sin(2 * pi * 0.641), 40e-6, 0.0006)
+boom_3_05 = Boom(cs_1.R * np.cos(2 * pi * 0.710), cs_1.R * np.sin(2 * pi * 0.710), 50e-6, 0.0006)
+boom_3_06 = Boom(cs_1.R * np.cos(2 * pi * 0.790), cs_1.R * np.sin(2 * pi * 0.790), 50e-6, 0.0006)
 boom_3_07 = Boom(cs_1.R * np.cos(2 * pi * 0.859), cs_1.R * np.sin(2 * pi * 0.859), 40e-6, 0.000)
 boom_3_08 = Boom(cs_1.R * np.cos(2 * pi * 0.904), cs_1.R * np.sin(2 * pi * 0.904), 40e-6, 0.000)
 
@@ -107,20 +107,23 @@ fuselage.shear_FL()
 fuselage.plot_loads(fuselage.Mx, True)
 # print(fuselage.Vy(3.501))
 
-cs = cs_5
+cs = cs_4
+
+
+
 print("SHEAR")
 for boom in cs.booms:
-    print('boom.X, boom.Y', boom.N_B, '           ', '           ', boom.tau_max)
+    print('boom.X, boom.Y', boom.N_B, 'q = ', boom.q, boom.tau_max)
     if abs(boom.tau[0]) <= abs(boom.tau_max[0]) and abs(boom.tau[1]) <= abs(boom.tau_max[1]):
-        print(boom.X, boom.Y, 'z0 =     OK', 'z1 =     OK', boom.tau, np.around(boom.tau / np.array(boom.tau_max) * 100), 2)
+        print('z0 =     OK', 'z1 =     OK', boom.tau, np.around(boom.tau / np.array(boom.tau_max) * 100, 2))
     elif abs(boom.tau[0]) > abs(boom.tau_max[0]) and abs(boom.tau[1]) <= abs(boom.tau_max[1]):
-        print(boom.X, boom.Y, 'z0 = NOT OK', 'z1 =     OK', boom.tau, np.around(boom.tau / np.array(boom.tau_max) * 100), 2)
+        print('z0 = NOT OK', 'z1 =     OK', boom.tau, np.around(boom.tau / np.array(boom.tau_max) * 100, 2))
     elif abs(boom.tau[0]) <= abs(boom.tau_max[0]) and abs(boom.tau[1]) > abs(boom.tau_max[1]):
-        print(boom.X, boom.Y, 'z0 =     OK', 'z1 = NOT OK', boom.tau, np.around(boom.tau / np.array(boom.tau_max) * 100), 2)
+        print('z0 =     OK', 'z1 = NOT OK', boom.tau, np.around(boom.tau / np.array(boom.tau_max) * 100, 2))
     else:
-        print(boom.X, boom.Y, 'z0 = NOT OK', 'z1 = NOT OK', boom.tau, np.around(boom.tau / np.array(boom.tau_max) * 100), 2)
+        print('z0 = NOT OK', 'z1 = NOT OK', boom.tau, np.around(boom.tau / np.array(boom.tau_max) * 100, 2))
 
-print("STRESS")
+print("\nSTRESS")
 for boom in cs.booms:
     print('boom.X, boom.Y', boom.N_B, '           ', '           ', boom.sigma_max)
     if abs(boom.sigma_z[0]) <= abs(boom.sigma_max[0]) and abs(boom.sigma_z[1]) <= abs(boom.sigma_max[1]):
