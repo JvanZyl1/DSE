@@ -59,7 +59,7 @@ class CrossSection(Boom):
         for boom in self.booms:
             boom.plot_b()
         plt.plot(self.neutral_x(), self.neutral_y(), '+k')
-        plt.title('Booms')
+        #plt.title('Booms')
         plt.xlabel('x [m]')
         plt.ylabel('y [m]')
         plt.axis('equal')
@@ -77,9 +77,10 @@ class CrossSection(Boom):
                          linewidth=1000 * boom_n.t, zorder=0)
                 plt.plot([boom_n.X[1], boom_n1.X[1]], [boom_n.Y[1], boom_n1.Y[1]], c='y',
                          linewidth=1000 * boom_n.t, zorder=0)
-        plt.title('Skin panels')
+        #plt.title('Skin panels')
         plt.xlabel('x [m]')
         plt.ylabel('y [m]')
+        plt.grid()
         plt.axis('equal')
         self.booms.remove(self.booms[-1])
         if show:
@@ -152,57 +153,57 @@ class CrossSection(Boom):
         index_x, index_y = None, None
         for boom in self.booms:
             if round(boom.Y[0], 4) == 0 and round(boom.X[0], 4) > 0:
-                boom.q_x = boom.dq_x / 2
-                q_x = boom.q_x
+                boom.q_x[n] = boom.dq_x[n] / 2
+                q_x = boom.q_x[n]
                 index_x = self.booms.index(boom)
                 # print('x, y=0', index_x)
             elif round(boom.Y[0], 4) > 0 and round(boom.X[0], 4) == 0:
-                boom.q_y = boom.dq_y / 2
-                q_y = boom.q_y
+                boom.q_y[n] = boom.dq_y[n] / 2
+                q_y = boom.q_y[n]
                 index_y = self.booms.index(boom)
                 # print('y, x=0', index_y)
             elif round(boom.Y[0], 4) == round(Y_max, 4) and round(boom.X[0], 4) > 0:
-                boom.q_y = boom.dq_y
-                q_y = boom.q_y
+                boom.q_y[n] = boom.dq_y[n]
+                q_y = boom.q_y[n]
                 index_y = self.booms.index(boom)
                 # print('y', index_y)
             elif round(boom.X[0], 4) == round(X_max, 4) and round(boom.Y[0], 4) > 0:
-                boom.q_x = boom.dq_x
-                q_x = boom.q_x
+                boom.q_x[n] = boom.dq_x[n]
+                q_x = boom.q_x[n]
                 index_x = self.booms.index(boom)
                 # print('x', index_x)
             elif round(boom.X[0], 4) == round(X_max, 4) and round(boom.Y[0], 4) < 0:
-                boom.q_x = boom.dq_x
-                q_x = boom.q_x
+                boom.q_x[n] = boom.dq_x[n]
+                q_x = boom.q_x[n]
                 index_x = self.booms.index(boom) - np.size(X_max) + 1
                 # print('x', index_x)
             else:
                 pass
 
         for boom in (self.booms[index_x + 1:] + self.booms[:index_x]):
-            q_x += boom.dq_x
-            boom.q_x = q_x
+            q_x += boom.dq_x[n]
+            boom.q_x[n] = q_x
+
 
         for boom in (self.booms[index_y + 1:] + self.booms[:index_y]):
-            q_y += boom.dq_y
-            boom.q_y = q_y
+            q_y += boom.dq_y[n]
+            boom.q_y[n] = q_y
 
         for boom in self.booms:
-            boom.q = boom.q_x + boom.q_y
+            boom.q[n] = boom.q_x[n] + boom.q_y[n]
             self.cs_A = np.multiply(self.R, self.R) * pi * 1.341 / 1.103
+
             Torque = MTOW * g * n_ult * SF * 0.2
-            if boom.q[0] >= 0:
-                boom.q[0] += Torque / (2 * self.cs_A[0])
+            if boom.q[n] >= 0:
+                boom.q[n] += Torque / (2 * self.cs_A[n])
+
             else:
-                boom.q[0] -= Torque / (2 * self.cs_A[0])
-            if boom.q[1] >= 0:
-                boom.q[1] += Torque / (2 * self.cs_A[1])
-            else:
-                boom.q[1] -= Torque / (2 * self.cs_A[1])
+                boom.q[n] -= Torque / (2 * self.cs_A[n])
+
             if boom.t != 0:
-                boom.tau = boom.q / boom.t
+                boom.tau[n] = boom.q[n] / boom.t
             else:
-                boom.tau = [0, 0]
+                boom.tau[n] = 0
 
     def skin_length(self, n):  # CHECKED
         nodes = self.booms

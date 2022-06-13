@@ -46,8 +46,16 @@ class Fuselage(CrossSection):
 
     def plot_cs(self):
         for cs in self.cross_sections:
+            plt.plot([cs.Z[0], cs.Z[0]], [-cs.R[0], cs.R[0]], 'r')
             plt.plot(cs.Z, cs.R, 'b')
             plt.plot(cs.Z, -cs.R, 'b')
+            for boom in cs.booms:
+                plt.plot([cs.Z[0], cs.Z[1]], [boom.Y[0], boom.Y[1]], 'g')
+        plt.plot([cs.Z[1], cs.Z[1]], [-cs.R[1], cs.R[1]], 'r')
+        plt.xlabel('$z$ [m]')
+        plt.ylabel('$y$ [m]')
+        plt.grid()
+        plt.savefig('fuselage_plot.png')
         plt.show()
 
     # Loading diagrams: step function
@@ -137,7 +145,7 @@ class Fuselage(CrossSection):
         M_x -= MTOW * g * (z - 0.620) * self.step(z, 0.620) * 2 / 8
         M_x -= MTOW * g * (z - 2.300) * self.step(z, 2.300) * 4 / 8
         M_x -= MTOW * g * (z - 2.425) * self.step(z, 2.425) * 2 / 8
-        M_x += 5990.985762974158 / (self.L + dz) * z # ASSUMPTION HERE!!!!
+        M_x += 5990.985762974158 / (self.L) * z # ASSUMPTION HERE!!!!
         return M_x * n_ult * SF
 
     def My(self, z):
@@ -150,7 +158,7 @@ class Fuselage(CrossSection):
         M_y = 0
         M_y += 450 * z + 450*(z-2.92) * self.step(z, 2.92) + 450*(z-3.3)*self.step(z, 3.30)
         M_y += 0
-        M_y -= 1939.50 / (self.L+dz) * z
+        M_y -= 1939.50 / (self.L) * z
         return M_y * n_ult * SF
 
     def stress_FL(self):
