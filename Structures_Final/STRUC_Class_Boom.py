@@ -44,7 +44,7 @@ class Boom:
 
     def plot_b(self):
         plt.plot(self.X, self.Y, '--')
-        plt.scatter(self.X, self.Y)
+        plt.scatter(self.X, self.Y, s=self.A[0]*1000000)
 
     def area(self, i, new_B):
         self.B[i] = new_B

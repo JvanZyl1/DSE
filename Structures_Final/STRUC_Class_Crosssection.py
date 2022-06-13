@@ -205,7 +205,7 @@ class CrossSection(Boom):
             if boom.t != 0:
                 boom.tau = boom.q / boom.t
             else:
-                boom.tau = 0
+                boom.tau = [0, 0]
 
     def skin_length(self, n):  # CHECKED
         nodes = self.booms

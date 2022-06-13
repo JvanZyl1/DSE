@@ -137,6 +137,7 @@ class Fuselage(CrossSection):
         M_x -= MTOW * g * (z - 0.620) * self.step(z, 0.620) * 2 / 8
         M_x -= MTOW * g * (z - 2.300) * self.step(z, 2.300) * 4 / 8
         M_x -= MTOW * g * (z - 2.425) * self.step(z, 2.425) * 2 / 8
+        M_x += 5990.985762974158 / self.L * z # ASSUMPTION HERE!!!!
         return M_x * n_ult * SF
 
     def My(self, z):
