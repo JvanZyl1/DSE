@@ -3,7 +3,13 @@ close all
 clc
 
 inputs;
+MTOW = 920;
+%[RPM_opt] = LiftDistributionCruise(MTOW);
 
-% LiftPowerRPM
-[RPM_opt_list, lin_twist] = TipAngleOpt(10000);
-%SPL_mat = NoiseCalculation(950);
+%%%%%%%% NOW CHANGED FOR VALIDATION %%%%%%%%%%%%%%%
+[L] = tipvalidation(MTOW);
+%disp(RPM_opt_list)
+
+%[SPL_mat] = NoiseCalculation(MTOW);
+
+

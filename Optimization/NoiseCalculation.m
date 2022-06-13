@@ -21,13 +21,13 @@ function [SPL_mat] = NoiseCalculation(MTOW)
 
     harmonics = 1:1:20;
     
-    ang_min = 90;
+    ang_min = 135;
     ang_max = 180;
-    d_ang = 10;
+    d_ang = 5;
 
-    dist_min = 30;
-    dist_max = 300;
-    d_dist = 30;
+    dist_min = 10;
+    dist_max = 100;
+    d_dist = 10;
 
     dim_ang = (ang_max - ang_min) / d_ang + 1;
     dim_dist = (dist_max - dist_min) / d_dist + 1;
@@ -50,6 +50,18 @@ function [SPL_mat] = NoiseCalculation(MTOW)
     end
     %disp(ang_vec_deg)
     ang_vec = ang_vec_deg * pi / 180;
+    
+    %dist = 50;
+    %dist_vec = ones(size(ang_vec)) * dist;
+    %dist_vec = cat(1, dist_vec, flip(dist_vec(2:end, :), 1));
+    %dist_vec = cat(2, dist_vec, flip(dist_vec(:, 2:end), 2));
+
+    %ang_vec = cat(1, ang_vec, flip(ang_vec(2:end, :), 1));
+    %ang_vec = cat(2, ang_vec, flip(ang_vec(:, 2:end), 2));
+
+    %dist_vec = dist_vec ./ cos(pi - ang_vec);
+    %disp(dist_vec)
+    %disp(ang_vec_deg)
     
     RPM_opt_list = 800;
     T = 1.1 * MTOW * g / N_prop;

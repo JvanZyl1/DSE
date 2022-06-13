@@ -25,9 +25,10 @@ for i=1:n_iter
     %disp([W_PL, BatWt, PropWt, FuseWt, ContWt, W_beams])
 
     % RPM and blade twist approximation
-    %[RPM_opt_list, lin_twist] = LiftPowerRPM(MTOW, T_cr);
     [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW);
     RPM_cr = RPM_opt_list(1);
+
+    [RPM_opt] = LiftDistributionCruise(MTOW);
 
 end
 
@@ -35,13 +36,13 @@ end
 
 [C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
 
-fprintf('MTOW: %f [kg]\n',MTOW)
+%fprintf('MTOW: %f [kg]\n',MTOW)
 %fprintf('Battery weight: %f [kg]\n',BatWt)
-fprintf('Required energy: %f [Wh]\n',E_total)
+%fprintf('Required energy: %f [Wh]\n',E_total)
 %fprintf('Battery volume: %f [L]\n', V_bat)
-fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise*redundancy_factor,P_TOL*redundancy_factor/1.5)
+%fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise*redundancy_factor,P_TOL*redundancy_factor/1.5)
 %fprintf('The total cost per vehicle: = %f [€]\n', C_unit)
-fprintf('Linear twist = %f, RPM = %f, %f, %f, %f \n', lin_twist, RPM_opt_list)
+%fprintf('Linear twist = %f, RPM = %f, %f, %f, %f \n', lin_twist, RPM_opt_list)
 
 
 

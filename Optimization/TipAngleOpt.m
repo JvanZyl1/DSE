@@ -1,12 +1,6 @@
 function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     inputs;
     
-
-    % SENSITIVITY ANALYSIS: change the following parameters
-    % Thrust
-    % Velocity
-    %R_prop = 0.4;
-    
     if MTOW <= 0
         error('invalid value of MTOW')
     end
@@ -27,29 +21,54 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     nr_stations = 20;
     dr = (R_emp-R_hub_emp) / nr_stations;  % ft
     sos_emp = 1125.32808; % ft/s
+    
+
+
+
+    V_cr = 1.68780986 * 110;
+
+
+
 
     [tilt_cr, ~] = RC_AoAandThrust(V_cr, MTOW);
     %tilt_cr = 6 / 180 * pi;
     V_z_cr = V_cr * sin(tilt_cr) * 3.2808399;
+    %V_x_cr = V_cr * cos(tilt_cr) * 3.2808399;
     fprintf('tilt angle = %f, V_z = %f \n', tilt_cr, V_z_cr)
     V_TO_emp = V_TO * 3.2808399;  % ft/s
     V_L_emp = -5 * 3.2808399;  % ft/s
-    V_z_list = 0.5 * [V_z_cr, V_TO_emp, V_L_emp, 0];
-    %V_z_list = [V_TO_emp, V_L_emp, V_z_cr, 0];
+    %V_z_list = 0.5 * [V_z_cr, V_TO_emp, V_L_emp, 0];
+    V_z_list = [V_TO_emp, V_L_emp, V_z_cr, 0];
     
     % Thrusts required for flight modes
     T_TO = 1.1 * MTOW * g / N_prop * 0.2248089431;  % lb
     T_L = T_TO;
     T_cr = T_TO * 0.6; %cos(tilt_cr); % T_cr * 0.2248089431; %%%%%%%%%%%%% TBD  % lb
-    T_em = T_TO / 0.75; %38500 * 0.2248089431; %1.5 * T_TO; %%%%%%%%%%%%% TBD  % lb
+    T_em = T_TO / 0.75; 
+    %T_em = 38500 * 0.2248089431; %1.5 * T_TO; %%%%%%%%%%%%% TBD  % lb
 
     T_list = [T_cr, T_TO, T_L, T_em];  % lb
-    T_list = T_TO;  % lb
+    T_list = T_em;  % lb
+
+
+
+    R_emp = 18.5;
+    C_emp = 1.083;
+    B_prop = 2;
+    R_hub_emp = 0.2 * R_emp;
+    
+    T_cr = 4150 * 0.45359237 * g * 0.2248089431;
+    T_list = 4150 * 0.45359237 * g * 0.2248089431;
+    RPM_list = 763 / R_prop / (2*pi) * 60;
+    lin_twist_list = 11.1;
+
+
+
     sigma = (R_emp * C_emp * B_prop) / (pi * R_emp^2);  % solidity ratio
 
     % Setting variables for iteration loops
     j = 1;
-    RPM_list = 400:10:1200;
+    RPM_list = 600:100:6000;
     RPM_opt_list = [];
     %L_list = [];
     M_tip_opt_list = [];
@@ -57,7 +76,7 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     %P_list = [];
     %theta_tip_opt_list = zeros(1, numel(T_list));
     %lin_twist_list = -10:-1:-90;  % deg
-    lin_twist_list = -38;
+    %lin_twist_list = -38;
 
     alpha_deg_list = zeros(1, nr_stations);
     for T=T_list
@@ -89,7 +108,7 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
                 for station=1:nr_stations
                     r = r + dr;
                     V_blade = omega * r;
-                    V = sqrt((V_z+V_i_emp)^2 + V_blade^2);
+                    V = sqrt((V_z+V_i_emp)^2 + (V_blade)^2);
     
                     % Ideal twist
                     % theta_local = theta_tip / (r / R_emp) * pi/180;  
@@ -100,7 +119,7 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
                     %fprintf('thetalocal = %f deg', theta_local)
 
                     %fprintf('incoming airflow = %f \n', atan((V_TO_emp+V_i_emp)/V_blade)*180/pi)
-                    alpha = theta_local - atan((V_z+V_i_emp)/V_blade);
+                    alpha = theta_local - atan((V_z+V_i_emp)/(V_blade));
                     alpha_deg = alpha * 180 / pi;
                     Cl = polyval(Cl_polar,alpha_deg);
                     if alpha_deg < alpha_min || alpha_deg>alpha_stall
@@ -109,18 +128,8 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
                     dL = 0.5 * Cl * rho_emp * V * V * C_emp * dr;
                     dL_z = dL * cos(alpha);
                     L_blade = L_blade + dL_z;
-                    fprintf('dL = %f, Cl = %f \n', dL_z, Cl)
-                    %fprintf('r = %f \n', r)
-                    if j>1
-                        %fprintf('theta = %f at r = %f \n', theta_local_deg, r)
-                    end
                     alpha_deg_list(k) = alpha_deg;
-
-                    %Cd = polyval(Cd_polar,alpha_deg);
-                    %dP = 0.5 * Cd * rho_emp * V^3 * C_emp * dr;
-
                     dldr(i, station) = dL_z * dr;
-                    fprintf('dldr = %f \n', dldr(i, station))
                     r_list(end+1) = r;
 
                     k = k + 1;
@@ -129,9 +138,10 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
                 L = L_blade * B_prop;
                 %P = P + dP;
                 %fprintf('L = %f \n', L)
+                fprintf('L = %f, T = %f \n', L, T)
                 if L>T && RPM < RPM_opt
                     RPM_opt = RPM;
-                    %RPM_opt_list(end+1) = RPM;
+                    RPM_opt_list(end+1) = RPM;
                     M_tip_opt =  V / sos_emp;
                     %theta_start_opt=theta_start;
                     lin_twist_opt = lin_twist;
@@ -147,10 +157,10 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
             
         end
         %theta_start_list(end+1) = theta_start_opt;
-        RPM_opt_list(end+1) = RPM_opt;
-        lin_twist_list = lin_twist;
+        %RPM_opt_list(end+1) = RPM_opt;
+        %lin_twist_list = lin_twist;
         theta_tip_opt = theta_tip;
-        M_tip_opt_list(end+1) = M_tip_opt;
+        %M_tip_opt_list(end+1) = M_tip_opt;
         j = j + 1;
         %P_list(end+1) = P * 1.35581795;
 
@@ -176,7 +186,7 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     fig1 = figure(1);
     surf(r_list,RPM_list,dldr_list)
     xlabel('R [m]');
-    ylabel('$\Omega$ [rad/s]','Interpreter','latex');
+    ylabel('$\Omega$ [RPM]','Interpreter','latex');
     zlabel('$\Delta L / \Delta R$ [N/m]','Interpreter','latex');
     %savefig(fig1,'Figures/ControlPropellerFig3')
 end
