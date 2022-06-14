@@ -86,6 +86,7 @@ class CrossSection(Boom):
         if show:
             plt.show()
 
+
     def Ixx_cs(self):  # Checked
         self.Ixx_CS = [0, 0]  # Initiate before running
         for boom in self.booms:  # Initiate before running
@@ -100,40 +101,29 @@ class CrossSection(Boom):
             self.Iyy_CS[1] += boom.Iyy(self.neutral_x())[1]
         return self.Iyy_CS
 
-    def boom_area(self, sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n):
+    def boom_area(self):
 
-        t_b = self.skin_length(n)
+        t_b0 = self.skin_length(0)
+        t_b1 = self.skin_length(0)
 
-        for boom in self.booms:
-            pass  # print(boom.N_B)
         for i in range(len(self.booms) - 1):
+
             if i <= len(self.booms) - 3:
                 b_i0, b_i1, b_i2 = self.booms[i], self.booms[i + 1], self.booms[i + 2]
             elif i == len(self.booms) - 2:
                 b_i0, b_i1, b_i2 = self.booms[i], self.booms[i + 1], self.booms[0]
             else:
                 b_i0, b_i1, b_i2 = self.booms[i], self.booms[0], self.booms[1]
+            b_i1.A[0] = float(b_i1.B[0] - t_b0[i] * b_i1.t / 6 * ((2 + b_i2.sigma_z[0]/b_i1.sigma_z[0]) +
+                                                            (2 + b_i0.sigma_z[0]/b_i1.sigma_z[0])))
+            b_i1.A[1] = float(b_i1.B[1] - t_b1[i] * b_i1.t / 6 * ((2 + b_i2.sigma_z[1] / b_i1.sigma_z[1]) +
+                                                            (2 + b_i0.sigma_z[1] / b_i1.sigma_z[1])))
 
-            s_i0 = b_i0.stress_max(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
-            s_i1 = b_i1.stress_max(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
-            s_i2 = b_i2.stress_max(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
-            # print(s_i0, s_i1, s_i2)
-            b_i1.area(n, b_i1.A[0] +
-                      t_b[n] * b_i1.t / 6 * (2 + s_i0 / s_i1) +
-                      t_b[n] * b_i1.t / 6 * (2 + s_i2 / s_i1))
-        self.Ixx_cs(), self.Iyy_cs()
 
     def stress_CS(self, sigma_y, E, M_x, M_y, n):
         n_x, n_y = self.neutral_x()[n], self.neutral_y()[n]
         Ixx, Iyy = self.Ixx_cs()[n], self.Iyy_cs()[n]
         # print('first', Ixx)
-        for boom in self.booms:
-            boom.stress_max(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
-
-        self.boom_area(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)
-        n_x, n_y = self.neutral_x()[n], self.neutral_y()[n]
-        Ixx, Iyy = self.Ixx_cs()[n], self.Iyy_cs()[n]
-        # print('sec', Ixx)
 
         for boom in self.booms:
             boom.stress_boom(sigma_y, E, n_x, n_y, M_x, M_y, Ixx, Iyy, n)

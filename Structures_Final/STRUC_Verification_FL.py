@@ -22,8 +22,8 @@ class TestBoom(unittest.TestCase):
 
     def test_init(self):
         # Check if initiating delivers right amount of items
-        self.assertEqual(len(self.boom1.__dict__), 9, 'boom1.__init__ method provided too many/few items.')
-        self.assertEqual(len(self.boom2.__dict__), 9, 'boom2.__init__ method provided too many/few items.')
+        self.assertEqual(len(self.boom1.__dict__), 13, 'boom1.__init__ method provided too many/few items.')
+        self.assertEqual(len(self.boom2.__dict__), 13, 'boom2.__init__ method provided too many/few items.')
 
     def test_init_unit(self):
         with self.assertRaises(TypeError):
