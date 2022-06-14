@@ -21,17 +21,10 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     nr_stations = 20;
     dr = (R_emp-R_hub_emp) / nr_stations;  % ft
     sos_emp = 1125.32808; % ft/s
-    
+   
 
-
-
-    V_cr = 1.68780986 * 110;
-
-
-
-
+    % 
     [tilt_cr, ~] = RC_AoAandThrust(V_cr, MTOW);
-    %tilt_cr = 6 / 180 * pi;
     V_z_cr = V_cr * sin(tilt_cr) * 3.2808399;
     %V_x_cr = V_cr * cos(tilt_cr) * 3.2808399;
     fprintf('tilt angle = %f, V_z = %f \n', tilt_cr, V_z_cr)
@@ -48,21 +41,8 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     %T_em = 38500 * 0.2248089431; %1.5 * T_TO; %%%%%%%%%%%%% TBD  % lb
 
     T_list = [T_cr, T_TO, T_L, T_em];  % lb
-    T_list = T_em;  % lb
-
-
-
-    R_emp = 18.5;
-    C_emp = 1.083;
-    B_prop = 2;
-    R_hub_emp = 0.2 * R_emp;
-    
-    T_cr = 4150 * 0.45359237 * g * 0.2248089431;
-    T_list = 4150 * 0.45359237 * g * 0.2248089431;
-    RPM_list = 763 / R_prop / (2*pi) * 60;
-    lin_twist_list = 11.1;
-
-
+    %T_list = T_TO;
+    %V_z_list = V_TO_emp;
 
     sigma = (R_emp * C_emp * B_prop) / (pi * R_emp^2);  % solidity ratio
 
@@ -76,7 +56,7 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     %P_list = [];
     %theta_tip_opt_list = zeros(1, numel(T_list));
     %lin_twist_list = -10:-1:-90;  % deg
-    %lin_twist_list = -38;
+    lin_twist_list = -36;
 
     alpha_deg_list = zeros(1, nr_stations);
     for T=T_list
@@ -87,6 +67,7 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
             lin_twist_list = lin_twist_opt;  % Taking optimum twist for cruise
             %theta_start = theta_start_opt;
             theta_tip = theta_tip_opt;
+            theta_tip = 10;
         end
 
         RPM_opt = RPM_list(end);

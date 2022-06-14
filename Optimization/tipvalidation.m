@@ -15,28 +15,32 @@ function [L] = tipvalidation(MTOW)
     rho_emp = 0.002377;  % slug/ft^3
 
     V_cr = 1.68780986 * 110;
+    tilt = 6 / 180 * pi;
 
     V_TO_emp = V_TO * 3.2808399;  % ft/s
     V_z_list = V_TO_emp;
+    %V_z_list = V_cr * sin(tilt);
     
-    R_emp = 12.58;
-    C_emp = 0.6;
-    B_prop = 2;
+    R_emp = 13.2;
+    C_emp = 0.56;
+    B_prop = 5;
     R_hub_emp = 0.2 * R_emp;
 
-    nr_stations = 20;
+    nr_stations = 100;
     dr = (R_emp-R_hub_emp) / nr_stations;  % ft
     sos_emp = 1125.32808; % ft/s
     fprintf('dr = %f \n', dr)
     
-    T_cr = 1370 * 0.45359237 * g * 0.2248089431 * 0.6;
-    T_list = 1370 * 0.45359237 * g * 0.2248089431;
+    T_TO = 3000 * 0.45359237 * g * 0.2248089431 * 1.1;
+    T_cr = 0.6 * T_TO;
+    T_list = T_TO;
+    %T_list = T_cr;
     RPM_list = 1;
-    rpm = 699 / R_emp / (2*pi) * 60;
-    lin_twist_list = -7;
+    rpm = 680 / R_emp / (2*pi) * 60;
+    lin_twist_list = -9;
     fprintf('rpm = %f \n', rpm)
 
-    sigma = 0.03;  % solidity ratio
+    sigma = 0.068;  % solidity ratio
     j = 1;
     %RPM_list = 600:100:6000;
     for T=T_list
@@ -46,7 +50,7 @@ function [L] = tipvalidation(MTOW)
 
             for RPM=RPM_list
                 r = R_hub_emp;
-                omega = 699 / R_emp;
+                omega = 680 / R_emp;
 
                 C_T_sigma = T_cr / (rho_emp * sigma * pi*R_emp^2 * (omega * R_emp)^2);  % Blade pitch optimized for cruise
                 theta_tip = 57.3 * (4/Cl_slope*C_T_sigma + sqrt(sigma * C_T_sigma / 2));  % deg

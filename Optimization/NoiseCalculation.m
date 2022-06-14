@@ -63,7 +63,7 @@ function [SPL_mat] = NoiseCalculation(MTOW)
     %disp(dist_vec)
     %disp(ang_vec_deg)
     
-    RPM_opt_list = 800;
+    RPM_opt_list = 1200;
     T = 1.1 * MTOW * g / N_prop;
     
     % Rotational noise

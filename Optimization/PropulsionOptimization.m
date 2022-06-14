@@ -12,6 +12,7 @@ for i=1:n_iter
 
     % Power calculation
     [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp, T_TOL, T_cr] = PowerReq(MTOW, V_cr, RPM_cr);
+    fprintf('P_TOL = %f \n', P_TOL)
     
     % Weight estimation
     [BatWt, E_total, V_bat] = BatteryMassFun(V_cr, P_cruise, P_TOL, P_cont_avg);

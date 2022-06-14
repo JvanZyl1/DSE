@@ -80,8 +80,7 @@ function [RPM_opt] = LiftDistributionCruise(MTOW)
                 theta_local = theta_local_deg * pi / 180;
                 
                 % Local angle of attack
-                gamma = atan((V_z_cr+V_i_imp)/(V_blade+cos(rot_rad) * V_x_cr));
-                alpha = theta_local - gamma;
+                alpha = theta_local - atan((V_z_cr+V_i_imp)/(V_blade+cos(rot_rad) * V_x_cr));
                 alpha_deg = alpha * 180 / pi;
 
                 % Determination of local Cl value
@@ -92,37 +91,29 @@ function [RPM_opt] = LiftDistributionCruise(MTOW)
 
                 % Calculation of locally generated lift
                 dL = 0.5 * Cl * rho_imp * V * V * C_imp * dr;
-                dL_z = dL * cos(gamma);
+                dL_z = dL * cos(theta_local - );
                 L_blade = L_blade + dL_z;
-                
-                % For plotting
+
                 dldr(i, station) = dldr(i, station) + dL_z * dr;
                 r_list(end+1) = r;
             end
-            
-            % Summation of lift produced by all element blades at each
-            % rotation angle
             L_sum = L_sum + L_blade * B_prop;
             i = i + 1;
     
         end
-
-        % Taking the average of produced lift over all rotation angles
         L = L_sum / numel(rot_angles);
         dldr = dldr / numel(rot_angles);
-
-        % Finding the first RPM for which the lift is sufficient
+        fprintf('L, T = %f, %f \n', L, T)
         if L>T && RPM < RPM_opt
             RPM_opt = RPM;
             fprintf('RPM_opt for cruise = %f \n', RPM_opt)
             break
         end
     end
-    
-    % Plotting
     r_list = r_list / 3.2808399;
     dldr_list = dldr / 0.2248089431;
-
+    fprintf('sizes')
+    disp([size(r_list), size(rot_angles), size(dldr_list)])
     fig1 = figure(1);
     surf(r_list,rot_angles,dldr_list)
     xlabel('r [m]');
