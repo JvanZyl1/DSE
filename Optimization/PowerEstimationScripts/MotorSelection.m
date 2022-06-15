@@ -3,6 +3,8 @@ function [max_powers, W_motors] = MotorSelection(MTOW)
     % conditions, thus for the critical cases where 2 propellers fail.
     
     inputs;
+
+    x_cg = 2.55;
     
     % Distances from centers of propellers to c.g. on x-axis
     x_b = x_cg - R_prop;  % Distance for back propellers

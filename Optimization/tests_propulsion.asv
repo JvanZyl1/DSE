@@ -13,7 +13,7 @@ fprintf('Cruise = %f, Take-off = %f, Landing = %f \n', RPM_opt, RPM_opt_list)
 %[L] = tipvalidation(MTOW);
 %disp(RPM_opt_list)
 
-%[SPL_mat] = NoiseCalculation(MTOW);
+[SPL_mat] = NoiseCalculation(MTOW);
 
 
 

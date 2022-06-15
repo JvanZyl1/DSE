@@ -5,6 +5,7 @@ function [RPM_opt] = LiftDistributionCruise(MTOW)
     %R_prop = 0.4;
 
     inputs;
+    %V_cr = 200;
     
     if MTOW <= 0
         error('invalid value of MTOW')

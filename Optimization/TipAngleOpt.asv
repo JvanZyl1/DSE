@@ -31,7 +31,7 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     V_TO_emp = V_TO * 3.2808399;  % ft/s
     V_L_emp = -5 * 3.2808399;  % ft/s
     %V_z_list = 0.5 * [V_z_cr, V_TO_emp, V_L_emp, 0];
-    V_z_list = [V_TO_emp, V_L_emp];
+    V_z_list = [V_TO_emp, V_L_emp, V_z_cr, 0];
     
     % Thrusts required for flight modes
     T_TO = 1.1 * MTOW * g / N_prop * 0.2248089431;  % lb
@@ -40,7 +40,7 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
     T_em = T_TO / 0.75; 
     %T_em = 38500 * 0.2248089431; %1.5 * T_TO; %%%%%%%%%%%%% TBD  % lb
 
-    T_list = [T_TO, T_L];  % lb
+    T_list = [T_cr, T_TO, T_L, T_em];  % lb
     %T_list = T_TO;
     %V_z_list = V_TO_emp;
 
@@ -129,7 +129,7 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
                     %fprintf('For j = %i, RPM_opt = %f for twist = %f.\n', j, RPM, lin_twist)
                     %theta_tip_opt = theta_local_deg;
                     % fprintf('lin_twist = %f, L = %f, T = %f, RPM = %f \n', lin_twist, L, T, RPM)
-                    break
+                    %break
                 
                 end
                 i = i + 1;
@@ -157,6 +157,9 @@ function [RPM_opt_list, lin_twist, T_list,V_i_emp] = TipAngleOpt(MTOW)
         %j = j + 1;
         %fprintf('theta_tip = %f \n', theta_tip_opt)
     end
+    fprintf(['Optimal linear twist for cruise conditions = %f with tip pitch angle = %f\n' ...
+        'RPM required for cruise = %f \n RPM required for take-off = %f \n RPM required for landing = %f \n RPM required for emergency = %f \n'], lin_twist_opt(end), theta_tip, RPM_opt_list)
+
     r_list = r_list / 3.2808399;
     dldr_list = dldr / 0.2248089431;
     fprintf('sizes')

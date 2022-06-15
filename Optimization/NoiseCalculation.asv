@@ -12,27 +12,27 @@ function [SPL_mat] = NoiseCalculation(MTOW)
 
     % Noise estimation
 
-     R_prop = 13.2 / 3.2808399;
-     RPM_list = 680 / R_prop;
-     R_hub = 0.2 * R_prop - 0.0875;
-     C_prop = 0.56 / 3.2808399;
-     t_prop = 0.12 * C_prop;
-     B_prop = 5;
-     N_prop = 1;
-     MTOW = 3000 * 0.45359237 * g;
-     h_cr = 500 / 3.2808399; %ft
-     Q = 800;
-
-%     R_prop = 420 * 0.0254 / 2;
-%     RPM_list = 413;
+%     R_prop = 13.2 / 3.2808399;
+%     RPM_list = 680 / R_prop;
 %     R_hub = 0.2 * R_prop - 0.0875;
-%     C_prop = 10.75 * 0.0254;
+%     C_prop = 0.56 / 3.2808399;
 %     t_prop = 0.12 * C_prop;
-%     B_prop = 4;
+%     B_prop = 5;
 %     N_prop = 1;
-%     MTOW = 6000 * 0.45359237;
-%     h_cr = 500 / 3.2808399;
-%     Q = 1000;
+%     MTOW = 3000 * 0.45359237 * g;
+%     h_cr = 500 / 3.2808399; %ft
+%     Q = 800;
+
+    R_prop = 420 * 0.0254 / 2;
+    RPM_list = 413;
+    R_hub = 0.2 * R_prop - 0.0875;
+    C_prop = 10.75 * 0.0254;
+    t_prop = 0.12 * C_prop;
+    B_prop = 4;
+    N_prop = 1;
+    MTOW = 6000 * 0.45359237;
+    h_cr = 500 / 3.2808399;
+    Q = 1000;
 
     sos = 343;  % m/s, speed of sound
     R_eff = (R_prop-(R_hub+0.0875));
@@ -44,8 +44,8 @@ function [SPL_mat] = NoiseCalculation(MTOW)
     harmonics = 1:1:20;
     
     ang_min = 180;
-    ang_max = 105;
-    d_ang = -1;
+    ang_max = 100;
+    d_ang = -5;
 
     dim_ang = (ang_max - ang_min) / d_ang + 1;
     dim_dist = dim_ang;
@@ -58,8 +58,8 @@ function [SPL_mat] = NoiseCalculation(MTOW)
     end
     ang_vec = ang_vec_deg * pi / 180;
     dist_vec = h_cr ./ sin(ang_vec - pi/2);
-    %disp(dist_vec)
-    %disp(ang_vec_deg)
+    disp(dist_vec)
+    disp(ang_vec_deg)
 
 %     dist_vec = dist_min:d_dist:dist_max;
 %     for i=1:dim_ang-1
@@ -132,18 +132,17 @@ function [SPL_mat] = NoiseCalculation(MTOW)
     [A_f] = A_Weighting(omega_opt, B_prop, 1);
     %disp(A_f)
     SPL_vortex = 20 * log10(K2 * (omega_opt*R_prop)./(rho*dist_vec).*sqrt(N_prop * T / sigma * T / (pi * R_prop^2))) + A_f;
-    %disp(SPL_vortex)
+    disp(SPL_vortex)
     SPL = 10 * log10(10.^(SPL_rot/10) + 10.^(SPL_vortex/10));
 
     %SPL(end, :) = zeros(1, dim_dist);
-    %disp(SPL)
-    SEL = 0;
-    noise_list = transpose(SPL(:, 1));
-    for noise=noise_list
+    disp(SPL)
+    
+    for noise=SPL(:, 1)
         SEL = 10 * log10(10^(SEL/10) + 10^(noise/10)); 
     end
     SEL_total = 10 * log10(10^(SEL/10) + 10^(SEL/10)); 
-    %fprintf('SEL = %f \n', SEL)
+    fprintf('SEL = %f \n', SEL)
 
 end
 

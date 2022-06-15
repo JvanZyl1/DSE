@@ -46,7 +46,7 @@ alpha_min = -15;
 alpha_stall = 17;
 
 % Configuration
-x_cg = 2.7;  % From back of design box (6x5x2 m)
+x_cg = 2.55;  % From back of design box (6x5x2 m)
 y_cg = 2.5;  % Middle of the design box
 prop_clearance = 0.2;  % Distance between blade tips of neighbouring propellers
 

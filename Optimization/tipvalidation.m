@@ -25,6 +25,7 @@ function [L] = tipvalidation(MTOW)
     C_emp = 0.56;
     B_prop = 5;
     R_hub_emp = 0.2 * R_emp;
+    N_prop = 1;
 
     nr_stations = 100;
     dr = (R_emp-R_hub_emp) / nr_stations;  % ft

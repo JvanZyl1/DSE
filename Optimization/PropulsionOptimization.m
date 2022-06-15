@@ -4,12 +4,13 @@ clc
 
 inputs;
 
-MTOW = 920;  % kg, initial MTOW estimation
+MTOW = 930;  % kg, initial MTOW estimation
 RPM_cr = 1000; % initial RPM estimation
 %RPM_list = 100:100:2000;  % RPM range to iterate on
 n_iter = 1;
 for i=1:n_iter
-
+    
+    MTOW = 932;
     % Power calculation
     [P_cruise, P_TOL,P_cont_avg, P_cont_max, P0, Pi, Pp, T_TOL, T_cr] = PowerReq(MTOW, V_cr, RPM_cr);
     fprintf('P_TOL = %f \n', P_TOL)
@@ -37,12 +38,12 @@ end
 
 [C_unit, ~, ~] = ParametricCostEstimation((MTOW - (BatWt + PropWt + W_PL)), E_total, P_TOL);
 
-%fprintf('MTOW: %f [kg]\n',MTOW)
+fprintf('MTOW: %f [kg]\n',MTOW)
 %fprintf('Battery weight: %f [kg]\n',BatWt)
-%fprintf('Required energy: %f [Wh]\n',E_total)
+fprintf('Required energy: %f [Wh]\n',E_total)
 %fprintf('Battery volume: %f [L]\n', V_bat)
-%fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise*redundancy_factor,P_TOL*redundancy_factor/1.5)
-%fprintf('The total cost per vehicle: = %f [€]\n', C_unit)
+fprintf('P_cruise = %f [W], and P_TOL = %f [W]\n',P_cruise*redundancy_factor,P_TOL*redundancy_factor)
+fprintf('The total cost per vehicle: = %f [€]\n', C_unit)
 %fprintf('Linear twist = %f, RPM = %f, %f, %f, %f \n', lin_twist, RPM_opt_list)
 
 
