@@ -52,9 +52,16 @@ class Fuselage(CrossSection):
             for boom in cs.booms:
                 plt.plot([cs.Z[0], cs.Z[1]], [boom.Y[0], boom.Y[1]], 'g')
         plt.plot([cs.Z[1], cs.Z[1]], [-cs.R[1], cs.R[1]], 'r')
-        plt.xlabel('$z$ [m]')
-        plt.ylabel('$y$ [m]')
+        plt.xlabel('$z$ [m]',fontsize=16)
+        plt.ylabel('$y$ [m]', fontsize=16)
+        plt.xticks(fontsize=14)
+        plt.yticks(fontsize=14)
+        plt.axis("equal")
+
+        plt.subplots_adjust(left=0.16, bottom=0.16)
         plt.grid()
+
+
         plt.savefig('fuselage_plot.png')
         plt.show()
 
@@ -65,17 +72,17 @@ class Fuselage(CrossSection):
             return 1
         return 0  # np.where(self.z < pos_z_start, 0, 1)
 
-    def Vx_v(self, z):
+    def Vx(self, z):
         return 0
-    def Vy_v(self, z):
+    def Vy(self, z):
         return 15000
-    def Mx_v(self, z):
+    def Mx(self, z):
         return 15000/self.L * z
-    def My_v(self, z):
+    def My(self, z):
         return 0
 
     # Loading diagrams functions
-    def Vx(self, z):
+    def Vxv(self, z):
         z = float(z)
         V_x = 0
         V_x += 450 + 450 * self.step(z, 2.92) + 450*self.step(z, 3.30)
@@ -157,7 +164,7 @@ class Fuselage(CrossSection):
         M_x += 5990.985762974158 / (self.L) * z # ASSUMPTION HERE!!!!
         return M_x * n_ult * SF
 
-    def My(self, z):
+    def Myv(self, z):
         self.Vy(z)
         MTOW = Fuselage.MTOW
         g = Fuselage.g
@@ -170,7 +177,7 @@ class Fuselage(CrossSection):
         M_y -= 1939.50 / (self.L) * z
         return M_y * n_ult * SF
 
-    def Vy(self, z):
+    def Vyv(self, z):
         #self.weight_FL()
         z = float(z)
         MTOW = Fuselage.MTOW

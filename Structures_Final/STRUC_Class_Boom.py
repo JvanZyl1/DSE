@@ -19,6 +19,7 @@ class Boom:
 
     def __init__(self, pos_x, pos_y, B, t):
         self.N_B = None
+        self.W_skinb = None
         self.X = pos_x
         self.Y = pos_y
         self.A = np.array([None, None])
@@ -41,8 +42,8 @@ class Boom:
 
 
     def plot_b(self):
-        plt.plot(self.X, self.Y, '--')
-        plt.scatter(self.X, self.Y, s=self.B[0] * 300000)
+        plt.plot(self.X, self.Y, '--g')
+        plt.scatter(self.X, self.Y, s=self.B[0] * 300000, c='g')
 
     # Try to delete this
     def area(self, i, new_B):

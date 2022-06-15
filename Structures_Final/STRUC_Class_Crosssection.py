@@ -73,15 +73,18 @@ class CrossSection(Boom):
             boom_n1 = self.booms[n + 1]
             if boom_n.t != 0:
                 # print(boom_n.t, boom_n.X, boom_n.Y)
-                plt.plot([boom_n.X[0], boom_n1.X[0]], [boom_n.Y[0], boom_n1.Y[0]], c='y',
-                         linewidth=1000 * boom_n.t, zorder=0)
-                plt.plot([boom_n.X[1], boom_n1.X[1]], [boom_n.Y[1], boom_n1.Y[1]], c='y',
-                         linewidth=1000 * boom_n.t, zorder=0)
+                plt.plot([boom_n.X[0], boom_n1.X[0]], [boom_n.Y[0], boom_n1.Y[0]], c='b',
+                         linewidth=5000 * boom_n.t, zorder=0)
+                plt.plot([boom_n.X[1], boom_n1.X[1]], [boom_n.Y[1], boom_n1.Y[1]], c='b',
+                         linewidth=5000 * boom_n.t, zorder=0)
         #plt.title('Skin panels')
-        plt.xlabel('x [m]')
-        plt.ylabel('y [m]')
+        plt.xticks(fontsize=14),  plt.yticks(fontsize=14)
+        plt.xlabel('$x$ [m]', fontsize=16), plt.ylabel('$y$ [m]', fontsize=16)
+
         plt.grid()
         plt.axis('equal')
+        plt.subplots_adjust(0.15, bottom=0.15)
+        plt.savefig('CS_' + str(self.Z[0]) + '.png')
         self.booms.remove(self.booms[-1])
         if show:
             plt.show()
@@ -217,5 +220,6 @@ class CrossSection(Boom):
 
         self.W_cs_skins = 0
         for i in range(len(t_b1) - 1):
+            self.booms[i].W_skinb = (abs(t_b1[i] + t_b2[i])) / 2 * self.booms[i].t * self.L * Boom.density
             self.W_cs_skins += (abs(t_b1[i] + t_b2[i])) / 2 * self.booms[i].t * self.L * Boom.density
         return self.W_cs_skins

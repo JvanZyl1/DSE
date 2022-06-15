@@ -146,7 +146,7 @@ plt.xlabel("$z$ [m]")
 plt.ylabel("$r$ [m]")
 plt.savefig('Beamdesign_' + str(use_beam.length) + 'm.png')
 
-#plt.show()
+plt.show()
 #print("Radius", r_design)
 
 
