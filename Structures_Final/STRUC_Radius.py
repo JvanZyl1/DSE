@@ -135,14 +135,20 @@ for iteration in range(10):
     use_beam.weight = W
 print(r_design)
 print('W -->', use_beam.weight)
-
+name = ['Bending in lift-direction for TENSION',
+        'Bending in lift-direction for COMPRESSION',
+        'Bending in axial-direction for TENSION',
+        'Bending in axial-direction for COMPRESSION',
+        'Shear in lift-direction',
+        'Shear in axial-direction']
 for i in range(6):
-    plt.plot(z_axis, r[i])
-plt.plot(z_axis, r_design, '-.b')
+    plt.plot(z_axis, r[i], label=name[i])
+plt.plot(z_axis, r_design, '.b', label='Design Radius')
 plt.axvline(use_beam.length - 0.25/2, color='b')
 #plt.axvline(use_beam.length + 0.25/2, color='b')
 plt.title('Length: ' + str(use_beam.length) + ' m, Thickness: ' + str(use_beam.thickness*1000) + ' mm')
 plt.xlabel("$z$ [m]")
+
 plt.ylabel("$r$ [m]")
 plt.savefig('Beamdesign_' + str(use_beam.length) + 'm.png')
 
